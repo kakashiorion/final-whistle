@@ -11,8 +11,10 @@ generator client {
 model Tournament {
   id        Int      @id @default(autoincrement())
   name     String
-  venue      String
+  venue      String?
+  logoURL String?
   matches Match[]
+  teams Team[]
   startDate DateTime
   endDate DateTime
   createdAt DateTime @default(now())
@@ -22,9 +24,11 @@ model Tournament {
 model Team {
   id        Int      @id @default(autoincrement())
   name     String
+  color String?
+  flagURL String?
   players      Player[]
   matches TeamsInMatch[]
-  color String
+  tournaments Tournament[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -49,8 +53,6 @@ model Match {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   teams TeamsInMatch[]
-  scoringPlayersOfTeam1 Int[]
-  scoringPlayersOfTeam2 Int[]
   maxWagerLimit Int
 }
 
@@ -60,7 +62,8 @@ model TeamsInMatch {
   match       Match     @relation(fields: [matchId], references: [id])
   teamId Int
   team   Team @relation(fields: [teamId], references: [id])
-  teamScore Int @default(0)
+  score Int?
+  scoringPlayers Int[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -69,13 +72,15 @@ model TeamsInMatch {
 
 model User {
   id        Int      @id @default(autoincrement())
-  email     String
-  password      String
-  username String
-  points Int @default(1000)
+  username String?
+  email     String @unique
+  hashedPassword      String
+  salt                String
+  points Int?
   predictions MatchPrediction[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  role     Role @default(Gamer)
 }
 
 model MatchPrediction {
@@ -83,12 +88,16 @@ model MatchPrediction {
   userId Int
   user   User @relation(fields: [userId], references: [id])
   matchId Int
-  predictedScoreTeam1 Int @default(0)
-  predictedScoreTeam2 Int @default(0)
+  predictedScoreOfTeam1 Int @default(0)
+  predictedScoreOfTeam2 Int @default(0)
   predictedScoringPlayersOfTeam1 Int[]
   predictedScoringPlayersOfTeam2 Int[]
   wageredPoints Int @default(10)
-  earnedPoints Int?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+enum Role{
+  Gamer
+  Admin
 }
