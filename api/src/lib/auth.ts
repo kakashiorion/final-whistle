@@ -21,7 +21,7 @@ import { db } from './db'
 export const getCurrentUser = async (session) => {
   return await db.user.findUnique({
     where: { id: session.id },
-    select: { id: true },
+    select: { id: true, email: true, roles: true },
   })
 }
 
@@ -31,8 +31,8 @@ export const getCurrentUser = async (session) => {
  * @returns {boolean} - If the currentUser is authenticated
  */
 export const isAuthenticated = (): boolean => {
-  // return !!context.currentUser
-  return true
+  return !!context.currentUser
+  // return true
 }
 
 /**

@@ -5,16 +5,13 @@ export const schema = gql`
     email: String!
     hashedPassword: String!
     salt: String!
+    resetToken: String
+    resetTokenExpiresAt: DateTime
     points: Int
     predictions: [MatchPrediction]!
     createdAt: DateTime!
     updatedAt: DateTime!
-    role: Role!
-  }
-
-  enum Role {
-    Gamer
-    Admin
+    roles: String!
   }
 
   type Query {
@@ -27,8 +24,10 @@ export const schema = gql`
     email: String!
     hashedPassword: String!
     salt: String!
+    resetToken: String
+    resetTokenExpiresAt: DateTime
     points: Int
-    role: Role!
+    roles: String!
   }
 
   input UpdateUserInput {
@@ -36,8 +35,10 @@ export const schema = gql`
     email: String
     hashedPassword: String
     salt: String
+    resetToken: String
+    resetTokenExpiresAt: DateTime
     points: Int
-    role: Role
+    roles: String
   }
 
   type Mutation {

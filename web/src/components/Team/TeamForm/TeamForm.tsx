@@ -22,6 +22,9 @@ const TeamForm = (props) => {
     
     
   
+    
+    
+  
     props.onSave(data, props?.team?.id)
   }
 
@@ -71,6 +74,24 @@ const TeamForm = (props) => {
         
 
         <FieldError name="color" className="rw-field-error" />
+
+        <Label
+          name="color2"
+          className="rw-label"
+          errorClassName="rw-label rw-label-error"
+        >
+          Color2
+        </Label>
+        
+          <TextField
+            name="color2"
+            defaultValue={props.team?.color2}
+            className="rw-input"
+            errorClassName="rw-input rw-input-error"
+          />
+        
+
+        <FieldError name="color2" className="rw-field-error" />
 
         <Label
           name="flagURL"

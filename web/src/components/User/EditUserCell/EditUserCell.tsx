@@ -15,10 +15,12 @@ export const QUERY = gql`
       email
       hashedPassword
       salt
+      resetToken
+      resetTokenExpiresAt
       points
       createdAt
       updatedAt
-      role
+      roles
     }
   }
 `
@@ -30,10 +32,12 @@ const UPDATE_USER_MUTATION = gql`
       email
       hashedPassword
       salt
+      resetToken
+      resetTokenExpiresAt
       points
       createdAt
       updatedAt
-      role
+      roles
     }
   }
 `

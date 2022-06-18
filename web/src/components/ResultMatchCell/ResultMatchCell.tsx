@@ -12,8 +12,6 @@ export const QUERY = gql`
       matchDate
       maxWagerLimit
       round
-      scoringPlayersOfTeam1
-      scoringPlayersOfTeam2
     }
   }
 `

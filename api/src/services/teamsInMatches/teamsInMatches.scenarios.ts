@@ -4,50 +4,50 @@ export const standard = defineScenario<Prisma.TeamsInMatchCreateArgs>({
   teamsInMatch: {
     one: {
       data: {
-        scoringPlayers: 6740180,
-        updatedAt: '2022-06-16T16:32:32Z',
+        scoringPlayers: 2748545,
+        updatedAt: '2022-06-18T19:07:42Z',
         match: {
           create: {
             location: 'String',
-            matchDate: '2022-06-16T16:32:32Z',
+            matchDate: '2022-06-18T19:07:42Z',
             round: 'String',
-            updatedAt: '2022-06-16T16:32:32Z',
-            maxWagerLimit: 6208135,
+            updatedAt: '2022-06-18T19:07:42Z',
+            maxWagerLimit: 8172568,
             tournament: {
               create: {
                 name: 'String',
-                startDate: '2022-06-16T16:32:32Z',
-                endDate: '2022-06-16T16:32:32Z',
-                updatedAt: '2022-06-16T16:32:32Z',
+                startDate: '2022-06-18T19:07:42Z',
+                endDate: '2022-06-18T19:07:42Z',
+                updatedAt: '2022-06-18T19:07:42Z',
               },
             },
           },
         },
-        team: { create: { name: 'String', updatedAt: '2022-06-16T16:32:32Z' } },
+        team: { create: { name: 'String', updatedAt: '2022-06-18T19:07:42Z' } },
       },
     },
     two: {
       data: {
-        scoringPlayers: 6122966,
-        updatedAt: '2022-06-16T16:32:32Z',
+        scoringPlayers: 62763,
+        updatedAt: '2022-06-18T19:07:42Z',
         match: {
           create: {
             location: 'String',
-            matchDate: '2022-06-16T16:32:32Z',
+            matchDate: '2022-06-18T19:07:42Z',
             round: 'String',
-            updatedAt: '2022-06-16T16:32:32Z',
-            maxWagerLimit: 1497321,
+            updatedAt: '2022-06-18T19:07:42Z',
+            maxWagerLimit: 6214521,
             tournament: {
               create: {
                 name: 'String',
-                startDate: '2022-06-16T16:32:32Z',
-                endDate: '2022-06-16T16:32:32Z',
-                updatedAt: '2022-06-16T16:32:32Z',
+                startDate: '2022-06-18T19:07:42Z',
+                endDate: '2022-06-18T19:07:42Z',
+                updatedAt: '2022-06-18T19:07:42Z',
               },
             },
           },
         },
-        team: { create: { name: 'String', updatedAt: '2022-06-16T16:32:32Z' } },
+        team: { create: { name: 'String', updatedAt: '2022-06-18T19:07:42Z' } },
       },
     },
   },

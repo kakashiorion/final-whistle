@@ -5,16 +5,16 @@ export const standard = defineScenario<Prisma.MatchCreateArgs>({
     one: {
       data: {
         location: 'String',
-        matchDate: '2022-06-16T16:30:45Z',
+        matchDate: '2022-06-18T19:07:24Z',
         round: 'String',
-        updatedAt: '2022-06-16T16:30:45Z',
-        maxWagerLimit: 5872378,
+        updatedAt: '2022-06-18T19:07:24Z',
+        maxWagerLimit: 8089242,
         tournament: {
           create: {
             name: 'String',
-            startDate: '2022-06-16T16:30:45Z',
-            endDate: '2022-06-16T16:30:45Z',
-            updatedAt: '2022-06-16T16:30:45Z',
+            startDate: '2022-06-18T19:07:24Z',
+            endDate: '2022-06-18T19:07:24Z',
+            updatedAt: '2022-06-18T19:07:24Z',
           },
         },
       },
@@ -22,16 +22,16 @@ export const standard = defineScenario<Prisma.MatchCreateArgs>({
     two: {
       data: {
         location: 'String',
-        matchDate: '2022-06-16T16:30:45Z',
+        matchDate: '2022-06-18T19:07:24Z',
         round: 'String',
-        updatedAt: '2022-06-16T16:30:45Z',
-        maxWagerLimit: 4774458,
+        updatedAt: '2022-06-18T19:07:24Z',
+        maxWagerLimit: 6841675,
         tournament: {
           create: {
             name: 'String',
-            startDate: '2022-06-16T16:30:45Z',
-            endDate: '2022-06-16T16:30:45Z',
-            updatedAt: '2022-06-16T16:30:45Z',
+            startDate: '2022-06-18T19:07:24Z',
+            endDate: '2022-06-18T19:07:24Z',
+            updatedAt: '2022-06-18T19:07:24Z',
           },
         },
       },

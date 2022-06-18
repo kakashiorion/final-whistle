@@ -86,6 +86,12 @@ const User = ({ user }) => {
               <th>Salt</th>
               <td>{user.salt}</td>
             </tr><tr>
+              <th>Reset token</th>
+              <td>{user.resetToken}</td>
+            </tr><tr>
+              <th>Reset token expires at</th>
+              <td>{timeTag(user.resetTokenExpiresAt)}</td>
+            </tr><tr>
               <th>Points</th>
               <td>{user.points}</td>
             </tr><tr>
@@ -95,8 +101,8 @@ const User = ({ user }) => {
               <th>Updated at</th>
               <td>{timeTag(user.updatedAt)}</td>
             </tr><tr>
-              <th>Role</th>
-              <td>{formatEnum(user.role)}</td>
+              <th>Roles</th>
+              <td>{user.roles}</td>
             </tr>
           </tbody>
         </table>

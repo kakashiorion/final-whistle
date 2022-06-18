@@ -33,16 +33,16 @@ describe('tournaments', () => {
     const result = await createTournament({
       input: {
         name: 'String',
-        startDate: '2022-06-16T16:28:59Z',
-        endDate: '2022-06-16T16:28:59Z',
-        updatedAt: '2022-06-16T16:28:59Z',
+        startDate: '2022-06-18T19:07:02Z',
+        endDate: '2022-06-18T19:07:02Z',
+        updatedAt: '2022-06-18T19:07:02Z',
       },
     })
 
     expect(result.name).toEqual('String')
-    expect(result.startDate).toEqual('2022-06-16T16:28:59Z')
-    expect(result.endDate).toEqual('2022-06-16T16:28:59Z')
-    expect(result.updatedAt).toEqual('2022-06-16T16:28:59Z')
+    expect(result.startDate).toEqual('2022-06-18T19:07:02Z')
+    expect(result.endDate).toEqual('2022-06-18T19:07:02Z')
+    expect(result.updatedAt).toEqual('2022-06-18T19:07:02Z')
   })
 
   scenario('updates a tournament', async (scenario: StandardScenario) => {

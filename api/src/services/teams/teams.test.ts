@@ -22,11 +22,11 @@ describe('teams', () => {
 
   scenario('creates a team', async () => {
     const result = await createTeam({
-      input: { name: 'String', updatedAt: '2022-06-16T16:29:13Z' },
+      input: { name: 'String', updatedAt: '2022-06-18T19:07:10Z' },
     })
 
     expect(result.name).toEqual('String')
-    expect(result.updatedAt).toEqual('2022-06-16T16:29:13Z')
+    expect(result.updatedAt).toEqual('2022-06-18T19:07:10Z')
   })
 
   scenario('updates a team', async (scenario: StandardScenario) => {

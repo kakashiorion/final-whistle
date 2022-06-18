@@ -3,6 +3,7 @@ export const schema = gql`
     id: Int!
     name: String!
     color: String
+    color2: String
     flagURL: String
     players: [Player]!
     matches: [TeamsInMatch]!
@@ -19,12 +20,14 @@ export const schema = gql`
   input CreateTeamInput {
     name: String!
     color: String
+    color2: String
     flagURL: String
   }
 
   input UpdateTeamInput {
     name: String
     color: String
+    color2: String
     flagURL: String
   }
 

@@ -82,6 +82,7 @@ const TeamsList = ({ teams }) => {
             <th>Id</th>
             <th>Name</th>
             <th>Color</th>
+            <th>Color2</th>
             <th>Flag url</th>
             <th>Created at</th>
             <th>Updated at</th>
@@ -94,6 +95,7 @@ const TeamsList = ({ teams }) => {
               <td>{truncate(team.id)}</td>
               <td>{truncate(team.name)}</td>
               <td>{truncate(team.color)}</td>
+              <td>{truncate(team.color2)}</td>
               <td>{truncate(team.flagURL)}</td>
               <td>{timeTag(team.createdAt)}</td>
               <td>{timeTag(team.updatedAt)}</td>

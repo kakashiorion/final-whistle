@@ -4,16 +4,28 @@ import {
   FieldError,
   Label,
   TextField,
+  DatetimeLocalField,
   NumberField,
-  RadioField,
   Submit,
 } from '@redwoodjs/forms'
 
+
+const formatDatetime = (value) => {
+  if (value) {
+    return value.replace(/:\d{2}\.\d{3}\w/, '')
+  }
+}
 
 
 const UserForm = (props) => {
   const onSubmit = (data) => {
 
+  
+    
+    
+  
+    
+    
   
     
     
@@ -122,6 +134,42 @@ const UserForm = (props) => {
         <FieldError name="salt" className="rw-field-error" />
 
         <Label
+          name="resetToken"
+          className="rw-label"
+          errorClassName="rw-label rw-label-error"
+        >
+          Reset token
+        </Label>
+        
+          <TextField
+            name="resetToken"
+            defaultValue={props.user?.resetToken}
+            className="rw-input"
+            errorClassName="rw-input rw-input-error"
+          />
+        
+
+        <FieldError name="resetToken" className="rw-field-error" />
+
+        <Label
+          name="resetTokenExpiresAt"
+          className="rw-label"
+          errorClassName="rw-label rw-label-error"
+        >
+          Reset token expires at
+        </Label>
+        
+          <DatetimeLocalField
+            name="resetTokenExpiresAt"
+            defaultValue={formatDatetime(props.user?.resetTokenExpiresAt)}
+            className="rw-input"
+            errorClassName="rw-input rw-input-error"
+          />
+        
+
+        <FieldError name="resetTokenExpiresAt" className="rw-field-error" />
+
+        <Label
           name="points"
           className="rw-label"
           errorClassName="rw-label rw-label-error"
@@ -140,46 +188,23 @@ const UserForm = (props) => {
         <FieldError name="points" className="rw-field-error" />
 
         <Label
-          name="role"
+          name="roles"
           className="rw-label"
           errorClassName="rw-label rw-label-error"
         >
-          Role
+          Roles
         </Label>
         
-          
-          
-        <div className="rw-check-radio-items">
-          <RadioField
-            id="user-role-0"
-            name="role"
-            defaultValue="Gamer"
-            defaultChecked={props.user?.role?.includes('Gamer')}
+          <TextField
+            name="roles"
+            defaultValue={props.user?.roles}
             className="rw-input"
             errorClassName="rw-input rw-input-error"
+            validation={{ required: true }}
           />
-          <div>
-            Gamer
-          </div>
-        </div>
-          
-        <div className="rw-check-radio-items">
-          <RadioField
-            id="user-role-1"
-            name="role"
-            defaultValue="Admin"
-            defaultChecked={props.user?.role?.includes('Admin')}
-            className="rw-input"
-            errorClassName="rw-input rw-input-error"
-          />
-          <div>
-            Admin
-          </div>
-        </div>
-          
         
 
-        <FieldError name="role" className="rw-field-error" />
+        <FieldError name="roles" className="rw-field-error" />
 
         <div className="rw-button-group">
           <Submit

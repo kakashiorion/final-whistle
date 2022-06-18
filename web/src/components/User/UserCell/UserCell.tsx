@@ -11,10 +11,12 @@ export const QUERY = gql`
       email
       hashedPassword
       salt
+      resetToken
+      resetTokenExpiresAt
       points
       createdAt
       updatedAt
-      role
+      roles
     }
   }
 `

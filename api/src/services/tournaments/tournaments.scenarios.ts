@@ -5,17 +5,17 @@ export const standard = defineScenario<Prisma.TournamentCreateArgs>({
     one: {
       data: {
         name: 'String',
-        startDate: '2022-06-16T16:28:59Z',
-        endDate: '2022-06-16T16:28:59Z',
-        updatedAt: '2022-06-16T16:28:59Z',
+        startDate: '2022-06-18T19:07:02Z',
+        endDate: '2022-06-18T19:07:02Z',
+        updatedAt: '2022-06-18T19:07:02Z',
       },
     },
     two: {
       data: {
         name: 'String',
-        startDate: '2022-06-16T16:28:59Z',
-        endDate: '2022-06-16T16:28:59Z',
-        updatedAt: '2022-06-16T16:28:59Z',
+        startDate: '2022-06-18T19:07:02Z',
+        endDate: '2022-06-18T19:07:02Z',
+        updatedAt: '2022-06-18T19:07:02Z',
       },
     },
   },

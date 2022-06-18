@@ -9,6 +9,7 @@ export const QUERY = gql`
       id
       name
       color
+      color2
       flagURL
       createdAt
       updatedAt

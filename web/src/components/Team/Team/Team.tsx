@@ -80,6 +80,9 @@ const Team = ({ team }) => {
               <th>Color</th>
               <td>{team.color}</td>
             </tr><tr>
+              <th>Color2</th>
+              <td>{team.color2}</td>
+            </tr><tr>
               <th>Flag url</th>
               <td>{team.flagURL}</td>
             </tr><tr>

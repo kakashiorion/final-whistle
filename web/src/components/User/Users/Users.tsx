@@ -84,10 +84,12 @@ const UsersList = ({ users }) => {
             <th>Email</th>
             <th>Hashed password</th>
             <th>Salt</th>
+            <th>Reset token</th>
+            <th>Reset token expires at</th>
             <th>Points</th>
             <th>Created at</th>
             <th>Updated at</th>
-            <th>Role</th>
+            <th>Roles</th>
             <th>&nbsp;</th>
           </tr>
         </thead>
@@ -99,10 +101,12 @@ const UsersList = ({ users }) => {
               <td>{truncate(user.email)}</td>
               <td>{truncate(user.hashedPassword)}</td>
               <td>{truncate(user.salt)}</td>
+              <td>{truncate(user.resetToken)}</td>
+              <td>{timeTag(user.resetTokenExpiresAt)}</td>
               <td>{truncate(user.points)}</td>
               <td>{timeTag(user.createdAt)}</td>
               <td>{timeTag(user.updatedAt)}</td>
-              <td>{formatEnum(user.role)}</td>
+              <td>{truncate(user.roles)}</td>
               <td>
                 <nav className="rw-table-actions">
                   <Link

@@ -25,6 +25,7 @@ model Team {
   id        Int      @id @default(autoincrement())
   name     String
   color String?
+  color2 String?
   flagURL String?
   players      Player[]
   matches TeamsInMatch[]
@@ -76,11 +77,13 @@ model User {
   email     String @unique
   hashedPassword      String
   salt                String
+  resetToken          String?
+  resetTokenExpiresAt DateTime?
   points Int?
   predictions MatchPrediction[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  role     Role @default(Gamer)
+  roles     String @default("Gamer")
 }
 
 model MatchPrediction {
@@ -95,9 +98,4 @@ model MatchPrediction {
   wageredPoints Int @default(10)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-}
-
-enum Role{
-  Gamer
-  Admin
 }

@@ -1,44 +1,36 @@
-export default () => (
-  <main>
-    <style
-      dangerouslySetInnerHTML={{
-        __html: `
-              html, body {
-                margin: 0;
-              }
-              html * {
-                box-sizing: border-box;
-              }
-              main {
-                display: flex;
-                align-items: center;
-                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
-                text-align: center;
-                background-color: #E2E8F0;
-                height: 100vh;
-              }
-              section {
-                background-color: white;
-                border-radius: 0.25rem;
-                width: 32rem;
-                padding: 1rem;
-                margin: 0 auto;
-                box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-              }
-              h1 {
-                font-size: 2rem;
-                margin: 0;
-                font-weight: 500;
-                line-height: 1;
-                color: #2D3748;
-              }
-            `,
-      }}
-    />
-    <section>
-      <h1>
-        <span>404 Page Not Found</span>
+import { back } from '@redwoodjs/router'
+import { MetaTags } from '@redwoodjs/web'
+import { PrimarySkewedButton } from 'src/components/Buttons/SkewedButton/PrimarySkewedButton'
+
+export default () => {
+  return (
+    <>
+      <MetaTags
+        title="Welcome"
+        description="Official landing page for Final Whistle - the football prediction game"
+      />
+      <ErrorBanner />
+    </>
+  )
+}
+
+const ErrorBanner = () => {
+  const errorText = 'Seems like you are lost!'
+  const navigateBack = () => {
+    back()
+  }
+  return (
+    <div className="w-full bg-white-1 md:h-full flex flex-col items-start justify-center gap-5 md:gap-8 px-8 py-24 md:py-16">
+      <p className="font-semibold text-secondary-normal text-lg md:text-2xl">
+        404... Page not found!
+      </p>
+      <h1 className="text-primary-normal text-4xl md:text-5xl font-extrabold text-left">
+        {errorText}
       </h1>
-    </section>
-  </main>
-)
+      <div className="px-4">
+        <PrimarySkewedButton label="Go Back" onClick={navigateBack} />
+      </div>
+      <div className="w-5/6 h-2 md:h-3 bg-primary-normal"></div>
+    </div>
+  )
+}

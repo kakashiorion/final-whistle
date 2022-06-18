@@ -13,6 +13,7 @@ export const QUERY = gql`
       id
       name
       color
+      color2
       flagURL
       createdAt
       updatedAt
@@ -25,6 +26,7 @@ const UPDATE_TEAM_MUTATION = gql`
       id
       name
       color
+      color2
       flagURL
       createdAt
       updatedAt

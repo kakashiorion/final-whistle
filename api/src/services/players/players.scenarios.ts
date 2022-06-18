@@ -6,14 +6,14 @@ export const standard = defineScenario<Prisma.PlayerCreateArgs>({
       data: {
         name: 'String',
         position: 'String',
-        updatedAt: '2022-06-15T18:47:15Z',
+        updatedAt: '2022-06-18T19:07:18Z',
       },
     },
     two: {
       data: {
         name: 'String',
         position: 'String',
-        updatedAt: '2022-06-15T18:47:15Z',
+        updatedAt: '2022-06-18T19:07:18Z',
       },
     },
   },

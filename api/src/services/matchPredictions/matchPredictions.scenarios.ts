@@ -4,32 +4,32 @@ export const standard = defineScenario<Prisma.MatchPredictionCreateArgs>({
   matchPrediction: {
     one: {
       data: {
-        matchId: 8318127,
-        predictedScoringPlayersOfTeam1: 5038891,
-        predictedScoringPlayersOfTeam2: 6214288,
-        updatedAt: '2022-06-16T16:34:47Z',
+        matchId: 8906147,
+        predictedScoringPlayersOfTeam1: 9272289,
+        predictedScoringPlayersOfTeam2: 4039661,
+        updatedAt: '2022-06-18T19:08:09Z',
         user: {
           create: {
-            email: 'String8558462',
+            email: 'String3485479',
             hashedPassword: 'String',
             salt: 'String',
-            updatedAt: '2022-06-16T16:34:47Z',
+            updatedAt: '2022-06-18T19:08:09Z',
           },
         },
       },
     },
     two: {
       data: {
-        matchId: 3636347,
-        predictedScoringPlayersOfTeam1: 8568625,
-        predictedScoringPlayersOfTeam2: 868180,
-        updatedAt: '2022-06-16T16:34:47Z',
+        matchId: 8932940,
+        predictedScoringPlayersOfTeam1: 3100721,
+        predictedScoringPlayersOfTeam2: 1551,
+        updatedAt: '2022-06-18T19:08:09Z',
         user: {
           create: {
-            email: 'String9665908',
+            email: 'String1409047',
             hashedPassword: 'String',
             salt: 'String',
-            updatedAt: '2022-06-16T16:34:47Z',
+            updatedAt: '2022-06-18T19:08:09Z',
           },
         },
       },
