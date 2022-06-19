@@ -1,5 +1,6 @@
 import { db } from 'src/lib/db'
 import { DbAuthHandler } from '@redwoodjs/api'
+import { emailUser } from 'src/services/users/users'
 
 export const handler = async (event, context) => {
   const forgotPasswordOptions = {
@@ -16,6 +17,7 @@ export const handler = async (event, context) => {
     // address in a toast message so the user will know it worked and where
     // to look for the email.
     handler: (user) => {
+      emailUser({ id: user.id })
       return user
     },
 

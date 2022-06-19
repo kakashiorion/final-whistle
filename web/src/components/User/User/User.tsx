@@ -66,41 +66,53 @@ const User = ({ user }) => {
     <>
       <div className="rw-segment">
         <header className="rw-segment-header">
-          <h2 className="rw-heading rw-heading-secondary">User {user.id} Detail</h2>
+          <h2 className="rw-heading rw-heading-secondary">
+            User {user.id} Detail
+          </h2>
         </header>
         <table className="rw-table">
           <tbody>
             <tr>
               <th>Id</th>
               <td>{user.id}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>Username</th>
               <td>{user.username}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>Email</th>
               <td>{user.email}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>Hashed password</th>
               <td>{user.hashedPassword}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>Salt</th>
               <td>{user.salt}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>Reset token</th>
               <td>{user.resetToken}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>Reset token expires at</th>
               <td>{timeTag(user.resetTokenExpiresAt)}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>Points</th>
               <td>{user.points}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>Created at</th>
               <td>{timeTag(user.createdAt)}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>Updated at</th>
               <td>{timeTag(user.updatedAt)}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>Roles</th>
               <td>{user.roles}</td>
             </tr>

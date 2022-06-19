@@ -1,8 +1,6 @@
 import { Link, navigate, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
-import logo from 'public/Main.png'
-import loginBanner from 'public/goalkeeper.webp'
-import logoText from 'public/Logo Text 3.png'
+import logo from 'public/Main 2.png'
 import {
   TextField,
   FieldError,
@@ -25,7 +23,6 @@ const LoginPage = () => {
       />
       <Toaster toastOptions={{ className: 'rw-toast', duration: 3000 }} />
       <LoginContent />
-      <LoginBanner />
     </>
   )
 }
@@ -34,21 +31,25 @@ export default LoginPage
 
 const LoginContent = () => {
   return (
-    <div className="w-full md:w-1/2 bg-dark-2 h-screen flex flex-col gap-6 md:gap-8 items-center justify-center px-4 py-16">
-      <div className="flex flex-col items-end">
-        <img
-          className="w-20 self-center animate-bounce"
-          src={logo}
-          alt="Final Whistle - Logo"
-        />
-        <div className="bg-black-3 animate-[pulse_1s_ease-in-out_infinite] h-2 w-10 rounded-[50%]"></div>
+    <div className=" bg-[url('/public/loginBG.jpeg')] bg-black-2 bg-cover bg-blend-overlay flex justify-start items-center w-full px-4 md:px-8 py-4 md:py-8 h-screen">
+      <div className="w-full md:w-2/3 rounded-3xl h-full flex flex-col gap-6 md:gap-8 items-center justify-center px-4 py-16">
+        <div className="flex flex-col items-end">
+          <img
+            className="w-20 self-center animate-bounce"
+            src={logo}
+            alt="Final Whistle - Logo"
+          />
+          <div className="bg-black-3 animate-[pulse_1s_ease-in-out_infinite] h-2 w-10 rounded-[50%]"></div>
+        </div>
+        <div className="flex flex-col gap-3 items-center justify-center">
+          <p className="text-lg md:text-xl text-primary-normal w-full text-center">
+            Login with your email and password
+          </p>
+          <LoginForm />
+          <ForgotPasswordButton />
+        </div>
+        <SignUpBlock />
       </div>
-      <img className="h-10" src={logoText} alt="logo text" />
-      <div className="flex h-full flex-col gap-3 items-center justify-start">
-        <LoginForm />
-        <ForgotPasswordButton />
-      </div>
-      <SignUpBlock />
     </div>
   )
 }
@@ -71,7 +72,7 @@ const LoginForm = () => {
   const { isAuthenticated, logIn } = useAuth()
   useEffect(() => {
     if (isAuthenticated) {
-      // navigate(routes.home())
+      navigate(routes.home())
     }
   }, [isAuthenticated])
 
@@ -93,7 +94,7 @@ const LoginForm = () => {
   return (
     <Form
       onSubmit={onSubmit}
-      className="flex flex-col items-center justify-start gap-3 md:gap-4"
+      className="flex flex-col items-center justify-center gap-3 md:gap-4"
     >
       <div className="items-center flex flex-col">
         <TextField
@@ -143,25 +144,17 @@ const SignUpBlock = () => {
   const navigateToSignUpPage = () => {
     navigate(routes.signup())
   }
-  const signupText = "Don't have an account?"
+  const signupText = "Don't have an account yet?"
 
   return (
     <div className="gap-2 flex flex-col items-center justify-center">
-      <p className="text-sm md:text-base text-center text-secondary-normal ">
+      <p className="text-base md:text-lg text-center whitespace-nowrap text-secondary-normal font-bold">
         {signupText}
       </p>
       <SecondaryRoundedButtonOutlined
-        label="SIGN UP TO PLAY!"
+        label="SIGN UP AND PLAY!"
         onClick={navigateToSignUpPage}
       />
-    </div>
-  )
-}
-
-const LoginBanner = () => {
-  return (
-    <div className="w-full md:w-1/2 bg-white-1 md:h-full hidden md:flex flex-col items-start justify-center gap-5 md:gap-8 px-8 py-24 md:py-16">
-      <img src={loginBanner} alt="Login Banner" />
     </div>
   )
 }

@@ -1,7 +1,6 @@
 import { navigate, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
-// import signUpBanner from 'public/goalkeeper.webp'
-import logo from 'public/Logo1.png'
+import logo from 'public/Main 2.png'
 import {
   FieldError,
   Form,
@@ -23,7 +22,6 @@ const SignupPage = () => {
         description="Signuo page for Final Whistle - the football prediction game"
       />
       <Toaster toastOptions={{ className: 'rw-toast', duration: 3000 }} />
-      <SignupBanner />
       <SignupContent />
     </>
   )
@@ -33,13 +31,19 @@ export default SignupPage
 
 const SignupContent = () => {
   return (
-    <div className="w-full md:w-1/2 bg-dark-3 h-screen flex flex-col gap-6 md:gap-8 items-center justify-center px-4 py-16">
-      <img className="max-w-[128px] max-h-32" src={logo} alt="FW logo" />
-      <p className="text-xl md:text-2xl text-secondary-normal font-bold w-2/3 text-center">
-        Provide email and choose a password to create account!
-      </p>
-      <SignupForm />
-      <LoginBlock />
+    <div className=" bg-[url('/public/signupBG.webp')] bg-black-1 bg-cover bg-blend-overlay flex justify-end items-center w-full px-4 md:px-8 py-4 md:py-8 h-screen">
+      <div className="w-full md:w-2/3 rounded-3xl h-full flex flex-col gap-6 md:gap-8 items-center justify-center px-4 py-16">
+        <img
+          className="max-w-[80px] max-h-20 animate-spin"
+          src={logo}
+          alt="FW logo"
+        />
+        <p className="text-lg md:text-xl text-secondary-normal w-2/3 md:w-1/2 text-center">
+          Start your journey by providing an email and choosing a password
+        </p>
+        <SignupForm />
+        <LoginBlock />
+      </div>
     </div>
   )
 }
@@ -52,7 +56,7 @@ const SignupForm = () => {
   const { isAuthenticated, signUp } = useAuth()
   useEffect(() => {
     if (isAuthenticated) {
-      // navigate(routes.home())
+      navigate(routes.home())
     }
   }, [isAuthenticated])
 
@@ -74,7 +78,7 @@ const SignupForm = () => {
   return (
     <Form
       onSubmit={onSubmit}
-      className="flex h-full flex-col items-center justify-start gap-3 md:gap-4"
+      className="flex flex-col items-center justify-center gap-3 md:gap-4"
     >
       <div className="items-center flex flex-col">
         <TextField
@@ -82,7 +86,7 @@ const SignupForm = () => {
           inputMode="email"
           className="text-primary-dark placeholder:text-secondary-light rounded-tl-lg rounded-br-lg px-3 py-1 bg-white-1 border-transparent border-4 focus:border-secondary-normal text-md md:text-lg"
           name="email"
-          errorClassName="text-red-light placeholder:text-secondary-light rounded-tl-lg rounded-br-lg px-3 py-1 bg-white-1 border-transparent border-2 border-red-light text-lg md:text-xl"
+          errorClassName="text-red-normal placeholder:text-secondary-light rounded-tl-lg rounded-br-lg px-3 py-1 bg-white-1 border-transparent border-2 border-red-normal text-lg md:text-xl"
           validation={{
             required: { value: true, message: 'Email is required' },
             pattern: {
@@ -92,7 +96,7 @@ const SignupForm = () => {
           }}
         />
         <FieldError
-          className="text-xs md:text-sm text-red-light"
+          className="text-xs md:text-sm text-red-normal"
           name="email"
         />
       </div>
@@ -102,7 +106,7 @@ const SignupForm = () => {
           hidden={true}
           className="text-primary-dark placeholder:text-secondary-light rounded-tl-lg rounded-br-lg px-3 py-1 bg-white-1 border-transparent border-4 focus:border-secondary-normal text-md md:text-lg"
           name="password"
-          errorClassName="text-red-light placeholder:text-secondary-light rounded-tl-lg rounded-br-lg px-3 py-1 bg-white-1 border-transparent border-2 border-red-light text-lg md:text-xl"
+          errorClassName="text-red-normal placeholder:text-secondary-light rounded-tl-lg rounded-br-lg px-3 py-1 bg-white-1 border-transparent border-2 border-red-normal text-lg md:text-xl"
           validation={{
             required: {
               value: true,
@@ -112,7 +116,7 @@ const SignupForm = () => {
           }}
         />
         <FieldError
-          className="text-xs md:text-sm text-red-light"
+          className="text-xs md:text-sm text-red-normal"
           name="password"
         />
       </div>
@@ -129,21 +133,13 @@ const LoginBlock = () => {
 
   return (
     <div className="gap-2 flex flex-col items-center justify-center">
-      <p className="text-sm md:text-base text-center text-primary-normal ">
+      <p className="text-base md:text-lg text-center whitespace-nowrap text-primary-normal font-bold">
         {loginText}
       </p>
       <PrimaryRoundedButtonOutlined
         label="LOGIN NOW!"
         onClick={navigateToLoginPage}
       />
-    </div>
-  )
-}
-
-const SignupBanner = () => {
-  return (
-    <div className="w-full md:w-1/2 bg-white-1 md:h-full hidden md:flex flex-col items-center justify-center gap-5 md:gap-8 px-8 py-24 md:py-16">
-      {/* <img className="w-1/2" src={logo} alt="Signup Banner" /> */}
     </div>
   )
 }

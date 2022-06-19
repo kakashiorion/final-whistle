@@ -7202,6 +7202,7 @@ __metadata:
   dependencies:
     "@redwoodjs/api": 1.5.1
     "@redwoodjs/graphql-server": 1.5.1
+    nodemailer: ^6.7.5
   languageName: unknown
   linkType: soft
 
@@ -17775,6 +17776,13 @@ __metadata:
   version: 2.0.5
   resolution: "node-releases@npm:2.0.5"
   checksum: 3e098e80d9699b18f67089d2617532e7b26d1f385c7b3397e3789018f8fefc7da6478cd057b80df39ed4e307380332c1225f48bf14d16c54c3376afb673ff2f5
+  languageName: node
+  linkType: hard
+
+"nodemailer@npm:^6.7.5":
+  version: 6.7.5
+  resolution: "nodemailer@npm:6.7.5"
+  checksum: 3aa0cdc42e041cc4109f96529ddaf9d0d4831589fd9ea0d9c8b521656288a3bc37657c727e19f24bb811f0bcc60dee985a75ad34acc1b216eba72c515e4ed1c1
   languageName: node
   linkType: hard
 

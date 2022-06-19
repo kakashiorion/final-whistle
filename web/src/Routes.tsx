@@ -72,7 +72,7 @@ const Routes = () => {
           <Route path="/admin/tournaments" page={TournamentTournamentsPage} name="tournaments" />
         </Set>
       </Private>
-      <Set wrap={NavigationLayout}>
+      <Set wrap={NavigationLayout} unauthenticated="landing">
         <Route path="/user-profile" page={UserProfilePage} name="user-profile" />
         <Route path="/leaderboard" page={LeaderboardPage} name="leaderboard" />
         <Route path="/rules" page={RulesPage} name="rules" />
@@ -80,18 +80,18 @@ const Routes = () => {
         <Route path="/all-matches" page={MatchesPage} name="all-matches" />
         <Route path="/user-setup" page={UserSetupPage} name="user-setup" />
       </Set>
+      <Set wrap={HomeLayout} unauthenticated="landing">
+        <Route path="/match-result/{id:Int}" page={MatchResultPage} name="matchResult" />
+        <Route path="/match-predict/{id:Int}" page={MatchPredictPage} name="matchPredict" />
+        <Route path="/home" page={HomePage} name="home" />
+      </Set>
       <Set wrap={LandingLayout}>
         <Route path="/reset-password" page={ResetPasswordPage} name="resetPassword" />
         <Route path="/forgot-password" page={ForgotPasswordPage} name="forgotPassword" />
         <Route path="/signup" page={SignupPage} name="signup" />
         <Route path="/login" page={LoginPage} name="login" />
-        <Route path="/landing" page={LandingPage} name="landing" />
+        <Route path="/" page={LandingPage} name="landing" />
         <Route notfound page={NotFoundPage} />
-      </Set>
-      <Set wrap={HomeLayout}>
-        <Route path="/match-result/{id:Int}" page={MatchResultPage} name="matchResult" />
-        <Route path="/match-predict/{id:Int}" page={MatchPredictPage} name="matchPredict" />
-        <Route path="/" page={HomePage} name="home" />
       </Set>
     </Router>
   )
