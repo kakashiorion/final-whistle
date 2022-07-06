@@ -81,7 +81,7 @@ export const Success = ({
         <p className="text-light-3 text-xs md:text-sm font-bold">
           UPCOMING MATCHES
         </p>
-        <div className="flex w-full h-full overflow-x-scroll rounded-md gap-2 md:gap-3 justify-start items-start">
+        <div className="flex w-full h-full overflow-x-scroll rounded-md gap-2 md:gap-3 justify-start items-start nonscroll">
           {upcomingMatches.map((match) => {
             return <UpcomingMatchItem upcomingMatch={match} key={match.id} />
           })}
@@ -94,7 +94,7 @@ export const Success = ({
         <p className="text-light-3 text-xs md:text-sm font-bold">
           RECENT RESULTS
         </p>
-        <div className="flex flex-col w-full gap-1 md:gap-1 justify-start items-start rounded-md overflow-scroll">
+        <div className="flex flex-col w-full gap-1 md:gap-1 justify-start items-start rounded-md overflow-y-scroll nonscroll">
           {recentMatches.length > 0 ? (
             recentMatches.map((match) => {
               return <RecentMatchItem recentMatch={match} key={match.id} />

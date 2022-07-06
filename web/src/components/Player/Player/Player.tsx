@@ -66,26 +66,33 @@ const Player = ({ player }) => {
     <>
       <div className="rw-segment">
         <header className="rw-segment-header">
-          <h2 className="rw-heading rw-heading-secondary">Player {player.id} Detail</h2>
+          <h2 className="rw-heading rw-heading-secondary">
+            Player {player.id} Detail
+          </h2>
         </header>
         <table className="rw-table">
           <tbody>
             <tr>
               <th>Id</th>
               <td>{player.id}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>Name</th>
               <td>{player.name}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>Position</th>
               <td>{player.position}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>Team id</th>
               <td>{player.teamId}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>Created at</th>
               <td>{timeTag(player.createdAt)}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>Updated at</th>
               <td>{timeTag(player.updatedAt)}</td>
             </tr>

@@ -11,17 +11,11 @@ const PlayersLayout = ({ children }: PlayerLayoutProps) => {
       <Toaster toastOptions={{ className: 'rw-toast', duration: 6000 }} />
       <header className="rw-header">
         <h1 className="rw-heading rw-heading-primary">
-          <Link
-            to={routes.players()}
-            className="rw-link"
-          >
+          <Link to={routes.players()} className="rw-link">
             Players
           </Link>
         </h1>
-        <Link
-          to={routes.newPlayer()}
-          className="rw-button rw-button-green"
-        >
+        <Link to={routes.newPlayer()} className="rw-button rw-button-green">
           <div className="rw-button-icon">+</div> New Player
         </Link>
       </header>

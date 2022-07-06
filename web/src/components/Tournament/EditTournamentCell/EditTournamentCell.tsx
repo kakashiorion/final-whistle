@@ -42,16 +42,21 @@ export const Failure = ({ error }: CellFailureProps) => (
   <div className="rw-cell-error">{error.message}</div>
 )
 
-export const Success = ({ tournament }: CellSuccessProps<EditTournamentById>) => {
-  const [updateTournament, { loading, error }] = useMutation(UPDATE_TOURNAMENT_MUTATION, {
-    onCompleted: () => {
-      toast.success('Tournament updated')
-      navigate(routes.tournaments())
-    },
-    onError: (error) => {
-      toast.error(error.message)
-    },
-  })
+export const Success = ({
+  tournament,
+}: CellSuccessProps<EditTournamentById>) => {
+  const [updateTournament, { loading, error }] = useMutation(
+    UPDATE_TOURNAMENT_MUTATION,
+    {
+      onCompleted: () => {
+        toast.success('Tournament updated')
+        navigate(routes.tournaments())
+      },
+      onError: (error) => {
+        toast.error(error.message)
+      },
+    }
+  )
 
   const onSave = (input, id) => {
     updateTournament({ variables: { id, input } })
@@ -60,10 +65,17 @@ export const Success = ({ tournament }: CellSuccessProps<EditTournamentById>) =>
   return (
     <div className="rw-segment">
       <header className="rw-segment-header">
-        <h2 className="rw-heading rw-heading-secondary">Edit Tournament {tournament.id}</h2>
+        <h2 className="rw-heading rw-heading-secondary">
+          Edit Tournament {tournament.id}
+        </h2>
       </header>
       <div className="rw-segment-main">
-        <TournamentForm tournament={tournament} onSave={onSave} error={error} loading={loading} />
+        <TournamentForm
+          tournament={tournament}
+          onSave={onSave}
+          error={error}
+          loading={loading}
+        />
       </div>
     </div>
   )

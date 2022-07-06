@@ -66,32 +66,41 @@ const Tournament = ({ tournament }) => {
     <>
       <div className="rw-segment">
         <header className="rw-segment-header">
-          <h2 className="rw-heading rw-heading-secondary">Tournament {tournament.id} Detail</h2>
+          <h2 className="rw-heading rw-heading-secondary">
+            Tournament {tournament.id} Detail
+          </h2>
         </header>
         <table className="rw-table">
           <tbody>
             <tr>
               <th>Id</th>
               <td>{tournament.id}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>Name</th>
               <td>{tournament.name}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>Venue</th>
               <td>{tournament.venue}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>Logo url</th>
               <td>{tournament.logoURL}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>Start date</th>
               <td>{timeTag(tournament.startDate)}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>End date</th>
               <td>{timeTag(tournament.endDate)}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>Created at</th>
               <td>{timeTag(tournament.createdAt)}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>Updated at</th>
               <td>{timeTag(tournament.updatedAt)}</td>
             </tr>

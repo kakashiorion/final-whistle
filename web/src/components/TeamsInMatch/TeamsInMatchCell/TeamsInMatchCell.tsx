@@ -24,6 +24,8 @@ export const Failure = ({ error }: CellFailureProps) => (
   <div className="rw-cell-error">{error.message}</div>
 )
 
-export const Success = ({ teamsInMatch }: CellSuccessProps<FindTeamsInMatchById>) => {
+export const Success = ({
+  teamsInMatch,
+}: CellSuccessProps<FindTeamsInMatchById>) => {
   return <TeamsInMatch teamsInMatch={teamsInMatch} />
 }

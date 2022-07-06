@@ -12,15 +12,18 @@ const CREATE_TOURNAMENT_MUTATION = gql`
 `
 
 const NewTournament = () => {
-  const [createTournament, { loading, error }] = useMutation(CREATE_TOURNAMENT_MUTATION, {
-    onCompleted: () => {
-      toast.success('Tournament created')
-      navigate(routes.tournaments())
-    },
-    onError: (error) => {
-      toast.error(error.message)
-    },
-  })
+  const [createTournament, { loading, error }] = useMutation(
+    CREATE_TOURNAMENT_MUTATION,
+    {
+      onCompleted: () => {
+        toast.success('Tournament created')
+        navigate(routes.tournaments())
+      },
+      onError: (error) => {
+        toast.error(error.message)
+      },
+    }
+  )
 
   const onSave = (input) => {
     createTournament({ variables: { input } })

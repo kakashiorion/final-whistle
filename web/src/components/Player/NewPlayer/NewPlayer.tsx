@@ -12,18 +12,21 @@ const CREATE_PLAYER_MUTATION = gql`
 `
 
 const NewPlayer = () => {
-  const [createPlayer, { loading, error }] = useMutation(CREATE_PLAYER_MUTATION, {
-    onCompleted: () => {
-      toast.success('Player created')
-      navigate(routes.players())
-    },
-    onError: (error) => {
-      toast.error(error.message)
-    },
-  })
+  const [createPlayer, { loading, error }] = useMutation(
+    CREATE_PLAYER_MUTATION,
+    {
+      onCompleted: () => {
+        toast.success('Player created')
+        navigate(routes.players())
+      },
+      onError: (error) => {
+        toast.error(error.message)
+      },
+    }
+  )
 
   const onSave = (input) => {
-    const castInput = Object.assign(input, { teamId: parseInt(input.teamId), })
+    const castInput = Object.assign(input, { teamId: parseInt(input.teamId) })
     createPlayer({ variables: { input: castInput } })
   }
 

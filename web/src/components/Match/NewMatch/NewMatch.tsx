@@ -23,7 +23,9 @@ const NewMatch = () => {
   })
 
   const onSave = (input) => {
-    const castInput = Object.assign(input, { tournamentId: parseInt(input.tournamentId), })
+    const castInput = Object.assign(input, {
+      tournamentId: parseInt(input.tournamentId),
+    })
     createMatch({ variables: { input: castInput } })
   }
 

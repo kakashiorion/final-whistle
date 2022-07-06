@@ -11,10 +11,7 @@ const MatchPredictionsLayout = ({ children }: MatchPredictionLayoutProps) => {
       <Toaster toastOptions={{ className: 'rw-toast', duration: 6000 }} />
       <header className="rw-header">
         <h1 className="rw-heading rw-heading-primary">
-          <Link
-            to={routes.matchPredictions()}
-            className="rw-link"
-          >
+          <Link to={routes.matchPredictions()} className="rw-link">
             MatchPredictions
           </Link>
         </h1>

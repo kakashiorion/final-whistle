@@ -12,18 +12,24 @@ const CREATE_TEAMS_IN_MATCH_MUTATION = gql`
 `
 
 const NewTeamsInMatch = () => {
-  const [createTeamsInMatch, { loading, error }] = useMutation(CREATE_TEAMS_IN_MATCH_MUTATION, {
-    onCompleted: () => {
-      toast.success('TeamsInMatch created')
-      navigate(routes.teamsInMatches())
-    },
-    onError: (error) => {
-      toast.error(error.message)
-    },
-  })
+  const [createTeamsInMatch, { loading, error }] = useMutation(
+    CREATE_TEAMS_IN_MATCH_MUTATION,
+    {
+      onCompleted: () => {
+        toast.success('TeamsInMatch created')
+        navigate(routes.teamsInMatches())
+      },
+      onError: (error) => {
+        toast.error(error.message)
+      },
+    }
+  )
 
   const onSave = (input) => {
-    const castInput = Object.assign(input, { matchId: parseInt(input.matchId), teamId: parseInt(input.teamId), })
+    const castInput = Object.assign(input, {
+      matchId: parseInt(input.matchId),
+      teamId: parseInt(input.teamId),
+    })
     createTeamsInMatch({ variables: { input: castInput } })
   }
 

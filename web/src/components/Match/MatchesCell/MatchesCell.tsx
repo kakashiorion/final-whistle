@@ -26,10 +26,7 @@ export const Empty = () => {
   return (
     <div className="rw-text-center">
       {'No matches yet. '}
-      <Link
-        to={routes.newMatch()}
-        className="rw-link"
-      >
+      <Link to={routes.newMatch()} className="rw-link">
         {'Create one?'}
       </Link>
     </div>

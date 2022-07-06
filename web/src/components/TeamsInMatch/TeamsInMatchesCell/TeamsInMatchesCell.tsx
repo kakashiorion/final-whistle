@@ -24,10 +24,7 @@ export const Empty = () => {
   return (
     <div className="rw-text-center">
       {'No teamsInMatches yet. '}
-      <Link
-        to={routes.newTeamsInMatch()}
-        className="rw-link"
-      >
+      <Link to={routes.newTeamsInMatch()} className="rw-link">
         {'Create one?'}
       </Link>
     </div>
@@ -38,6 +35,8 @@ export const Failure = ({ error }: CellFailureProps) => (
   <div className="rw-cell-error">{error.message}</div>
 )
 
-export const Success = ({ teamsInMatches }: CellSuccessProps<FindTeamsInMatches>) => {
+export const Success = ({
+  teamsInMatches,
+}: CellSuccessProps<FindTeamsInMatches>) => {
   return <TeamsInMatches teamsInMatches={teamsInMatches} />
 }

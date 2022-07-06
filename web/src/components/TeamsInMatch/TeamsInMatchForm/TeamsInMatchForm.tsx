@@ -7,21 +7,8 @@ import {
   Submit,
 } from '@redwoodjs/forms'
 
-
-
 const TeamsInMatchForm = (props) => {
   const onSubmit = (data) => {
-
-  
-    
-    
-  
-    
-    
-  
-    
-    
-  
     props.onSave(data, props?.teamsInMatch?.id)
   }
 
@@ -34,7 +21,7 @@ const TeamsInMatchForm = (props) => {
           titleClassName="rw-form-error-title"
           listClassName="rw-form-error-list"
         />
-      
+
         <Label
           name="matchId"
           className="rw-label"
@@ -42,15 +29,14 @@ const TeamsInMatchForm = (props) => {
         >
           Match id
         </Label>
-        
-          <NumberField
-            name="matchId"
-            defaultValue={props.teamsInMatch?.matchId}
-            className="rw-input"
-            errorClassName="rw-input rw-input-error"
-            validation={{ required: true }}
-          />
-        
+
+        <NumberField
+          name="matchId"
+          defaultValue={props.teamsInMatch?.matchId}
+          className="rw-input"
+          errorClassName="rw-input rw-input-error"
+          validation={{ required: true }}
+        />
 
         <FieldError name="matchId" className="rw-field-error" />
 
@@ -61,15 +47,14 @@ const TeamsInMatchForm = (props) => {
         >
           Team id
         </Label>
-        
-          <NumberField
-            name="teamId"
-            defaultValue={props.teamsInMatch?.teamId}
-            className="rw-input"
-            errorClassName="rw-input rw-input-error"
-            validation={{ required: true }}
-          />
-        
+
+        <NumberField
+          name="teamId"
+          defaultValue={props.teamsInMatch?.teamId}
+          className="rw-input"
+          errorClassName="rw-input rw-input-error"
+          validation={{ required: true }}
+        />
 
         <FieldError name="teamId" className="rw-field-error" />
 
@@ -80,22 +65,18 @@ const TeamsInMatchForm = (props) => {
         >
           Score
         </Label>
-        
-          <NumberField
-            name="score"
-            defaultValue={props.teamsInMatch?.score}
-            className="rw-input"
-            errorClassName="rw-input rw-input-error"
-          />
-        
+
+        <NumberField
+          name="score"
+          defaultValue={props.teamsInMatch?.score}
+          className="rw-input"
+          errorClassName="rw-input rw-input-error"
+        />
 
         <FieldError name="score" className="rw-field-error" />
 
         <div className="rw-button-group">
-          <Submit
-            disabled={props.loading}
-            className="rw-button rw-button-blue"
-          >
+          <Submit disabled={props.loading} className="rw-button rw-button-blue">
             Save
           </Submit>
         </div>

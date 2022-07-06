@@ -12,18 +12,24 @@ const CREATE_MATCH_PREDICTION_MUTATION = gql`
 `
 
 const NewMatchPrediction = () => {
-  const [createMatchPrediction, { loading, error }] = useMutation(CREATE_MATCH_PREDICTION_MUTATION, {
-    onCompleted: () => {
-      toast.success('MatchPrediction created')
-      navigate(routes.matchPredictions())
-    },
-    onError: (error) => {
-      toast.error(error.message)
-    },
-  })
+  const [createMatchPrediction, { loading, error }] = useMutation(
+    CREATE_MATCH_PREDICTION_MUTATION,
+    {
+      onCompleted: () => {
+        toast.success('MatchPrediction created')
+        navigate(routes.matchPredictions())
+      },
+      onError: (error) => {
+        toast.error(error.message)
+      },
+    }
+  )
 
   const onSave = (input) => {
-    const castInput = Object.assign(input, { userId: parseInt(input.userId), matchId: parseInt(input.matchId), })
+    const castInput = Object.assign(input, {
+      userId: parseInt(input.userId),
+      matchId: parseInt(input.matchId),
+    })
     createMatchPrediction({ variables: { input: castInput } })
   }
 

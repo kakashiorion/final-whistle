@@ -11,10 +11,7 @@ const TeamsInMatchesLayout = ({ children }: TeamsInMatchLayoutProps) => {
       <Toaster toastOptions={{ className: 'rw-toast', duration: 6000 }} />
       <header className="rw-header">
         <h1 className="rw-heading rw-heading-primary">
-          <Link
-            to={routes.teamsInMatches()}
-            className="rw-link"
-          >
+          <Link to={routes.teamsInMatches()} className="rw-link">
             TeamsInMatches
           </Link>
         </h1>

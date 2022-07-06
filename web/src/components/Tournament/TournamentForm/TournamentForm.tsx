@@ -8,33 +8,14 @@ import {
   Submit,
 } from '@redwoodjs/forms'
 
-
 const formatDatetime = (value) => {
   if (value) {
     return value.replace(/:\d{2}\.\d{3}\w/, '')
   }
 }
 
-
 const TournamentForm = (props) => {
   const onSubmit = (data) => {
-
-  
-    
-    
-  
-    
-    
-  
-    
-    
-  
-    
-    
-  
-    
-    
-  
     props.onSave(data, props?.tournament?.id)
   }
 
@@ -47,7 +28,7 @@ const TournamentForm = (props) => {
           titleClassName="rw-form-error-title"
           listClassName="rw-form-error-list"
         />
-      
+
         <Label
           name="name"
           className="rw-label"
@@ -55,15 +36,14 @@ const TournamentForm = (props) => {
         >
           Name
         </Label>
-        
-          <TextField
-            name="name"
-            defaultValue={props.tournament?.name}
-            className="rw-input"
-            errorClassName="rw-input rw-input-error"
-            validation={{ required: true }}
-          />
-        
+
+        <TextField
+          name="name"
+          defaultValue={props.tournament?.name}
+          className="rw-input"
+          errorClassName="rw-input rw-input-error"
+          validation={{ required: true }}
+        />
 
         <FieldError name="name" className="rw-field-error" />
 
@@ -74,14 +54,13 @@ const TournamentForm = (props) => {
         >
           Venue
         </Label>
-        
-          <TextField
-            name="venue"
-            defaultValue={props.tournament?.venue}
-            className="rw-input"
-            errorClassName="rw-input rw-input-error"
-          />
-        
+
+        <TextField
+          name="venue"
+          defaultValue={props.tournament?.venue}
+          className="rw-input"
+          errorClassName="rw-input rw-input-error"
+        />
 
         <FieldError name="venue" className="rw-field-error" />
 
@@ -92,14 +71,13 @@ const TournamentForm = (props) => {
         >
           Logo url
         </Label>
-        
-          <TextField
-            name="logoURL"
-            defaultValue={props.tournament?.logoURL}
-            className="rw-input"
-            errorClassName="rw-input rw-input-error"
-          />
-        
+
+        <TextField
+          name="logoURL"
+          defaultValue={props.tournament?.logoURL}
+          className="rw-input"
+          errorClassName="rw-input rw-input-error"
+        />
 
         <FieldError name="logoURL" className="rw-field-error" />
 
@@ -110,15 +88,14 @@ const TournamentForm = (props) => {
         >
           Start date
         </Label>
-        
-          <DatetimeLocalField
-            name="startDate"
-            defaultValue={formatDatetime(props.tournament?.startDate)}
-            className="rw-input"
-            errorClassName="rw-input rw-input-error"
-            validation={{ required: true }}
-          />
-        
+
+        <DatetimeLocalField
+          name="startDate"
+          defaultValue={formatDatetime(props.tournament?.startDate)}
+          className="rw-input"
+          errorClassName="rw-input rw-input-error"
+          validation={{ required: true }}
+        />
 
         <FieldError name="startDate" className="rw-field-error" />
 
@@ -129,23 +106,19 @@ const TournamentForm = (props) => {
         >
           End date
         </Label>
-        
-          <DatetimeLocalField
-            name="endDate"
-            defaultValue={formatDatetime(props.tournament?.endDate)}
-            className="rw-input"
-            errorClassName="rw-input rw-input-error"
-            validation={{ required: true }}
-          />
-        
+
+        <DatetimeLocalField
+          name="endDate"
+          defaultValue={formatDatetime(props.tournament?.endDate)}
+          className="rw-input"
+          errorClassName="rw-input rw-input-error"
+          validation={{ required: true }}
+        />
 
         <FieldError name="endDate" className="rw-field-error" />
 
         <div className="rw-button-group">
-          <Submit
-            disabled={props.loading}
-            className="rw-button rw-button-blue"
-          >
+          <Submit disabled={props.loading} className="rw-button rw-button-blue">
             Save
           </Submit>
         </div>

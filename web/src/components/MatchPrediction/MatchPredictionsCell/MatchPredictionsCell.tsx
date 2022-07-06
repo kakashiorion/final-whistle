@@ -28,10 +28,7 @@ export const Empty = () => {
   return (
     <div className="rw-text-center">
       {'No matchPredictions yet. '}
-      <Link
-        to={routes.newMatchPrediction()}
-        className="rw-link"
-      >
+      <Link to={routes.newMatchPrediction()} className="rw-link">
         {'Create one?'}
       </Link>
     </div>
@@ -42,6 +39,8 @@ export const Failure = ({ error }: CellFailureProps) => (
   <div className="rw-cell-error">{error.message}</div>
 )
 
-export const Success = ({ matchPredictions }: CellSuccessProps<FindMatchPredictions>) => {
+export const Success = ({
+  matchPredictions,
+}: CellSuccessProps<FindMatchPredictions>) => {
   return <MatchPredictions matchPredictions={matchPredictions} />
 }
