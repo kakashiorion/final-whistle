@@ -8,6 +8,16 @@ export const QUERY = gql`
   query FindCurrentUserQuery($id: Int!) {
     currentUser: user(id: $id) {
       id
+      username
+      email
+      hashedPassword
+      salt
+      resetToken
+      resetTokenExpiresAt
+      points
+      createdAt
+      updatedAt
+      roles
     }
   }
 `

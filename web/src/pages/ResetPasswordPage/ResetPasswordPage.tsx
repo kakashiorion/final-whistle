@@ -63,24 +63,15 @@ interface FormValues {
   password: string
 }
 const ResetPasswordForm = ({ resetToken }: { resetToken: string }) => {
-  const { isAuthenticated, reauthenticate, validateResetToken, resetPassword } =
-    useAuth()
-  const [enabled, setEnabled] = useState(true)
+  const { reauthenticate, validateResetToken, resetPassword } = useAuth()
+  const [enabled, setEnabled] = useState(false)
   const [username, setUsername] = useState('')
-
-  useEffect(() => {
-    if (isAuthenticated) {
-      navigate(routes.home())
-    }
-  }, [isAuthenticated])
 
   useEffect(() => {
     const validateToken = async () => {
       const response = await validateResetToken(resetToken)
-      console.log({ response })
       if (response.error) {
-        setEnabled(false)
-        toast.error(response.error)
+        navigate(routes.forgotPassword())
       } else {
         setUsername(response.username ?? response.email)
         setEnabled(true)
@@ -115,7 +106,7 @@ const ResetPasswordForm = ({ resetToken }: { resetToken: string }) => {
       <div className="items-center flex flex-col">
         <PasswordField
           placeholder="New Password"
-          className="text-secondary-dark placeholder:text-primary-light rounded-tl-lg rounded-br-lg px-3 py-1 bg-white-1 border-transparent border-4 focus:border-primary-normal text-md md:text-lg"
+          className="text-secondary-dark placeholder:text-primary-light rounded-tl-lg rounded-br-lg px-3 py-1 bg-white-1 border-transparent border-4 focus:border-primary-normal text-base md:text-lg"
           name="password"
           disabled={!enabled}
           errorClassName="text-red-light placeholder:text-primary-light rounded-tl-lg rounded-br-lg px-3 py-1 bg-white-1 border-transparent border-2 border-red-light text-lg md:text-xl"

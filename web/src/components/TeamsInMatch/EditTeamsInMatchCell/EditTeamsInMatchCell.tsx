@@ -14,7 +14,6 @@ export const QUERY = gql`
       matchId
       teamId
       score
-      scoringPlayers
       createdAt
       updatedAt
     }
@@ -27,7 +26,6 @@ const UPDATE_TEAMS_IN_MATCH_MUTATION = gql`
       matchId
       teamId
       score
-      scoringPlayers
       createdAt
       updatedAt
     }

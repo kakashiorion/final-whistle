@@ -4,32 +4,64 @@ export const standard = defineScenario<Prisma.MatchPredictionCreateArgs>({
   matchPrediction: {
     one: {
       data: {
-        matchId: 8906147,
-        predictedScoringPlayersOfTeam1: 9272289,
-        predictedScoringPlayersOfTeam2: 4039661,
-        updatedAt: '2022-06-18T19:08:09Z',
+        predictedScoringPlayersOfTeam1: 59831,
+        predictedScoringPlayersOfTeam2: 9206931,
+        updatedAt: '2022-06-23T15:29:41Z',
         user: {
           create: {
-            email: 'String3485479',
+            email: 'String2104859',
             hashedPassword: 'String',
             salt: 'String',
-            updatedAt: '2022-06-18T19:08:09Z',
+            updatedAt: '2022-06-23T15:29:41Z',
+          },
+        },
+        match: {
+          create: {
+            location: 'String',
+            matchDate: '2022-06-23T15:29:41Z',
+            round: 'String',
+            updatedAt: '2022-06-23T15:29:41Z',
+            maxWagerLimit: 5303524,
+            tournament: {
+              create: {
+                name: 'String',
+                startDate: '2022-06-23T15:29:41Z',
+                endDate: '2022-06-23T15:29:41Z',
+                updatedAt: '2022-06-23T15:29:41Z',
+              },
+            },
           },
         },
       },
     },
     two: {
       data: {
-        matchId: 8932940,
-        predictedScoringPlayersOfTeam1: 3100721,
-        predictedScoringPlayersOfTeam2: 1551,
-        updatedAt: '2022-06-18T19:08:09Z',
+        predictedScoringPlayersOfTeam1: 5422578,
+        predictedScoringPlayersOfTeam2: 1460625,
+        updatedAt: '2022-06-23T15:29:41Z',
         user: {
           create: {
-            email: 'String1409047',
+            email: 'String7834288',
             hashedPassword: 'String',
             salt: 'String',
-            updatedAt: '2022-06-18T19:08:09Z',
+            updatedAt: '2022-06-23T15:29:41Z',
+          },
+        },
+        match: {
+          create: {
+            location: 'String',
+            matchDate: '2022-06-23T15:29:41Z',
+            round: 'String',
+            updatedAt: '2022-06-23T15:29:41Z',
+            maxWagerLimit: 2749839,
+            tournament: {
+              create: {
+                name: 'String',
+                startDate: '2022-06-23T15:29:41Z',
+                endDate: '2022-06-23T15:29:41Z',
+                updatedAt: '2022-06-23T15:29:41Z',
+              },
+            },
           },
         },
       },

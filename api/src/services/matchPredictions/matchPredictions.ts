@@ -40,4 +40,6 @@ export const deleteMatchPrediction: MutationResolvers['deleteMatchPrediction'] =
 export const MatchPrediction: MatchPredictionResolvers = {
   user: (_obj, { root }) =>
     db.matchPrediction.findUnique({ where: { id: root.id } }).user(),
+  match: (_obj, { root }) =>
+    db.matchPrediction.findUnique({ where: { id: root.id } }).match(),
 }

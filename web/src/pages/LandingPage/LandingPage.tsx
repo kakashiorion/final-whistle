@@ -5,17 +5,8 @@ import betImage from 'public/betImage.png'
 import { PrimarySkewedButton } from 'src/components/Buttons/SkewedButton/PrimarySkewedButton'
 import { navigate, routes } from '@redwoodjs/router'
 import { SecondaryRoundedButtonOutlined } from 'src/components/Buttons/RoundedButton/SecondaryRoundedButton'
-import { useEffect } from 'react'
-import { useAuth } from '@redwoodjs/auth'
 
 const LandingPage = () => {
-  const { isAuthenticated } = useAuth()
-  useEffect(() => {
-    if (isAuthenticated) {
-      navigate(routes.home())
-    }
-  }, [isAuthenticated])
-
   return (
     <>
       <MetaTags

@@ -6,7 +6,7 @@ export const schema = gql`
     teamId: Int!
     team: Team!
     score: Int
-    scoringPlayers: [Int]!
+    scoringPlayers: [Player]!
     createdAt: DateTime!
     updatedAt: DateTime!
   }
@@ -20,14 +20,12 @@ export const schema = gql`
     matchId: Int!
     teamId: Int!
     score: Int
-    scoringPlayers: [Int]!
   }
 
   input UpdateTeamsInMatchInput {
     matchId: Int
     teamId: Int
     score: Int
-    scoringPlayers: [Int]!
   }
 
   type Mutation {

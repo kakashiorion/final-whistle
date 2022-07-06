@@ -42,4 +42,6 @@ export const Match: MatchResolvers = {
     db.match.findUnique({ where: { id: root.id } }).tournament(),
   teams: (_obj, { root }) =>
     db.match.findUnique({ where: { id: root.id } }).teams(),
+  predictions: (_obj, { root }) =>
+    db.match.findUnique({ where: { id: root.id } }).predictions(),
 }

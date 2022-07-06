@@ -22,9 +22,6 @@ const TeamsInMatchForm = (props) => {
     
     
   
-    
-    
-  
     props.onSave(data, props?.teamsInMatch?.id)
   }
 
@@ -93,25 +90,6 @@ const TeamsInMatchForm = (props) => {
         
 
         <FieldError name="score" className="rw-field-error" />
-
-        <Label
-          name="scoringPlayers"
-          className="rw-label"
-          errorClassName="rw-label rw-label-error"
-        >
-          Scoring players
-        </Label>
-        
-          <NumberField
-            name="scoringPlayers"
-            defaultValue={props.teamsInMatch?.scoringPlayers}
-            className="rw-input"
-            errorClassName="rw-input rw-input-error"
-            validation={{ required: true }}
-          />
-        
-
-        <FieldError name="scoringPlayers" className="rw-field-error" />
 
         <div className="rw-button-group">
           <Submit

@@ -10,6 +10,7 @@ export const schema = gql`
     updatedAt: DateTime!
     teams: [TeamsInMatch]!
     maxWagerLimit: Int!
+    predictions: [MatchPrediction]!
   }
 
   type Query {

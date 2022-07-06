@@ -14,6 +14,17 @@ export const SecondaryRoundedButton = (props: RoundedButtonProps) => {
   )
 }
 
+export const SecondaryRoundedButtonSmall = (props: RoundedButtonProps) => {
+  return (
+    <button
+      className="flex items-center justify-center hover:bg-secondary-dark rounded-full shadow-md px-3 py-1 bg-secondary-normal text-white-1"
+      onClick={props.onClick}
+    >
+      <p className="text-xs md:text-sm">{props.label}</p>
+    </button>
+  )
+}
+
 export const SecondaryRoundedButtonOutlined = (props: RoundedButtonProps) => {
   return (
     <button

@@ -10,7 +10,6 @@ import {
 } from '@redwoodjs/forms'
 import { toast, Toaster } from '@redwoodjs/web/dist/toast'
 import { useAuth } from '@redwoodjs/auth'
-import { useEffect } from 'react'
 import { SecondaryRoundedButtonOutlined } from 'src/components/Buttons/RoundedButton/SecondaryRoundedButton'
 import { PrimarySkewedButton } from 'src/components/Buttons/SkewedButton/PrimarySkewedButton'
 
@@ -31,7 +30,7 @@ export default LoginPage
 
 const LoginContent = () => {
   return (
-    <div className=" bg-[url('/public/loginBG.jpeg')] bg-black-2 bg-cover bg-blend-overlay flex justify-start items-center w-full px-4 md:px-8 py-4 md:py-8 h-screen">
+    <div className="bg-[url('/public/loginBG.jpeg')] bg-black-2 bg-cover bg-blend-overlay flex justify-start items-center w-full px-4 md:px-8 py-4 md:py-8 h-screen">
       <div className="w-full md:w-2/3 rounded-3xl h-full flex flex-col gap-6 md:gap-8 items-center justify-center px-4 py-16">
         <div className="flex flex-col items-end">
           <img
@@ -42,7 +41,7 @@ const LoginContent = () => {
           <div className="bg-black-3 animate-[pulse_1s_ease-in-out_infinite] h-2 w-10 rounded-[50%]"></div>
         </div>
         <div className="flex flex-col gap-3 items-center justify-center">
-          <p className="text-lg md:text-xl text-primary-normal w-full text-center">
+          <p className="text-lg md:text-xl text-white-2 w-full text-center">
             Login with your email and password
           </p>
           <LoginForm />
@@ -69,19 +68,13 @@ interface FormValues {
   password: string
 }
 const LoginForm = () => {
-  const { isAuthenticated, logIn } = useAuth()
-  useEffect(() => {
-    if (isAuthenticated) {
-      navigate(routes.home())
-    }
-  }, [isAuthenticated])
+  const { logIn } = useAuth()
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     const response = await logIn({
       username: data.email,
       password: data.password,
     })
-    console.log({ response })
     if (response.message) {
       toast(response.message)
     } else if (response.error) {
@@ -99,7 +92,7 @@ const LoginForm = () => {
       <div className="items-center flex flex-col">
         <TextField
           placeholder="Email"
-          className="text-secondary-dark placeholder:text-primary-light rounded-tl-lg rounded-br-lg px-3 py-1 bg-white-1 border-transparent border-4 focus:border-primary-normal text-md md:text-lg"
+          className="text-secondary-dark placeholder:text-primary-light rounded-tl-lg rounded-br-lg px-3 py-1 bg-white-1 border-transparent border-4 focus:border-primary-normal text-base md:text-lg"
           name="email"
           inputMode="email"
           errorClassName="text-red-light placeholder:text-primary-light rounded-tl-lg rounded-br-lg px-3 py-1 bg-white-1 border-transparent border-2 border-red-light text-lg md:text-xl"
@@ -119,7 +112,7 @@ const LoginForm = () => {
       <div className="items-center flex flex-col">
         <PasswordField
           placeholder="Password"
-          className="text-secondary-dark placeholder:text-primary-light rounded-tl-lg rounded-br-lg px-3 py-1 bg-white-1 border-transparent border-4 focus:border-primary-normal text-md md:text-lg"
+          className="text-secondary-dark placeholder:text-primary-light rounded-tl-lg rounded-br-lg px-3 py-1 bg-white-1 border-transparent border-4 focus:border-primary-normal text-base md:text-lg"
           name="password"
           errorClassName="text-red-light placeholder:text-primary-light rounded-tl-lg rounded-br-lg px-3 py-1 bg-white-1 border-transparent border-2 border-red-light text-lg md:text-xl"
           validation={{

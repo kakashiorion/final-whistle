@@ -40,18 +40,18 @@ describe('matchPredictions', () => {
     const result = await createMatchPrediction({
       input: {
         userId: scenario.matchPrediction.two.userId,
-        matchId: 1633041,
-        predictedScoringPlayersOfTeam1: 8445016,
-        predictedScoringPlayersOfTeam2: 9957692,
-        updatedAt: '2022-06-18T19:08:08Z',
+        matchId: scenario.matchPrediction.two.matchId,
+        predictedScoringPlayersOfTeam1: 9126400,
+        predictedScoringPlayersOfTeam2: 5005751,
+        updatedAt: '2022-06-23T15:29:41Z',
       },
     })
 
     expect(result.userId).toEqual(scenario.matchPrediction.two.userId)
-    expect(result.matchId).toEqual(1633041)
-    expect(result.predictedScoringPlayersOfTeam1).toEqual(8445016)
-    expect(result.predictedScoringPlayersOfTeam2).toEqual(9957692)
-    expect(result.updatedAt).toEqual('2022-06-18T19:08:08Z')
+    expect(result.matchId).toEqual(scenario.matchPrediction.two.matchId)
+    expect(result.predictedScoringPlayersOfTeam1).toEqual(9126400)
+    expect(result.predictedScoringPlayersOfTeam2).toEqual(5005751)
+    expect(result.updatedAt).toEqual('2022-06-23T15:29:41Z')
   })
 
   scenario('updates a matchPrediction', async (scenario: StandardScenario) => {
@@ -60,10 +60,10 @@ describe('matchPredictions', () => {
     })
     const result = await updateMatchPrediction({
       id: original.id,
-      input: { matchId: 1443078 },
+      input: { predictedScoringPlayersOfTeam1: 8109502 },
     })
 
-    expect(result.matchId).toEqual(1443078)
+    expect(result.predictedScoringPlayersOfTeam1).toEqual(8109502)
   })
 
   scenario('deletes a matchPrediction', async (scenario: StandardScenario) => {

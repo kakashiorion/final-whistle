@@ -5,6 +5,7 @@ export const schema = gql`
     position: String!
     team: Team
     teamId: Int
+    scoredForTeamInMatch: [TeamsInMatch]!
     createdAt: DateTime!
     updatedAt: DateTime!
   }

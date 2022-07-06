@@ -10,7 +10,6 @@ import {
 } from '@redwoodjs/forms'
 import { toast, Toaster } from '@redwoodjs/web/dist/toast'
 import { useAuth } from '@redwoodjs/auth'
-import { useEffect } from 'react'
 import { PrimaryRoundedButtonOutlined } from 'src/components/Buttons/RoundedButton/PrimaryRoundedButton'
 import { SecondarySkewedButton } from 'src/components/Buttons/SkewedButton/SecondarySkewedButton'
 
@@ -19,7 +18,7 @@ const SignupPage = () => {
     <>
       <MetaTags
         title="Signup"
-        description="Signuo page for Final Whistle - the football prediction game"
+        description="Signup page for Final Whistle - the football prediction game"
       />
       <Toaster toastOptions={{ className: 'rw-toast', duration: 3000 }} />
       <SignupContent />
@@ -31,15 +30,15 @@ export default SignupPage
 
 const SignupContent = () => {
   return (
-    <div className=" bg-[url('/public/signupBG.webp')] bg-black-1 bg-cover bg-blend-overlay flex justify-end items-center w-full px-4 md:px-8 py-4 md:py-8 h-screen">
-      <div className="w-full md:w-2/3 rounded-3xl h-full flex flex-col gap-6 md:gap-8 items-center justify-center px-4 py-16">
+    <div className=" bg-[url('/public/signupBG.webp')] bg-black-2 bg-cover bg-blend-overlay flex justify-end items-center w-full px-4 md:px-8 py-4 md:py-8 h-screen">
+      <div className="w-full md:w-1/2 rounded-3xl flex flex-col gap-6 md:gap-8 items-center justify-center px-4 py-16">
         <img
           className="max-w-[80px] max-h-20 animate-spin"
           src={logo}
           alt="FW logo"
         />
-        <p className="text-lg md:text-xl text-secondary-normal w-2/3 md:w-1/2 text-center">
-          Start your journey by providing an email and choosing a password
+        <p className="text-lg md:text-xl text-white-2 w-full text-center">
+          Start your journey with just an email
         </p>
         <SignupForm />
         <LoginBlock />
@@ -53,25 +52,20 @@ interface FormValues {
   password: string
 }
 const SignupForm = () => {
-  const { isAuthenticated, signUp } = useAuth()
-  useEffect(() => {
-    if (isAuthenticated) {
-      navigate(routes.home())
-    }
-  }, [isAuthenticated])
+  const { signUp } = useAuth()
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     const response = await signUp({
       username: data.email,
       password: data.password,
     })
-    console.log({ response })
     if (response.message) {
       toast(response.message)
     } else if (response.error) {
       toast.error(response.error)
     } else {
       toast.success('Welcome!')
+      navigate(routes.userSetup(), { replace: true })
     }
   }
 
@@ -84,7 +78,7 @@ const SignupForm = () => {
         <TextField
           placeholder="Enter your email"
           inputMode="email"
-          className="text-primary-dark placeholder:text-secondary-light rounded-tl-lg rounded-br-lg px-3 py-1 bg-white-1 border-transparent border-4 focus:border-secondary-normal text-md md:text-lg"
+          className="text-primary-dark placeholder:text-secondary-light rounded-tl-lg rounded-br-lg px-3 py-1 bg-white-1 border-transparent border-4 focus:border-secondary-normal text-base md:text-lg"
           name="email"
           errorClassName="text-red-normal placeholder:text-secondary-light rounded-tl-lg rounded-br-lg px-3 py-1 bg-white-1 border-transparent border-2 border-red-normal text-lg md:text-xl"
           validation={{
@@ -104,7 +98,7 @@ const SignupForm = () => {
         <PasswordField
           placeholder="Choose a password"
           hidden={true}
-          className="text-primary-dark placeholder:text-secondary-light rounded-tl-lg rounded-br-lg px-3 py-1 bg-white-1 border-transparent border-4 focus:border-secondary-normal text-md md:text-lg"
+          className="text-primary-dark placeholder:text-secondary-light rounded-tl-lg rounded-br-lg px-3 py-1 bg-white-1 border-transparent border-4 focus:border-secondary-normal text-base md:text-lg"
           name="password"
           errorClassName="text-red-normal placeholder:text-secondary-light rounded-tl-lg rounded-br-lg px-3 py-1 bg-white-1 border-transparent border-2 border-red-normal text-lg md:text-xl"
           validation={{

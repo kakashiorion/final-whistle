@@ -10,7 +10,6 @@ export const QUERY = gql`
       matchId
       teamId
       score
-      scoringPlayers
       createdAt
       updatedAt
     }

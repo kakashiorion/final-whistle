@@ -17468,6 +17468,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"moment@npm:^2.29.3":
+  version: 2.29.3
+  resolution: "moment@npm:2.29.3"
+  checksum: 2395b566a5e9ab88ea75c26ef4c72bc3aec801bfa46904ea237b67e824a7abcb0d52a79dfb83d402772b67d8c8cfe7853ebd864066c39f82bfa195a560c0e4b8
+  languageName: node
+  linkType: hard
+
 "move-concurrently@npm:^1.0.1":
   version: 1.0.1
   resolution: "move-concurrently@npm:1.0.1"
@@ -23956,6 +23963,7 @@ __metadata:
     "@redwoodjs/router": 1.5.1
     "@redwoodjs/web": 1.5.1
     autoprefixer: ^10.4.7
+    moment: ^2.29.3
     postcss: ^8.4.14
     postcss-loader: ^7.0.0
     prop-types: 15.8.1

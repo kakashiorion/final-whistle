@@ -83,9 +83,6 @@ const TeamsInMatch = ({ teamsInMatch }) => {
               <th>Score</th>
               <td>{teamsInMatch.score}</td>
             </tr><tr>
-              <th>Scoring players</th>
-              <td>{teamsInMatch.scoringPlayers}</td>
-            </tr><tr>
               <th>Created at</th>
               <td>{timeTag(teamsInMatch.createdAt)}</td>
             </tr><tr>

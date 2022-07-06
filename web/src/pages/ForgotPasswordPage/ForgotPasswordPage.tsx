@@ -4,7 +4,6 @@ import { Link, navigate, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 import { toast, Toaster } from '@redwoodjs/web/dist/toast'
 import logo from 'public/Main 2.png'
-import { useEffect } from 'react'
 import { SecondaryRoundedButtonOutlined } from 'src/components/Buttons/RoundedButton/SecondaryRoundedButton'
 import { PrimarySkewedButton } from 'src/components/Buttons/SkewedButton/PrimarySkewedButton'
 
@@ -62,16 +61,10 @@ interface FormValues {
   email: string
 }
 const ForgotPasswordForm = () => {
-  const { isAuthenticated, forgotPassword } = useAuth()
-  useEffect(() => {
-    if (isAuthenticated) {
-      navigate(routes.home())
-    }
-  }, [isAuthenticated])
+  const { forgotPassword } = useAuth()
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     const response = await forgotPassword(data.email)
-    console.log({ response })
     if (response.message) {
       toast(response.message)
     } else if (response.error) {
@@ -88,8 +81,8 @@ const ForgotPasswordForm = () => {
     >
       <div className="items-center flex flex-col">
         <TextField
-          placeholder="Provide your email"
-          className="text-secondary-dark placeholder:text-primary-light rounded-tl-lg rounded-br-lg px-3 py-1 bg-white-1 border-transparent border-4 focus:border-primary-normal text-md md:text-lg"
+          placeholder="Provide your email ID"
+          className="text-secondary-dark placeholder:text-primary-light rounded-tl-lg rounded-br-lg px-3 py-1 bg-white-1 border-transparent border-4 focus:border-primary-normal text-base md:text-lg"
           name="email"
           inputMode="email"
           errorClassName="text-red-light placeholder:text-primary-light rounded-tl-lg rounded-br-lg px-3 py-1 bg-white-1 border-transparent border-2 border-red-light text-lg md:text-xl"
@@ -106,7 +99,7 @@ const ForgotPasswordForm = () => {
           name="email"
         />
       </div>
-      <PrimarySkewedButton label="SEND ME CODE!" />
+      <PrimarySkewedButton label="SEND ME LINK!" />
     </Form>
   )
 }

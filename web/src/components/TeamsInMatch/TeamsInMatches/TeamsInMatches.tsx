@@ -83,7 +83,6 @@ const TeamsInMatchesList = ({ teamsInMatches }) => {
             <th>Match id</th>
             <th>Team id</th>
             <th>Score</th>
-            <th>Scoring players</th>
             <th>Created at</th>
             <th>Updated at</th>
             <th>&nbsp;</th>
@@ -96,7 +95,6 @@ const TeamsInMatchesList = ({ teamsInMatches }) => {
               <td>{truncate(teamsInMatch.matchId)}</td>
               <td>{truncate(teamsInMatch.teamId)}</td>
               <td>{truncate(teamsInMatch.score)}</td>
-              <td>{truncate(teamsInMatch.scoringPlayers)}</td>
               <td>{timeTag(teamsInMatch.createdAt)}</td>
               <td>{timeTag(teamsInMatch.updatedAt)}</td>
               <td>

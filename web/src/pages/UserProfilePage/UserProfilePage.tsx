@@ -1,12 +1,14 @@
+import { useAuth } from '@redwoodjs/auth'
 import { MetaTags } from '@redwoodjs/web'
 import CurrentUserCell from 'src/components/CurrentUserCell'
 
 const UserProfilePage = () => {
+  const { currentUser } = useAuth()
   return (
     <>
       <MetaTags title="UserProfile" description="UserProfile page" />
 
-      <CurrentUserCell />
+      <CurrentUserCell id={currentUser.id} />
     </>
   )
 }

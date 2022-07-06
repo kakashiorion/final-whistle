@@ -31,13 +31,13 @@ describe('players', () => {
       input: {
         name: 'String',
         position: 'String',
-        updatedAt: '2022-06-18T19:07:18Z',
+        updatedAt: '2022-06-23T15:30:28Z',
       },
     })
 
     expect(result.name).toEqual('String')
     expect(result.position).toEqual('String')
-    expect(result.updatedAt).toEqual('2022-06-18T19:07:18Z')
+    expect(result.updatedAt).toEqual('2022-06-23T15:30:28Z')
   })
 
   scenario('updates a player', async (scenario: StandardScenario) => {

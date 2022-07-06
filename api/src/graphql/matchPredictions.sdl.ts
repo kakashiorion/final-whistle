@@ -4,6 +4,7 @@ export const schema = gql`
     userId: Int!
     user: User!
     matchId: Int!
+    match: Match!
     predictedScoreOfTeam1: Int!
     predictedScoreOfTeam2: Int!
     predictedScoringPlayersOfTeam1: [Int]!

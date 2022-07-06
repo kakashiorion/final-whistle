@@ -4,7 +4,8 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Open Sans'],
+        sans: ['Rubik', 'Poppins', 'Open Sans', 'Helvetica'],
+        serif: ['Noto Serif', 'Didot', 'Garamond'],
       },
       colors: {
         primary: {

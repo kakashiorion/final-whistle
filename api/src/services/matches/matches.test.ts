@@ -30,20 +30,20 @@ describe('matches', () => {
     const result = await createMatch({
       input: {
         location: 'String',
-        matchDate: '2022-06-18T19:07:24Z',
+        matchDate: '2022-06-23T15:30:18Z',
         round: 'String',
         tournamentId: scenario.match.two.tournamentId,
-        updatedAt: '2022-06-18T19:07:24Z',
-        maxWagerLimit: 6740476,
+        updatedAt: '2022-06-23T15:30:18Z',
+        maxWagerLimit: 7586095,
       },
     })
 
     expect(result.location).toEqual('String')
-    expect(result.matchDate).toEqual('2022-06-18T19:07:24Z')
+    expect(result.matchDate).toEqual('2022-06-23T15:30:18Z')
     expect(result.round).toEqual('String')
     expect(result.tournamentId).toEqual(scenario.match.two.tournamentId)
-    expect(result.updatedAt).toEqual('2022-06-18T19:07:24Z')
-    expect(result.maxWagerLimit).toEqual(6740476)
+    expect(result.updatedAt).toEqual('2022-06-23T15:30:18Z')
+    expect(result.maxWagerLimit).toEqual(7586095)
   })
 
   scenario('updates a match', async (scenario: StandardScenario) => {

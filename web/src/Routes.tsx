@@ -21,13 +21,36 @@ import MatchesLayout from 'src/layouts/MatchesLayout'
 import PlayersLayout from 'src/layouts/PlayersLayout'
 import TeamsLayout from 'src/layouts/TeamsLayout'
 import TournamentsLayout from 'src/layouts/TournamentsLayout'
-import HomeLayout from './layouts/HomeLayout/HomeLayout'
 import LandingLayout from './layouts/LandingLayout/LandingLayout'
 import NavigationLayout from './layouts/NavigationLayout/NavigationLayout'
 
 const Routes = () => {
   return (
     <Router>
+      <Set wrap={PlayersLayout}>
+        <Route path="/players/new" page={PlayerNewPlayerPage} name="newPlayer" />
+        <Route path="/players/{id:Int}/edit" page={PlayerEditPlayerPage} name="editPlayer" />
+        <Route path="/players/{id:Int}" page={PlayerPlayerPage} name="player" />
+        <Route path="/players" page={PlayerPlayersPage} name="players" />
+      </Set>
+      <Set wrap={MatchesLayout}>
+        <Route path="/matches/new" page={MatchNewMatchPage} name="newMatch" />
+        <Route path="/matches/{id:Int}/edit" page={MatchEditMatchPage} name="editMatch" />
+        <Route path="/matches/{id:Int}" page={MatchMatchPage} name="match" />
+        <Route path="/matches" page={MatchMatchesPage} name="matches" />
+      </Set>
+      <Set wrap={TeamsInMatchesLayout}>
+        <Route path="/teams-in-matches/new" page={TeamsInMatchNewTeamsInMatchPage} name="newTeamsInMatch" />
+        <Route path="/teams-in-matches/{id:Int}/edit" page={TeamsInMatchEditTeamsInMatchPage} name="editTeamsInMatch" />
+        <Route path="/teams-in-matches/{id:Int}" page={TeamsInMatchTeamsInMatchPage} name="teamsInMatch" />
+        <Route path="/teams-in-matches" page={TeamsInMatchTeamsInMatchesPage} name="teamsInMatches" />
+      </Set>
+      <Set wrap={MatchPredictionsLayout}>
+        <Route path="/match-predictions/new" page={MatchPredictionNewMatchPredictionPage} name="newMatchPrediction" />
+        <Route path="/match-predictions/{id:Int}/edit" page={MatchPredictionEditMatchPredictionPage} name="editMatchPrediction" />
+        <Route path="/match-predictions/{id:Int}" page={MatchPredictionMatchPredictionPage} name="matchPrediction" />
+        <Route path="/match-predictions" page={MatchPredictionMatchPredictionsPage} name="matchPredictions" />
+      </Set>
       <Private unauthenticated="landing" roles={['Admin']}>
         <Set wrap={MatchPredictionsLayout}>
           <Route path="/admin/match-predictions/new" page={MatchPredictionNewMatchPredictionPage} name="newMatchPrediction" />
@@ -72,25 +95,25 @@ const Routes = () => {
           <Route path="/admin/tournaments" page={TournamentTournamentsPage} name="tournaments" />
         </Set>
       </Private>
-      <Set wrap={NavigationLayout} unauthenticated="landing">
-        <Route path="/user-profile" page={UserProfilePage} name="user-profile" />
-        <Route path="/leaderboard" page={LeaderboardPage} name="leaderboard" />
-        <Route path="/rules" page={RulesPage} name="rules" />
-        <Route path="/all-teams" page={TeamsPage} name="all-teams" />
-        <Route path="/all-matches" page={MatchesPage} name="all-matches" />
-        <Route path="/user-setup" page={UserSetupPage} name="user-setup" />
-      </Set>
-      <Set wrap={HomeLayout} unauthenticated="landing">
-        <Route path="/match-result/{id:Int}" page={MatchResultPage} name="matchResult" />
-        <Route path="/match-predict/{id:Int}" page={MatchPredictPage} name="matchPredict" />
-        <Route path="/home" page={HomePage} name="home" />
-      </Set>
+      <Private unauthenticated="landing">
+        <Set wrap={NavigationLayout}>
+          <Route path="/user-profile" page={UserProfilePage} name="userProfile" />
+          <Route path="/leaderboard" page={LeaderboardPage} name="leaderboard" />
+          <Route path="/rules" page={RulesPage} name="rules" />
+          <Route path="/all-teams" page={TeamsPage} name="allTeams" />
+          <Route path="/all-matches" page={MatchesPage} name="allMatches" />
+          <Route path="/" page={HomePage} name="home" />
+          <Route path="/match-result/{id:Int}" page={MatchResultPage} name="matchResult" />
+          <Route path="/match-predict/{id:Int}" page={MatchPredictPage} name="matchPredict" />
+        </Set>
+        <Route path="/user-setup" page={UserSetupPage} name="userSetup" />
+      </Private>
       <Set wrap={LandingLayout}>
         <Route path="/reset-password" page={ResetPasswordPage} name="resetPassword" />
         <Route path="/forgot-password" page={ForgotPasswordPage} name="forgotPassword" />
         <Route path="/signup" page={SignupPage} name="signup" />
         <Route path="/login" page={LoginPage} name="login" />
-        <Route path="/" page={LandingPage} name="landing" />
+        <Route path="/landing" page={LandingPage} name="landing" />
         <Route notfound page={NotFoundPage} />
       </Set>
     </Router>
