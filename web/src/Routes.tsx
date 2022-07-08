@@ -27,30 +27,6 @@ import NavigationLayout from './layouts/NavigationLayout/NavigationLayout'
 const Routes = () => {
   return (
     <Router>
-      <Set wrap={PlayersLayout}>
-        <Route path="/players/new" page={PlayerNewPlayerPage} name="newPlayer" />
-        <Route path="/players/{id:Int}/edit" page={PlayerEditPlayerPage} name="editPlayer" />
-        <Route path="/players/{id:Int}" page={PlayerPlayerPage} name="player" />
-        <Route path="/players" page={PlayerPlayersPage} name="players" />
-      </Set>
-      <Set wrap={MatchesLayout}>
-        <Route path="/matches/new" page={MatchNewMatchPage} name="newMatch" />
-        <Route path="/matches/{id:Int}/edit" page={MatchEditMatchPage} name="editMatch" />
-        <Route path="/matches/{id:Int}" page={MatchMatchPage} name="match" />
-        <Route path="/matches" page={MatchMatchesPage} name="matches" />
-      </Set>
-      <Set wrap={TeamsInMatchesLayout}>
-        <Route path="/teams-in-matches/new" page={TeamsInMatchNewTeamsInMatchPage} name="newTeamsInMatch" />
-        <Route path="/teams-in-matches/{id:Int}/edit" page={TeamsInMatchEditTeamsInMatchPage} name="editTeamsInMatch" />
-        <Route path="/teams-in-matches/{id:Int}" page={TeamsInMatchTeamsInMatchPage} name="teamsInMatch" />
-        <Route path="/teams-in-matches" page={TeamsInMatchTeamsInMatchesPage} name="teamsInMatches" />
-      </Set>
-      <Set wrap={MatchPredictionsLayout}>
-        <Route path="/match-predictions/new" page={MatchPredictionNewMatchPredictionPage} name="newMatchPrediction" />
-        <Route path="/match-predictions/{id:Int}/edit" page={MatchPredictionEditMatchPredictionPage} name="editMatchPrediction" />
-        <Route path="/match-predictions/{id:Int}" page={MatchPredictionMatchPredictionPage} name="matchPrediction" />
-        <Route path="/match-predictions" page={MatchPredictionMatchPredictionsPage} name="matchPredictions" />
-      </Set>
       <Private unauthenticated="landing" roles={['Admin']}>
         <Set wrap={MatchPredictionsLayout}>
           <Route path="/admin/match-predictions/new" page={MatchPredictionNewMatchPredictionPage} name="newMatchPrediction" />

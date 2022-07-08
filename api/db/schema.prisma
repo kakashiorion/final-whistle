@@ -10,7 +10,7 @@ generator client {
 
 model Tournament {
   id        Int      @id @default(autoincrement())
-  name     String
+  name     String @unique
   venue      String?
   logoURL String?
   matches Match[]
@@ -23,7 +23,7 @@ model Tournament {
 
 model Team {
   id        Int      @id @default(autoincrement())
-  name     String
+  name     String @unique
   color String?
   color2 String?
   flagURL String?
@@ -36,7 +36,7 @@ model Team {
 
 model Player {
   id        Int      @id @default(autoincrement())
-  name     String
+  name     String @unique
   position      String
   team      Team?     @relation(fields: [teamId], references: [id])
   teamId    Int?
@@ -75,7 +75,7 @@ model TeamsInMatch {
 
 model User {
   id        Int      @id @default(autoincrement())
-  username String?
+  username String? @unique
   email     String @unique
   hashedPassword      String
   salt                String

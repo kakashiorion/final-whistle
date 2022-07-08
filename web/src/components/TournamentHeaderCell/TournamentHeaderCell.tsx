@@ -34,7 +34,7 @@ export const Success = ({
   return (
     <div
       id="HeaderContentDiv"
-      className="flex w-5/6 self-end md:self-start gap-2 md:gap-3 rounded-md justify-end overflow-hidden whitespace-nowrap md:justify-start items-center text-secondary-normal text-sm md:text-lg font-medium"
+      className="flex w-5/6 self-end md:self-start gap-2 md:gap-3 rounded-md justify-end whitespace-nowrap md:justify-start items-center text-secondary-normal text-sm md:text-lg font-medium"
     >
       <img
         className="h-6 md:h-8"
