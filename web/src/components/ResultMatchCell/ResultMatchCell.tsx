@@ -2,7 +2,7 @@ import type {
   FindResultMatchQuery,
   FindResultMatchQueryVariables,
 } from 'types/graphql'
-import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
+import type { CellSuccessProps } from '@redwoodjs/web'
 import { navigate, Redirect, routes } from '@redwoodjs/router'
 import logo from 'public/Main 2.png'
 import { useEffect } from 'react'
@@ -52,13 +52,7 @@ export const Loading = () => (
 
 export const Empty = () => <Redirect to={routes.home()} />
 
-export const Failure = ({
-  error,
-}: CellFailureProps<FindResultMatchQueryVariables>) => (
-  <div style={{ color: 'red' }}>Error: {error.message}</div>
-)
-
-const currentDate = new Date()
+const currentDate = new Date('15 Aug 2022')
 
 export const Success = ({
   resultMatch,
@@ -89,5 +83,26 @@ export const Success = ({
     }
   }, [resultMatch.matchDate])
 
-  return <div id="matchResultDiv" className=""></div>
+  return (
+    <div
+      id="matchResultDiv"
+      className="flex flex-col w-full overflow-y-scroll gap-2 md:gap-3 nonscroll"
+    >
+      <div
+        id="infoDiv"
+        className="flex px-2 md:px-3 py-2 md:py-3 gap-2 md:gap-3
+       bg-tertiary-dark bg-opacity-80 rounded-md
+      justify-between items-center w-full text-white-3 text-xs md:text-sm"
+      >
+        <div className="flex flex-col gap-1 md:gap-2">
+          <p>{resultMatch.round}</p>
+          <p>{resultMatch.location}</p>
+        </div>
+        <div className="flex flex-col gap-1 md:gap-2 items-end">
+          <p>{moment(resultMatch.matchDate).format('HH:mm')}</p>
+          <p>{moment(resultMatch.matchDate).format('DD MMM')}</p>
+        </div>
+      </div>
+    </div>
+  )
 }
