@@ -9,6 +9,7 @@ import { useEffect } from 'react'
 import { useAuth } from '@redwoodjs/auth'
 import moment from 'moment'
 import goal from 'public/goal.png'
+import whistle from 'public/Whistle.png'
 
 export const QUERY = gql`
   query FindResultMatchQuery($id: Int!) {
@@ -25,15 +26,12 @@ export const QUERY = gql`
         predictedScoreOfTeam2
         predictedScoringPlayersOfTeam1
         predictedScoringPlayersOfTeam2
-        wageredPoints
+        wageredCoins
+        earnedPoints
       }
       teams {
         id
-        scoringPlayers {
-          id
-          name
-          position
-        }
+        scoringPlayers
         score
         teamId
         team {
@@ -71,21 +69,14 @@ export const Success = ({
     (p) => p.userId == currentUser.id
   )
 
-  const team1ActualScore = resultMatch.teams[0].score ?? 0
+  const team1ActualScore = resultMatch.teams[0].score ?? 3
   const team1ActualScoringPlayers =
     // resultMatch.teams[0].scoringPlayers ??
-    [
-      { id: 50, name: 'Player 1' },
-      { id: 1, name: 'Player 2' },
-    ]
-  const team2ActualScore = resultMatch.teams[1].score ?? 0
+    [1, 4, 2]
+  const team2ActualScore = resultMatch.teams[1].score ?? 3
   const team2ActualScoringPlayers =
     // resultMatch.teams[1].scoringPlayers ??
-    [
-      { id: 1, name: 'Player 1' },
-      { id: 4, name: 'Player 2' },
-      { id: 40, name: 'Player 3' },
-    ]
+    [5, 4, 3]
 
   const team1Players = resultMatch.teams[0].team.players
   const team2Players = resultMatch.teams[1].team.players
@@ -153,15 +144,16 @@ export const Success = ({
               className="flex flex-col gap-1 md:gap-2 items-end"
             >
               {team1ActualScoringPlayers.map((p, i) => {
+                const player = team1Players.find((e) => e.id === p)
                 return (
                   <div
                     key={i}
                     className="text-xs md:text-sm text-secondary-light justify-end items-center flex gap-1"
                   >
                     <p>
-                      {(team1Players.find((e) => e.id === p.id)
-                        ? ''
-                        : '(OG) ') + p.name}
+                      {player
+                        ? player.name
+                        : team2Players.find((e) => e.id === p)?.name + ' (OG)'}
                     </p>
                     <img src={goal} className="h-3 md:h-4" alt="Goal" />
                   </div>
@@ -207,6 +199,8 @@ export const Success = ({
               className="flex flex-col gap-1 md:gap-2 items-start"
             >
               {team2ActualScoringPlayers.map((p, i) => {
+                const player = team2Players.find((e) => e.id === p)
+
                 return (
                   <div
                     key={i}
@@ -214,10 +208,9 @@ export const Success = ({
                   >
                     <img src={goal} className="h-3 md:h-4" alt="Goal" />
                     <p>
-                      {p.name +
-                        (team2Players.find((e) => e.id === p.id)
-                          ? ''
-                          : ' (OG)')}
+                      {player
+                        ? player.name
+                        : team1Players.find((e) => e.id === p)?.name + ' (OG)'}
                     </p>
                   </div>
                 )
@@ -228,64 +221,191 @@ export const Success = ({
       </div>
       <div
         id="predictionResultDiv"
-        className="flex flex-col min-w-max border-2 border-primary-normal rounded-md px-3 md:px-4 py-2 md:py-3 bg-black-3 bg-opacity-70 gap-2 md:gap-3 items-center justify-start "
+        className="flex flex-col min-w-max rounded-md px-2 md:px-3 py-2 md:py-3 bg-black-3 bg-opacity-70 gap-2 md:gap-3 items-start"
       >
         {userPrediction ? (
           <div
             id="userPredictionsDiv"
-            className="flex flex-col items-center text-primary-normal"
+            className="w-full text-white-3  flex flex-col items-start gap-2 md:gap-3"
           >
-            <p>Your predicted scoreline</p>
-            <p>
-              {userPrediction.predictedScoreOfTeam1} -{' '}
-              {userPrediction.predictedScoreOfTeam2}
-            </p>
-            {userPrediction.predictedScoringPlayersOfTeam1.length > 0 ? (
-              <>
-                <p>
-                  Predicted Scorers for{' '}
-                  {resultMatch.teams[0].team.name.split('U-')[0]}
-                </p>
-                <div>
-                  {userPrediction.predictedScoringPlayersOfTeam1.map((p, i) => {
-                    return (
-                      <div key={i}>
-                        {team1Players.find((e) => e.id === p).name}
-                      </div>
-                    )
-                  })}
-                </div>
-              </>
-            ) : (
-              <></>
-            )}
-            {userPrediction.predictedScoringPlayersOfTeam2.length > 0 ? (
-              <>
-                <p>
-                  Predicted Scorers for{' '}
-                  {resultMatch.teams[1].team.name.split('U-')[0]}
-                </p>{' '}
-                <div>
-                  {userPrediction.predictedScoringPlayersOfTeam2.map((p, i) => {
-                    return (
-                      <div key={i}>
-                        {team1Players.find((e) => e.id === p).name}
-                      </div>
-                    )
-                  })}
-                </div>
-              </>
-            ) : (
-              <></>
-            )}
-            <p>Wagered points: {userPrediction.wageredPoints}</p>
+            <p className="text-xs md:text-sm font-bold">YOUR PREDICTIONS</p>
+            <div
+              id="scorelinePredDiv"
+              className="w-full -skew-x-[6deg] bg-black-1 flex gap-1 md:gap-2 rounded-sm items-center justify-center border-[1px] border-primary-normal px-1 md:px-2 py-2 md:py-3"
+            >
+              <p className="flex w-full items-center justify-center">
+                {' '}
+                {resultMatch.teams[0].team.name.split('U-')[0]}{' '}
+                {userPrediction.predictedScoreOfTeam1}
+                <img
+                  src={whistle}
+                  className="h-4 md:h-5 px-1"
+                  alt="Final Whistle"
+                ></img>
+                {userPrediction.predictedScoreOfTeam2}{' '}
+                {resultMatch.teams[1].team.name.split('U-')[0]}
+              </p>
+              {getScorelinePoints(
+                userPrediction.predictedScoreOfTeam1,
+                userPrediction.predictedScoreOfTeam2,
+                team1ActualScore,
+                team2ActualScore
+              )}
+            </div>
+            <div
+              id="goalscorersPredDiv"
+              className="w-full -skew-x-[6deg] bg-black-1 flex items-start rounded-sm justify-center border-[1px] border-primary-normal px-1 md:px-2 py-2 md:py-3 gap-5 md:gap-6"
+            >
+              <div
+                id="team1PredScorers"
+                className="flex flex-col w-full items-end basis-1/2 gap-1 md:gap-2"
+              >
+                {userPrediction.predictedScoringPlayersOfTeam1.map((p, i) => {
+                  return (
+                    <div key={i} className="flex items-center gap-1 text-xs">
+                      {team1Players.find((e) => e.id === p).name}{' '}
+                      <img src={goal} className="h-3 md:h-4" alt="Goal" />
+                    </div>
+                  )
+                })}
+              </div>
+              <div
+                id="team2PredScorers"
+                className="flex flex-col w-full items-start basis-1/2 gap-1 md:gap-2"
+              >
+                {userPrediction.predictedScoringPlayersOfTeam2.map((p, i) => {
+                  return (
+                    <div key={i} className="flex items-center gap-1 text-xs">
+                      {' '}
+                      <img src={goal} className="h-3 md:h-4" alt="Goal" />
+                      {team2Players.find((e) => e.id === p).name}
+                    </div>
+                  )
+                })}
+              </div>
+              {getGoalscorerPoints(
+                userPrediction.predictedScoringPlayersOfTeam1,
+                userPrediction.predictedScoringPlayersOfTeam2,
+                team1ActualScoringPlayers,
+                team2ActualScoringPlayers
+              )}
+            </div>
+            <div className=" w-full flex gap-3 md:gap-4 justify-between items-center">
+              <div className="flex rounded-md px-3 py-2 bg-primary-dark">
+                Wagered Coins: {userPrediction.wageredCoins}
+              </div>
+              <div className="flex rounded-md px-3 py-2 bg-green-dark">
+                Earned points: {userPrediction.earnedPoints}
+              </div>
+            </div>
           </div>
         ) : (
-          <p className="text-red-normal text-center text-sm md:text-base">
-            You did not make any predictions
+          <p className="text-red-light text-center self-center text-sm md:text-base">
+            You did not make any predictions for this match
           </p>
         )}
       </div>
+    </div>
+  )
+}
+
+function findIntersectionCount(a: number[], b: number[]) {
+  let count = 0
+  b = b.filter((p) => a.includes(p))
+  a.forEach((p) => {
+    const index = b.indexOf(p)
+    if (index > -1) {
+      count += 1
+      b.splice(index, 1)
+    }
+  })
+  return count
+}
+
+const getGoalscorerPoints = (
+  predScoringPlayersTeam1: number[],
+  predScoringPlayersTeam2: number[],
+  actualScoringPlayersTeam1: number[],
+  actualScoringPlayersTeam2: number[]
+) => {
+  const team1Score = findIntersectionCount(
+    predScoringPlayersTeam1,
+    actualScoringPlayersTeam1
+  )
+  const team2Score = findIntersectionCount(
+    predScoringPlayersTeam2,
+    actualScoringPlayersTeam2
+  )
+  const count = team1Score + team2Score
+  if (count == 0) {
+    return (
+      <div
+        id="scorerMultiplier"
+        className="bg-red-dark px-2 md:px-3 py-1 text-[10px] md:text-xs rounded-full"
+      >
+        {count}X
+      </div>
+    )
+  }
+  return (
+    <div
+      id="scorerMultiplier"
+      className="bg-secondary-dark px-2 md:px-3 py-1 text-[10px] md:text-xs rounded-full"
+    >
+      {count}X
+    </div>
+  )
+}
+
+const getScorelinePoints = (
+  predScoreTeam1: number,
+  predScoreTeam2: number,
+  actualScoreTeam1: number,
+  actualScoreTeam2: number
+) => {
+  if (
+    predScoreTeam1 == actualScoreTeam1 &&
+    predScoreTeam2 == actualScoreTeam2
+  ) {
+    return (
+      <div
+        id="3x"
+        className="bg-green-dark px-2 md:px-3 py-1 text-[10px] md:text-xs rounded-full"
+      >
+        3X
+      </div>
+    )
+  } else if (
+    predScoreTeam1 - predScoreTeam2 ==
+    actualScoreTeam1 - actualScoreTeam2
+  ) {
+    return (
+      <div
+        id="2x"
+        className="bg-green-normal px-2 md:px-3 py-1 text-[10px] md:text-xs rounded-full"
+      >
+        2X
+      </div>
+    )
+  } else if (
+    (predScoreTeam1 - predScoreTeam2) * (actualScoreTeam1 - actualScoreTeam2) >
+    0
+  ) {
+    return (
+      <div
+        id="1x"
+        className="bg-primary-dark px-2 md:px-3 py-1 text-[10px] md:text-xs rounded-full"
+      >
+        1X
+      </div>
+    )
+  }
+  return (
+    <div
+      id="0x"
+      className="bg-red-dark px-2 md:px-3 py-1 text-[10px] md:text-xs rounded-full"
+    >
+      0X
     </div>
   )
 }

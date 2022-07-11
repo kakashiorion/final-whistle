@@ -7,6 +7,7 @@ export const schema = gql`
     salt: String!
     resetToken: String
     resetTokenExpiresAt: DateTime
+    coins: Int
     points: Int
     predictions: [MatchPrediction]!
     createdAt: DateTime!
@@ -26,6 +27,7 @@ export const schema = gql`
     salt: String!
     resetToken: String
     resetTokenExpiresAt: DateTime
+    coins: Int
     points: Int
     roles: String!
   }
@@ -37,6 +39,7 @@ export const schema = gql`
     salt: String
     resetToken: String
     resetTokenExpiresAt: DateTime
+    coins: Int
     points: Int
     roles: String
   }
@@ -45,6 +48,5 @@ export const schema = gql`
     createUser(input: CreateUserInput!): User! @requireAuth
     updateUser(id: Int!, input: UpdateUserInput!): User! @requireAuth
     deleteUser(id: Int!): User! @requireAuth
-    emailUser(id: Int!): User! @requireAuth
   }
 `

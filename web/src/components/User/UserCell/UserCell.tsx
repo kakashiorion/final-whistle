@@ -13,6 +13,7 @@ export const QUERY = gql`
       salt
       resetToken
       resetTokenExpiresAt
+      coins
       points
       createdAt
       updatedAt

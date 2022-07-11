@@ -17,6 +17,7 @@ export const QUERY = gql`
       salt
       resetToken
       resetTokenExpiresAt
+      coins
       points
       createdAt
       updatedAt
@@ -34,6 +35,7 @@ const UPDATE_USER_MUTATION = gql`
       salt
       resetToken
       resetTokenExpiresAt
+      coins
       points
       createdAt
       updatedAt

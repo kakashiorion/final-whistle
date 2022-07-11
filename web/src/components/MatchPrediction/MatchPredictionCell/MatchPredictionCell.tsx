@@ -13,7 +13,7 @@ export const QUERY = gql`
       predictedScoreOfTeam2
       predictedScoringPlayersOfTeam1
       predictedScoringPlayersOfTeam2
-      wageredPoints
+      wageredCoins
       createdAt
       updatedAt
     }
@@ -28,8 +28,6 @@ export const Failure = ({ error }: CellFailureProps) => (
   <div className="rw-cell-error">{error.message}</div>
 )
 
-export const Success = ({
-  matchPrediction,
-}: CellSuccessProps<FindMatchPredictionById>) => {
+export const Success = ({ matchPrediction }: CellSuccessProps<FindMatchPredictionById>) => {
   return <MatchPrediction matchPrediction={matchPrediction} />
 }

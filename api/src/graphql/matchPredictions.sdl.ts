@@ -9,7 +9,8 @@ export const schema = gql`
     predictedScoreOfTeam2: Int!
     predictedScoringPlayersOfTeam1: [Int]!
     predictedScoringPlayersOfTeam2: [Int]!
-    wageredPoints: Int!
+    wageredCoins: Int!
+    earnedPoints: Int
     createdAt: DateTime!
     updatedAt: DateTime!
   }
@@ -26,7 +27,8 @@ export const schema = gql`
     predictedScoreOfTeam2: Int!
     predictedScoringPlayersOfTeam1: [Int]!
     predictedScoringPlayersOfTeam2: [Int]!
-    wageredPoints: Int!
+    wageredCoins: Int!
+    earnedPoints: Int
   }
 
   input UpdateMatchPredictionInput {
@@ -36,7 +38,8 @@ export const schema = gql`
     predictedScoreOfTeam2: Int
     predictedScoringPlayersOfTeam1: [Int]!
     predictedScoringPlayersOfTeam2: [Int]!
-    wageredPoints: Int
+    wageredCoins: Int
+    earnedPoints: Int
   }
 
   type Mutation {

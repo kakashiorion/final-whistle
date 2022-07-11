@@ -22,7 +22,7 @@ const UPDATE_USER_NAME_MUTATION = gql`
     updateUser(id: $id, input: $input) {
       id
       username
-      points
+      coins
     }
   }
 `
@@ -32,6 +32,8 @@ export const Loading = () => (
     <img className="h-1/4 animate-spin" src={logo} alt="FW logo" />
   </div>
 )
+
+const tournamentInitialCoins = 1000
 
 export const Success = ({ users }: CellSuccessProps<FindUsers>) => {
   const { currentUser, reauthenticate } = useAuth()
@@ -46,10 +48,10 @@ export const Success = ({ users }: CellSuccessProps<FindUsers>) => {
   })
 
   useEffect(() => {
-    if (currentUser.username) {
+    if (currentUser.username && currentUser.coins) {
       navigate(routes.home())
     }
-  }, [currentUser.username])
+  }, [currentUser.username, currentUser.coins])
 
   interface FormValues {
     username: string
@@ -59,12 +61,11 @@ export const Success = ({ users }: CellSuccessProps<FindUsers>) => {
       //username already exists.. try another
       toast.error('Username already taken.. Try something different')
     } else {
-      //Update username and give user tournament points
-      const tournamentInitialPoints = 1000
+      //Update username and give user tournament coins
       updateUser({
         variables: {
           id: currentUser.id,
-          input: { username: data.username, points: tournamentInitialPoints },
+          input: { username: data.username, coins: tournamentInitialCoins },
         },
       })
     }

@@ -20,15 +20,16 @@ type NavigationLayoutProps = {
   children?: React.ReactNode
 }
 
+//Current tournament ID
 const currentTournament = 2
 
 const NavigationLayout = ({ children }: NavigationLayoutProps) => {
   const { currentUser } = useAuth()
   useEffect(() => {
-    if (!currentUser.username) {
+    if (!currentUser.username || !currentUser.points) {
       navigate(routes.userSetup())
     }
-  }, [currentUser.username])
+  }, [currentUser.username, currentUser.points])
   const [isSidebarOpen, setSidebarOpen] = useState(false)
   return (
     <>

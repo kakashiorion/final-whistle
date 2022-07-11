@@ -9,14 +9,45 @@ import {
   Submit,
 } from '@redwoodjs/forms'
 
+
 const formatDatetime = (value) => {
   if (value) {
     return value.replace(/:\d{2}\.\d{3}\w/, '')
   }
 }
 
+
 const UserForm = (props) => {
   const onSubmit = (data) => {
+
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
     props.onSave(data, props?.user?.id)
   }
 
@@ -29,7 +60,7 @@ const UserForm = (props) => {
           titleClassName="rw-form-error-title"
           listClassName="rw-form-error-list"
         />
-
+      
         <Label
           name="username"
           className="rw-label"
@@ -37,13 +68,14 @@ const UserForm = (props) => {
         >
           Username
         </Label>
-
-        <TextField
-          name="username"
-          defaultValue={props.user?.username}
-          className="rw-input"
-          errorClassName="rw-input rw-input-error"
-        />
+        
+          <TextField
+            name="username"
+            defaultValue={props.user?.username}
+            className="rw-input"
+            errorClassName="rw-input rw-input-error"
+          />
+        
 
         <FieldError name="username" className="rw-field-error" />
 
@@ -54,14 +86,15 @@ const UserForm = (props) => {
         >
           Email
         </Label>
-
-        <TextField
-          name="email"
-          defaultValue={props.user?.email}
-          className="rw-input"
-          errorClassName="rw-input rw-input-error"
-          validation={{ required: true }}
-        />
+        
+          <TextField
+            name="email"
+            defaultValue={props.user?.email}
+            className="rw-input"
+            errorClassName="rw-input rw-input-error"
+            validation={{ required: true }}
+          />
+        
 
         <FieldError name="email" className="rw-field-error" />
 
@@ -72,14 +105,15 @@ const UserForm = (props) => {
         >
           Hashed password
         </Label>
-
-        <TextField
-          name="hashedPassword"
-          defaultValue={props.user?.hashedPassword}
-          className="rw-input"
-          errorClassName="rw-input rw-input-error"
-          validation={{ required: true }}
-        />
+        
+          <TextField
+            name="hashedPassword"
+            defaultValue={props.user?.hashedPassword}
+            className="rw-input"
+            errorClassName="rw-input rw-input-error"
+            validation={{ required: true }}
+          />
+        
 
         <FieldError name="hashedPassword" className="rw-field-error" />
 
@@ -90,14 +124,15 @@ const UserForm = (props) => {
         >
           Salt
         </Label>
-
-        <TextField
-          name="salt"
-          defaultValue={props.user?.salt}
-          className="rw-input"
-          errorClassName="rw-input rw-input-error"
-          validation={{ required: true }}
-        />
+        
+          <TextField
+            name="salt"
+            defaultValue={props.user?.salt}
+            className="rw-input"
+            errorClassName="rw-input rw-input-error"
+            validation={{ required: true }}
+          />
+        
 
         <FieldError name="salt" className="rw-field-error" />
 
@@ -108,13 +143,14 @@ const UserForm = (props) => {
         >
           Reset token
         </Label>
-
-        <TextField
-          name="resetToken"
-          defaultValue={props.user?.resetToken}
-          className="rw-input"
-          errorClassName="rw-input rw-input-error"
-        />
+        
+          <TextField
+            name="resetToken"
+            defaultValue={props.user?.resetToken}
+            className="rw-input"
+            errorClassName="rw-input rw-input-error"
+          />
+        
 
         <FieldError name="resetToken" className="rw-field-error" />
 
@@ -125,15 +161,34 @@ const UserForm = (props) => {
         >
           Reset token expires at
         </Label>
-
-        <DatetimeLocalField
-          name="resetTokenExpiresAt"
-          defaultValue={formatDatetime(props.user?.resetTokenExpiresAt)}
-          className="rw-input"
-          errorClassName="rw-input rw-input-error"
-        />
+        
+          <DatetimeLocalField
+            name="resetTokenExpiresAt"
+            defaultValue={formatDatetime(props.user?.resetTokenExpiresAt)}
+            className="rw-input"
+            errorClassName="rw-input rw-input-error"
+          />
+        
 
         <FieldError name="resetTokenExpiresAt" className="rw-field-error" />
+
+        <Label
+          name="coins"
+          className="rw-label"
+          errorClassName="rw-label rw-label-error"
+        >
+          Coins
+        </Label>
+        
+          <NumberField
+            name="coins"
+            defaultValue={props.user?.coins}
+            className="rw-input"
+            errorClassName="rw-input rw-input-error"
+          />
+        
+
+        <FieldError name="coins" className="rw-field-error" />
 
         <Label
           name="points"
@@ -142,13 +197,14 @@ const UserForm = (props) => {
         >
           Points
         </Label>
-
-        <NumberField
-          name="points"
-          defaultValue={props.user?.points}
-          className="rw-input"
-          errorClassName="rw-input rw-input-error"
-        />
+        
+          <NumberField
+            name="points"
+            defaultValue={props.user?.points}
+            className="rw-input"
+            errorClassName="rw-input rw-input-error"
+          />
+        
 
         <FieldError name="points" className="rw-field-error" />
 
@@ -159,19 +215,23 @@ const UserForm = (props) => {
         >
           Roles
         </Label>
-
-        <TextField
-          name="roles"
-          defaultValue={props.user?.roles}
-          className="rw-input"
-          errorClassName="rw-input rw-input-error"
-          validation={{ required: true }}
-        />
+        
+          <TextField
+            name="roles"
+            defaultValue={props.user?.roles}
+            className="rw-input"
+            errorClassName="rw-input rw-input-error"
+            validation={{ required: true }}
+          />
+        
 
         <FieldError name="roles" className="rw-field-error" />
 
         <div className="rw-button-group">
-          <Submit disabled={props.loading} className="rw-button rw-button-blue">
+          <Submit
+            disabled={props.loading}
+            className="rw-button rw-button-blue"
+          >
             Save
           </Submit>
         </div>

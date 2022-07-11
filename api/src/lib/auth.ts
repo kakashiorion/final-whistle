@@ -26,6 +26,7 @@ export const getCurrentUser = async (session) => {
       email: true,
       roles: true,
       username: true,
+      coins: true,
       points: true,
     },
   })

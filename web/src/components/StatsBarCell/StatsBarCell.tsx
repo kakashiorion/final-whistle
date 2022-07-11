@@ -29,10 +29,7 @@ export const QUERY = gql`
             color
           }
           score
-          scoringPlayers {
-            id
-            name
-          }
+          scoringPlayers
         }
       }
     }

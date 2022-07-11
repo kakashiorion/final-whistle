@@ -19,13 +19,18 @@ export const QUERY = gql`
         predictions {
           id
           userId
-          wageredPoints
+          wageredCoins
+          earnedPoints
           predictedScoreOfTeam1
           predictedScoreOfTeam2
+          predictedScoringPlayersOfTeam1
+          predictedScoringPlayersOfTeam2
         }
         teams {
           id
+          scoringPlayers
           team {
+            id
             name
             flagURL
             color
@@ -192,8 +197,8 @@ const PredictedLabel = () => {
 
 const NotPredictedLabel = () => {
   return (
-    <div className="bg-red-light rounded-sm px-1 py-[2px] text-[8px] md:text-[10px] text-white-3">
-      DID NOT PRED
+    <div className="text-red-light text-[8px] md:text-[10px] line-through">
+      PRED
     </div>
   )
 }
@@ -209,7 +214,7 @@ const RecentMatchItem = ({ recentMatch }) => {
   //Rate of successful predictions
   const successRate =
     recentMatch.predictions.length != 0
-      ? `${(successCount * 100) / recentMatch.predictions.length} %`
+      ? `${(successCount * 100) / recentMatch.predictions.length}%`
       : '-'
   //Did currentUser make a prediction for this match
   const didPredict = recentMatch.predictions.find(
@@ -224,21 +229,21 @@ const RecentMatchItem = ({ recentMatch }) => {
       >
         <div
           id="dateTime"
-          className="flex flex-col skew-x-[12deg] whitespace-nowrap gap-1 basis-[10%] items-center justify-evenly text-white-3 text-[10px] md:text-xs"
+          className="flex flex-col skew-x-[12deg] whitespace-nowrap gap-1 min-w-[15%] sm:min-w-[10%] items-center justify-evenly text-white-3 text-[10px] md:text-xs"
         >
           <p>{moment(recentMatch.matchDate).format('HH:mm')}</p>
           <p>{moment(recentMatch.matchDate).format('DD MMM')}</p>
         </div>
         <div
           id="round"
-          className="hidden sm:flex flex-col skew-x-[12deg] whitespace-nowrap gap-1 basis-[10%] items-center justify-evenly text-white-3 text-[10px] md:text-xs"
+          className="hidden sm:flex flex-col skew-x-[12deg] whitespace-nowrap gap-1 min-w-[10%] items-center justify-evenly text-white-3 text-[10px] md:text-xs"
         >
           <p>{recentMatch.round.split('-')[0]}</p>
           <p>{recentMatch.round.split('-')[1]}</p>
         </div>
         <div
           id="flags"
-          className="flex flex-col skew-x-[12deg] basis-[5%] items-end gap-1 justify-center"
+          className="flex flex-col skew-x-[12deg] min-w-[5%] items-end gap-1 justify-center"
         >
           <img
             className="h-3 md:h-4 aspect-video"
@@ -253,37 +258,39 @@ const RecentMatchItem = ({ recentMatch }) => {
         </div>
         <div
           id="teams"
-          className="flex flex-col skew-x-[12deg] gap-1 whitespace-nowrap basis-[40%] items-start justify-center text-white-1 text-xs md:text-sm"
+          className="flex flex-col skew-x-[12deg] gap-1 whitespace-nowrap min-w-[30%] md:min-w-[25%] items-start justify-center text-white-1 text-xs md:text-sm"
         >
           <p>{recentMatch.teams[0].team.name.split('U-')[0]}</p>
           <p>{recentMatch.teams[1].team.name.split('U-')[0]}</p>
         </div>
         <div
           id="score"
-          className="flex flex-col skew-x-[12deg] gap-1 whitespace-nowrap basis-[5%] items-start justify-evenly text-white-1 text-xs md:text-sm"
+          className="flex flex-col skew-x-[12deg] gap-1 whitespace-nowrap min-w-[5%] items-start justify-evenly text-white-1 text-xs md:text-sm"
         >
-          <p>{recentMatch.teams[0].team.score ?? 'NA'}</p>
-          <p>{recentMatch.teams[1].team.score ?? 'NA'}</p>
+          <p>{recentMatch.teams[0].team.score ?? 0}</p>
+          <p>{recentMatch.teams[1].team.score ?? 0}</p>
         </div>
         <div
           id="predictions"
-          className="py-1 md:py-2 skew-x-[12deg] rounded-lg whitespace-nowrap basis-[10%] px-1 md:px-2 bg-secondary-light flex justify-center items-center text-black-2 text-xs md:text-sm"
+          className="py-1 md:py-[6px] skew-x-[12deg] rounded-lg whitespace-nowrap min-w-[10%] px-1 md:px-2 bg-secondary-light flex justify-center items-center text-black-2 text-[8px] md:text-[10px]"
         >
           <p>{recentMatch.predictions.length}</p>
         </div>
         <div
           id="success"
-          className="py-1 md:py-2 skew-x-[12deg] rounded-lg whitespace-nowrap basis-[10%] px-1 md:px-2 bg-green-light flex justify-center items-center text-black-2 text-xs md:text-sm"
+          className="py-1 md:py-[6px] skew-x-[12deg] rounded-lg whitespace-nowrap min-w-[10%] px-1 md:px-2 bg-green-light flex justify-center items-center text-black-2 text-[8px] md:text-[10px]"
         >
           <p>{successRate}</p>
         </div>
         <div
           id="userPoints"
-          className="flex skew-x-[12deg] justify-center items-center whitespace-nowrap basis-[10%] text-primary-light text-center text-xs md:text-sm"
+          className="flex skew-x-[12deg] justify-center items-center whitespace-nowrap min-w-[15%] text-primary-light text-center text-[8px] md:text-[10px]"
         >
           {didPredict ? (
-            /*TODO: Logic to calculate earned points based on wageredPoints*/
-            <p>{didPredict.wageredPoints} PTS</p>
+            <p>
+              {didPredict.earnedPoints}
+              PTS
+            </p>
           ) : (
             <NotPredictedLabel />
           )}

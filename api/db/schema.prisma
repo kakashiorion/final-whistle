@@ -40,7 +40,6 @@ model Player {
   position      String
   team      Team?     @relation(fields: [teamId], references: [id])
   teamId    Int?
-  scoredForTeamInMatch TeamsInMatch[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -66,7 +65,7 @@ model TeamsInMatch {
   teamId Int
   team   Team @relation(fields: [teamId], references: [id])
   score Int?
-  scoringPlayers Player[]
+  scoringPlayers Int[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -81,6 +80,7 @@ model User {
   salt                String
   resetToken          String?
   resetTokenExpiresAt DateTime?
+  coins Int?
   points Int?
   predictions MatchPrediction[]
   createdAt DateTime @default(now())
@@ -98,7 +98,8 @@ model MatchPrediction {
   predictedScoreOfTeam2 Int @default(0)
   predictedScoringPlayersOfTeam1 Int[]
   predictedScoringPlayersOfTeam2 Int[]
-  wageredPoints Int @default(10)
+  wageredCoins Int @default(10)
+  earnedPoints Int?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

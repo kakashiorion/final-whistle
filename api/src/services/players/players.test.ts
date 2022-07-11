@@ -29,25 +29,25 @@ describe('players', () => {
   scenario('creates a player', async () => {
     const result = await createPlayer({
       input: {
-        name: 'String',
+        name: 'String476849',
         position: 'String',
-        updatedAt: '2022-06-23T15:30:28Z',
+        updatedAt: '2022-07-11T18:41:51Z',
       },
     })
 
-    expect(result.name).toEqual('String')
+    expect(result.name).toEqual('String476849')
     expect(result.position).toEqual('String')
-    expect(result.updatedAt).toEqual('2022-06-23T15:30:28Z')
+    expect(result.updatedAt).toEqual('2022-07-11T18:41:51Z')
   })
 
   scenario('updates a player', async (scenario: StandardScenario) => {
     const original = await player({ id: scenario.player.one.id })
     const result = await updatePlayer({
       id: original.id,
-      input: { name: 'String2' },
+      input: { name: 'String10437702' },
     })
 
-    expect(result.name).toEqual('String2')
+    expect(result.name).toEqual('String10437702')
   })
 
   scenario('deletes a player', async (scenario: StandardScenario) => {

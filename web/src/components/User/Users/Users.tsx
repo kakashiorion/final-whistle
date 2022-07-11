@@ -86,6 +86,7 @@ const UsersList = ({ users }) => {
             <th>Salt</th>
             <th>Reset token</th>
             <th>Reset token expires at</th>
+            <th>Coins</th>
             <th>Points</th>
             <th>Created at</th>
             <th>Updated at</th>
@@ -103,6 +104,7 @@ const UsersList = ({ users }) => {
               <td>{truncate(user.salt)}</td>
               <td>{truncate(user.resetToken)}</td>
               <td>{timeTag(user.resetTokenExpiresAt)}</td>
+              <td>{truncate(user.coins)}</td>
               <td>{truncate(user.points)}</td>
               <td>{timeTag(user.createdAt)}</td>
               <td>{timeTag(user.updatedAt)}</td>

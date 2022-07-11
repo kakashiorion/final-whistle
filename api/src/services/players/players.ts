@@ -40,6 +40,4 @@ export const deletePlayer: MutationResolvers['deletePlayer'] = ({ id }) => {
 export const Player: PlayerResolvers = {
   team: (_obj, { root }) =>
     db.player.findUnique({ where: { id: root.id } }).team(),
-  scoredForTeamInMatch: (_obj, { root }) =>
-    db.player.findUnique({ where: { id: root.id } }).scoredForTeamInMatch(),
 }

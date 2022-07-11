@@ -34,23 +34,25 @@ describe('teamsInMatches', () => {
       input: {
         matchId: scenario.teamsInMatch.two.matchId,
         teamId: scenario.teamsInMatch.two.teamId,
-        updatedAt: '2022-06-23T15:30:07Z',
+        scoringPlayers: 4529772,
+        updatedAt: '2022-07-11T18:42:08Z',
       },
     })
 
     expect(result.matchId).toEqual(scenario.teamsInMatch.two.matchId)
     expect(result.teamId).toEqual(scenario.teamsInMatch.two.teamId)
-    expect(result.updatedAt).toEqual('2022-06-23T15:30:07Z')
+    expect(result.scoringPlayers).toEqual(4529772)
+    expect(result.updatedAt).toEqual('2022-07-11T18:42:08Z')
   })
 
   scenario('updates a teamsInMatch', async (scenario: StandardScenario) => {
     const original = await teamsInMatch({ id: scenario.teamsInMatch.one.id })
     const result = await updateTeamsInMatch({
       id: original.id,
-      input: { updatedAt: '2022-06-24T15:30:07Z' },
+      input: { scoringPlayers: 2061693 },
     })
 
-    expect(result.updatedAt).toEqual('2022-06-24T15:30:07Z')
+    expect(result.scoringPlayers).toEqual(2061693)
   })
 
   scenario('deletes a teamsInMatch', async (scenario: StandardScenario) => {

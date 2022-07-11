@@ -32,7 +32,7 @@ export const QUERY = gql`
         predictedScoreOfTeam2
         predictedScoringPlayersOfTeam1
         predictedScoringPlayersOfTeam2
-        wageredPoints
+        wageredCoins
       }
       teams {
         id
@@ -58,7 +58,7 @@ const CREATE_PREDICTION_MUTATION = gql`
       id
       userId
       matchId
-      wageredPoints
+      wageredCoins
       predictedScoreOfTeam1
       predictedScoreOfTeam2
       predictedScoringPlayersOfTeam1
@@ -76,7 +76,7 @@ const UPDATE_PREDICTION_MUTATION = gql`
       id
       userId
       matchId
-      wageredPoints
+      wageredCoins
       predictedScoreOfTeam1
       predictedScoreOfTeam2
       predictedScoringPlayersOfTeam1
@@ -91,7 +91,7 @@ const DELETE_PREDICTION_MUTATION = gql`
       id
       userId
       matchId
-      wageredPoints
+      wageredCoins
       predictedScoreOfTeam1
       predictedScoreOfTeam2
       predictedScoringPlayersOfTeam1
@@ -160,10 +160,10 @@ export const Success = ({
   const team2InitialScore = userInitialPrediction?.predictedScoreOfTeam2 ?? 0
   const team2InitialGoalScoringPlayers =
     userInitialPrediction?.predictedScoringPlayersOfTeam2 ?? []
-  const initialWageredPoints = userInitialPrediction?.wageredPoints
+  const initialWageredCoins = userInitialPrediction?.wageredCoins
 
   //State variables for updating prediction data
-  const [wageredPoints, setWageredPoints] = useState(initialWageredPoints ?? 10)
+  const [wageredCoins, setWageredCoins] = useState(initialWageredCoins ?? 10)
   const [team1PredictedScore, setTeam1PredictedScore] =
     useState(team1InitialScore)
   const [team1PredictedScoringPlayers, setTeam1PredictedScoringPlayers] =
@@ -307,20 +307,20 @@ export const Success = ({
       >
         <div className="flex gap-2 md:gap-3 justify-end items-center whitespace-nowrap">
           <p className="text-primary-normal text-lg md:text-xl">
-            Wager points:{' '}
+            Wager coins:{' '}
           </p>
           <input
             className="text-secondary-dark w-20 placeholder:text-primary-light rounded-tl-lg rounded-br-lg px-1 md:px-2 py-1 bg-white-1 border-transparent border-4 focus:border-primary-normal text-base md:text-lg"
             name="wager"
-            value={wageredPoints}
+            value={wageredCoins}
             onChange={(e) =>
-              setWageredPoints(
+              setWageredCoins(
                 Math.min(
                   e.target.value == '' || e.target.value == '0' // Handle null and 0 values
                     ? 1
                     : parseInt(e.target.value),
                   matchBeingPredicted.maxWagerLimit,
-                  currentUser.points
+                  currentUser.coins
                 )
               )
             }
@@ -331,7 +331,7 @@ export const Success = ({
           </p>
         </div>
         <p className="text-end text-xs md:text-sm text-secondary-light">
-          Predict goal scorers for bonus points
+          Predict goal scorers for bonus coins
         </p>
       </div>
       <div
@@ -347,7 +347,7 @@ export const Success = ({
                   variables: {
                     id: userInitialPrediction.id,
                     input: {
-                      wageredPoints: wageredPoints,
+                      wageredCoins: wageredCoins,
                       predictedScoreOfTeam1: team1PredictedScore,
                       predictedScoreOfTeam2: team2PredictedScore,
                       predictedScoringPlayersOfTeam1:
@@ -362,7 +362,7 @@ export const Success = ({
                     input: {
                       userId: currentUser.id,
                       matchId: matchBeingPredicted.id,
-                      wageredPoints: wageredPoints,
+                      wageredCoins: wageredCoins,
                       predictedScoreOfTeam1: team1PredictedScore,
                       predictedScoreOfTeam2: team2PredictedScore,
                       predictedScoringPlayersOfTeam1:

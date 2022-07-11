@@ -54,27 +54,22 @@ const checkboxInputTag = (checked) => {
 }
 
 const MatchPredictionsList = ({ matchPredictions }) => {
-  const [deleteMatchPrediction] = useMutation(
-    DELETE_MATCH_PREDICTION_MUTATION,
-    {
-      onCompleted: () => {
-        toast.success('MatchPrediction deleted')
-      },
-      onError: (error) => {
-        toast.error(error.message)
-      },
-      // This refetches the query on the list page. Read more about other ways to
-      // update the cache over here:
-      // https://www.apollographql.com/docs/react/data/mutations/#making-all-other-cache-updates
-      refetchQueries: [{ query: QUERY }],
-      awaitRefetchQueries: true,
-    }
-  )
+  const [deleteMatchPrediction] = useMutation(DELETE_MATCH_PREDICTION_MUTATION, {
+    onCompleted: () => {
+      toast.success('MatchPrediction deleted')
+    },
+    onError: (error) => {
+      toast.error(error.message)
+    },
+    // This refetches the query on the list page. Read more about other ways to
+    // update the cache over here:
+    // https://www.apollographql.com/docs/react/data/mutations/#making-all-other-cache-updates
+    refetchQueries: [{ query: QUERY }],
+    awaitRefetchQueries: true,
+  })
 
   const onDeleteClick = (id) => {
-    if (
-      confirm('Are you sure you want to delete matchPrediction ' + id + '?')
-    ) {
+    if (confirm('Are you sure you want to delete matchPrediction ' + id + '?')) {
       deleteMatchPrediction({ variables: { id } })
     }
   }
@@ -91,7 +86,7 @@ const MatchPredictionsList = ({ matchPredictions }) => {
             <th>Predicted score of team2</th>
             <th>Predicted scoring players of team1</th>
             <th>Predicted scoring players of team2</th>
-            <th>Wagered points</th>
+            <th>Wagered coins</th>
             <th>Created at</th>
             <th>Updated at</th>
             <th>&nbsp;</th>
@@ -105,22 +100,16 @@ const MatchPredictionsList = ({ matchPredictions }) => {
               <td>{truncate(matchPrediction.matchId)}</td>
               <td>{truncate(matchPrediction.predictedScoreOfTeam1)}</td>
               <td>{truncate(matchPrediction.predictedScoreOfTeam2)}</td>
-              <td>
-                {truncate(matchPrediction.predictedScoringPlayersOfTeam1)}
-              </td>
-              <td>
-                {truncate(matchPrediction.predictedScoringPlayersOfTeam2)}
-              </td>
-              <td>{truncate(matchPrediction.wageredPoints)}</td>
+              <td>{truncate(matchPrediction.predictedScoringPlayersOfTeam1)}</td>
+              <td>{truncate(matchPrediction.predictedScoringPlayersOfTeam2)}</td>
+              <td>{truncate(matchPrediction.wageredCoins)}</td>
               <td>{timeTag(matchPrediction.createdAt)}</td>
               <td>{timeTag(matchPrediction.updatedAt)}</td>
               <td>
                 <nav className="rw-table-actions">
                   <Link
                     to={routes.matchPrediction({ id: matchPrediction.id })}
-                    title={
-                      'Show matchPrediction ' + matchPrediction.id + ' detail'
-                    }
+                    title={'Show matchPrediction ' + matchPrediction.id + ' detail'}
                     className="rw-button rw-button-small"
                   >
                     Show
