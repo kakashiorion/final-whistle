@@ -26,10 +26,10 @@ const currentTournament = 2
 const NavigationLayout = ({ children }: NavigationLayoutProps) => {
   const { currentUser } = useAuth()
   useEffect(() => {
-    if (!currentUser.username || !currentUser.points) {
+    if (!currentUser.username || !currentUser.coins) {
       navigate(routes.userSetup())
     }
-  }, [currentUser.username, currentUser.points])
+  }, [currentUser.username, currentUser.coins])
   const [isSidebarOpen, setSidebarOpen] = useState(false)
   return (
     <>

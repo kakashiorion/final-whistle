@@ -82,8 +82,11 @@ export const Success = ({
         id="UpcomingMatchesDiv"
         className="flex flex-col w-full px-2 md:px-3 py-2 md:py-3 gap-2 md:gap-3 max-h-[30vh] bg-black-3 bg-opacity-60 rounded-md items-start justify-start"
       >
-        <p className="text-light-3 text-xs md:text-sm font-bold">
-          UPCOMING MATCHES
+        <p className="text-light-3 flex justify-between w-full gap-1 md:gap-2 text-xs md:text-sm font-bold">
+          <p>UPCOMING MATCHES</p>
+          <p className="whitespace-nowrap animate-pulse flex items-center justify-center px-2 py-1 rounded-full text-[10px] md:text-xs bg-green-dark text-white-2">
+            PREDICT NOW!
+          </p>
         </p>
         <div className="flex w-full h-full overflow-x-scroll rounded-md gap-2 md:gap-3 justify-start items-start nonscroll">
           {upcomingMatches.length > 0 ? (
@@ -190,14 +193,14 @@ const UpcomingMatchItem = ({ upcomingMatch }) => {
 const PredictedLabel = () => {
   return (
     <div className="bg-green-dark rounded-sm px-1 py-[2px] text-[8px] md:text-[10px] text-white-3">
-      PREDICTED
+      PRED
     </div>
   )
 }
 
 const NotPredictedLabel = () => {
   return (
-    <div className="text-red-light text-[8px] md:text-[10px] line-through">
+    <div className="text-red-light text-[10px] md:text-[12px] line-through">
       PRED
     </div>
   )
@@ -229,14 +232,14 @@ const RecentMatchItem = ({ recentMatch }) => {
       >
         <div
           id="dateTime"
-          className="flex flex-col skew-x-[12deg] whitespace-nowrap gap-1 min-w-[15%] sm:min-w-[10%] items-center justify-evenly text-white-3 text-[10px] md:text-xs"
+          className="flex flex-col skew-x-[12deg] whitespace-nowrap gap-1 min-w-[15%] sm:min-w-[10%] items-center justify-center text-white-3 text-[10px] md:text-xs"
         >
           <p>{moment(recentMatch.matchDate).format('HH:mm')}</p>
           <p>{moment(recentMatch.matchDate).format('DD MMM')}</p>
         </div>
         <div
           id="round"
-          className="hidden sm:flex flex-col skew-x-[12deg] whitespace-nowrap gap-1 min-w-[10%] items-center justify-evenly text-white-3 text-[10px] md:text-xs"
+          className="hidden sm:flex flex-col skew-x-[12deg] whitespace-nowrap gap-1 min-w-[10%] items-center justify-center text-white-3 text-[10px] md:text-xs"
         >
           <p>{recentMatch.round.split('-')[0]}</p>
           <p>{recentMatch.round.split('-')[1]}</p>
@@ -265,7 +268,7 @@ const RecentMatchItem = ({ recentMatch }) => {
         </div>
         <div
           id="score"
-          className="flex flex-col skew-x-[12deg] gap-1 whitespace-nowrap min-w-[5%] items-start justify-evenly text-white-1 text-xs md:text-sm"
+          className="flex flex-col skew-x-[12deg] gap-1 whitespace-nowrap min-w-[5%] items-start justify-center text-white-1 text-xs md:text-sm"
         >
           <p>{recentMatch.teams[0].team.score ?? 0}</p>
           <p>{recentMatch.teams[1].team.score ?? 0}</p>
@@ -284,13 +287,10 @@ const RecentMatchItem = ({ recentMatch }) => {
         </div>
         <div
           id="userPoints"
-          className="flex skew-x-[12deg] justify-center items-center whitespace-nowrap min-w-[15%] text-primary-light text-center text-[8px] md:text-[10px]"
+          className="flex skew-x-[12deg] justify-center items-center whitespace-nowrap min-w-[15%] text-primary-light text-center text-[10px] md:text-[12px]"
         >
           {didPredict ? (
-            <p>
-              {didPredict.earnedPoints}
-              PTS
-            </p>
+            <p>{didPredict.earnedPoints ?? 100} PTS</p>
           ) : (
             <NotPredictedLabel />
           )}

@@ -4,7 +4,10 @@ import AllTeamsCell from 'src/components/AllTeamsCell'
 const TeamsPage = () => {
   return (
     <>
-      <MetaTags title="Teams" description="Teams page" />
+      <MetaTags
+        title="Teams"
+        description="List of all tournament teams in Final Whistle - the football prediction game"
+      />
 
       <AllTeamsCell />
     </>

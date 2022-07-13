@@ -331,7 +331,7 @@ export const Success = ({
           </p>
         </div>
         <p className="text-end text-xs md:text-sm text-secondary-light">
-          Predict goal scorers for bonus coins
+          (Predict goal scorers for bonus points)
         </p>
       </div>
       <div
