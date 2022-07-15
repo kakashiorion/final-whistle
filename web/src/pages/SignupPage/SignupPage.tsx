@@ -12,6 +12,7 @@ import { toast, Toaster } from '@redwoodjs/web/dist/toast'
 import { useAuth } from '@redwoodjs/auth'
 import { PrimaryRoundedButtonOutlined } from 'src/components/Buttons/RoundedButton/PrimaryRoundedButton'
 import { SecondarySkewedButton } from 'src/components/Buttons/SkewedButton/SecondarySkewedButton'
+import { useState } from 'react'
 
 const SignupPage = () => {
   return (
@@ -53,12 +54,15 @@ interface FormValues {
 }
 const SignupForm = () => {
   const { signUp } = useAuth()
+  const [loading, setLoading] = useState(false)
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
+    setLoading(true)
     const response = await signUp({
       username: data.email,
       password: data.password,
     })
+    setLoading(false)
     if (response.message) {
       toast(response.message)
     } else if (response.error) {
@@ -114,7 +118,9 @@ const SignupForm = () => {
           name="password"
         />
       </div>
-      <SecondarySkewedButton label="CREATE ACCOUNT" />
+      <SecondarySkewedButton
+        label={loading ? '... Please Wait' : 'CREATE ACCOUNT'}
+      />
     </Form>
   )
 }

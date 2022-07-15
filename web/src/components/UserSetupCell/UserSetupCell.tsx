@@ -6,7 +6,7 @@ import { navigate, routes } from '@redwoodjs/router'
 import logo from 'public/Main 2.png'
 import { SecondarySkewedButton } from '../Buttons/SkewedButton/SecondarySkewedButton'
 import { useAuth } from '@redwoodjs/auth'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 export const QUERY = gql`
   query FindAllUsers {
@@ -33,10 +33,12 @@ export const Loading = () => (
   </div>
 )
 
+//Initial tournament coins to be given to every new user
 const tournamentInitialCoins = 1000
 
 export const Success = ({ users }: CellSuccessProps<FindUsers>) => {
   const { currentUser, reauthenticate } = useAuth()
+  const [loading, setLoading] = useState(false)
   const [updateUser] = useMutation(UPDATE_USER_NAME_MUTATION, {
     onCompleted: () => {
       toast.success('All set!')
@@ -57,18 +59,24 @@ export const Success = ({ users }: CellSuccessProps<FindUsers>) => {
     username: string
   }
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
+    setLoading(true)
     if (users.some((user) => user.username === data.username)) {
       //username already exists.. try another
       toast.error('Username already taken.. Try something different')
     } else {
-      //Update username and give user tournament coins
+      //Update username and give initial tournament coins and 0 points
       updateUser({
         variables: {
           id: currentUser.id,
-          input: { username: data.username, coins: tournamentInitialCoins },
+          input: {
+            username: data.username,
+            coins: tournamentInitialCoins,
+            points: 0,
+          },
         },
       })
     }
+    setLoading(false)
   }
 
   return (
@@ -104,7 +112,7 @@ export const Success = ({ users }: CellSuccessProps<FindUsers>) => {
               name="username"
             />
           </div>
-          <SecondarySkewedButton label="DONE" />
+          <SecondarySkewedButton label={loading ? '... Please Wait' : 'DONE'} />
         </Form>
       </div>
     </div>

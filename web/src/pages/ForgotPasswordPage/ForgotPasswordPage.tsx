@@ -4,6 +4,7 @@ import { Link, navigate, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 import { toast, Toaster } from '@redwoodjs/web/dist/toast'
 import logo from 'public/Main 2.png'
+import { useState } from 'react'
 import { SecondaryRoundedButtonOutlined } from 'src/components/Buttons/RoundedButton/SecondaryRoundedButton'
 import { PrimarySkewedButton } from 'src/components/Buttons/SkewedButton/PrimarySkewedButton'
 
@@ -62,9 +63,12 @@ interface FormValues {
 }
 const ForgotPasswordForm = () => {
   const { forgotPassword } = useAuth()
+  const [loading, setLoading] = useState(false)
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
+    setLoading(true)
     const response = await forgotPassword(data.email)
+    setLoading(false)
     if (response.message) {
       toast(response.message)
     } else if (response.error) {
@@ -99,7 +103,9 @@ const ForgotPasswordForm = () => {
           name="email"
         />
       </div>
-      <PrimarySkewedButton label="SEND ME LINK!" />
+      <PrimarySkewedButton
+        label={loading ? '... Please Wait' : 'SEND ME LINK!'}
+      />
     </Form>
   )
 }

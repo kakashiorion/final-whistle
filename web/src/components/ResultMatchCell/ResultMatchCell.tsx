@@ -69,14 +69,10 @@ export const Success = ({
     (p) => p.userId == currentUser.id
   )
 
-  const team1ActualScore = resultMatch.teams[0].score ?? 3
-  const team1ActualScoringPlayers =
-    // resultMatch.teams[0].scoringPlayers ??
-    [1, 4, 2]
-  const team2ActualScore = resultMatch.teams[1].score ?? 3
-  const team2ActualScoringPlayers =
-    // resultMatch.teams[1].scoringPlayers ??
-    [5, 4, 3]
+  const team1ActualScore = resultMatch.teams[0].score
+  const team1ActualScoringPlayers = resultMatch.teams[0].scoringPlayers
+  const team2ActualScore = resultMatch.teams[1].score
+  const team2ActualScoringPlayers = resultMatch.teams[1].scoringPlayers
 
   const team1Players = resultMatch.teams[0].team.players
   const team2Players = resultMatch.teams[1].team.players

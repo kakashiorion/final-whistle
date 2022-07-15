@@ -12,6 +12,7 @@ import { toast, Toaster } from '@redwoodjs/web/dist/toast'
 import { useAuth } from '@redwoodjs/auth'
 import { SecondaryRoundedButtonOutlined } from 'src/components/Buttons/RoundedButton/SecondaryRoundedButton'
 import { PrimarySkewedButton } from 'src/components/Buttons/SkewedButton/PrimarySkewedButton'
+import { useState } from 'react'
 
 const LoginPage = () => {
   return (
@@ -69,12 +70,15 @@ interface FormValues {
 }
 const LoginForm = () => {
   const { logIn } = useAuth()
+  const [loading, setLoading] = useState(false)
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
+    setLoading(true)
     const response = await logIn({
       username: data.email,
       password: data.password,
     })
+    setLoading(false)
     if (response.message) {
       toast(response.message)
     } else if (response.error) {
@@ -128,7 +132,7 @@ const LoginForm = () => {
           name="password"
         />
       </div>
-      <PrimarySkewedButton label="KICK OFF!" />
+      <PrimarySkewedButton label={loading ? '... Please Wait' : 'KICK OFF!'} />
     </Form>
   )
 }

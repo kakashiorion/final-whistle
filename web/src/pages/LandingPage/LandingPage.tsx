@@ -1,7 +1,8 @@
 import { MetaTags } from '@redwoodjs/web'
 import logo from 'public/Logo2.png'
-import predictImage from 'public/predictImage.png'
+import playerImage from 'public/playerImage.png'
 import betImage from 'public/betImage.png'
+import predictImage from 'public/tournamentDefault.png'
 import { PrimarySkewedButton } from 'src/components/Buttons/SkewedButton/PrimarySkewedButton'
 import { navigate, routes } from '@redwoodjs/router'
 import { SecondaryRoundedButtonOutlined } from 'src/components/Buttons/RoundedButton/SecondaryRoundedButton'
@@ -67,11 +68,11 @@ const LandingContent = () => {
           <div className="flex w-full justify-between items-center gap-4 md:gap-6">
             <div className="w-3/4 flex gap-3 md:gap-4 flex-col items-start">
               <p className="text-xl font-semibold md:text-2xl text-primary-normal ">
-                Predict and earn points
+                Predict final scoreline
               </p>
               <p className="text-base md:text-lg text-white-2">
-                Predict the final result and goal scorers of each game in the
-                tournament to win points
+                Correctly guess the final result of every game to win points and
+                top the leaderboard
               </p>
             </div>
             <img className="w-1/4" src={predictImage} alt="predict" />
@@ -85,10 +86,24 @@ const LandingContent = () => {
                 Bet to multiply winnings
               </p>
               <p className="text-base md:text-lg text-white-2 text-end">
-                Wager and win more points if you are confident in your
-                prediction skills
+                Wager more coins and earn upto 3x points if you are confident in
+                your prediction skills
               </p>
             </div>
+          </div>
+        </div>
+        <div className=" h-full w-full flex flex-col gap-3 md:gap-4 items-center justify-center  bg-black-2 rounded-lg px-4 md:px-8 py-8 md:py-10">
+          <div className="flex w-full justify-between items-center gap-4 md:gap-6">
+            <div className="w-3/4 gap-3 md:gap-4 flex flex-col items-start">
+              <p className="text-xl font-semibold md:text-2xl text-primary-normal text-start">
+                Guess goalscorers for bonus points
+              </p>
+              <p className="text-base md:text-lg text-white-2 text-start">
+                With nothing to lose, also predict the goal scoring players to
+                get bonus points
+              </p>
+            </div>
+            <img className="w-1/4" src={playerImage} alt="predict" />
           </div>
         </div>
       </div>

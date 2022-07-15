@@ -80,7 +80,7 @@ const NavigationSidebar = ({ isSidebarOpen }: { isSidebarOpen: boolean }) => {
     <>
       <div
         className={
-          'z-20 backdrop-blur-sm min-w-max h-full bg-dark-1 bg-opacity-60 absolute md:relative px-4 md:px-8 py-16 md:py-20 flex-col items-start justify-start gap-6 md:gap-8 md:flex ' +
+          'z-20 backdrop-blur-sm min-w-max h-screen bg-dark-1 bg-opacity-60 absolute md:relative px-4 md:px-8 py-16 md:py-20 flex-col items-start justify-start gap-6 md:gap-8 md:flex ' +
           (isSidebarOpen ? `flex` : 'hidden')
         }
       >

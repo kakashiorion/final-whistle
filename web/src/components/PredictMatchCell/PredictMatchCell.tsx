@@ -100,6 +100,15 @@ const DELETE_PREDICTION_MUTATION = gql`
   }
 `
 
+const UPDATE_USER_COINS_MUTATION = gql`
+  mutation UpdateUserCoinsMutation($id: Int!, $input: UpdateUserInput!) {
+    updateUser(id: $id, input: $input) {
+      id
+      coins
+    }
+  }
+`
+
 export const Loading = () => (
   <div className="h-full w-full flex items-center justify-center">
     <img className="max-h-[25vh] animate-bounce" src={logo} alt="FW logo" />
@@ -114,6 +123,13 @@ export const Success = ({
   matchBeingPredicted,
 }: CellSuccessProps<FindPredictMatchQuery, FindPredictMatchQueryVariables>) => {
   const { currentUser } = useAuth()
+
+  //Function to update user coins
+  const [updateUserCoins] = useMutation(UPDATE_USER_COINS_MUTATION, {
+    onError: (error) => {
+      toast.error(error.message)
+    },
+  })
 
   //Function to create Prediction
   const [createPrediction] = useMutation(CREATE_PREDICTION_MUTATION, {
@@ -154,24 +170,26 @@ export const Success = ({
   )
 
   //Get already existing prediction data, if any
-  const team1InitialScore = userInitialPrediction?.predictedScoreOfTeam1 ?? 0
+  const team1InitialScore = userInitialPrediction?.predictedScoreOfTeam1
   const team1InitialGoalScoringPlayers =
-    userInitialPrediction?.predictedScoringPlayersOfTeam1 ?? []
-  const team2InitialScore = userInitialPrediction?.predictedScoreOfTeam2 ?? 0
+    userInitialPrediction?.predictedScoringPlayersOfTeam1
+  const team2InitialScore = userInitialPrediction?.predictedScoreOfTeam2
   const team2InitialGoalScoringPlayers =
-    userInitialPrediction?.predictedScoringPlayersOfTeam2 ?? []
+    userInitialPrediction?.predictedScoringPlayersOfTeam2
   const initialWageredCoins = userInitialPrediction?.wageredCoins
 
   //State variables for updating prediction data
   const [wageredCoins, setWageredCoins] = useState(initialWageredCoins ?? 10)
-  const [team1PredictedScore, setTeam1PredictedScore] =
-    useState(team1InitialScore)
+  const [team1PredictedScore, setTeam1PredictedScore] = useState(
+    team1InitialScore ?? 0
+  )
   const [team1PredictedScoringPlayers, setTeam1PredictedScoringPlayers] =
-    useState(team1InitialGoalScoringPlayers)
-  const [team2PredictedScore, setTeam2PredictedScore] =
-    useState(team2InitialScore)
+    useState(team1InitialGoalScoringPlayers ?? [])
+  const [team2PredictedScore, setTeam2PredictedScore] = useState(
+    team2InitialScore ?? 0
+  )
   const [team2PredictedScoringPlayers, setTeam2PredictedScoringPlayers] =
-    useState(team2InitialGoalScoringPlayers)
+    useState(team2InitialGoalScoringPlayers ?? [])
 
   //Cannot predict a match already played; Redirect to home
   useEffect(() => {
@@ -331,7 +349,9 @@ export const Success = ({
           </p>
         </div>
         <p className="text-end text-xs md:text-sm text-secondary-light">
-          (Predict goal scorers for bonus points)
+          {team1PredictedScore || team2PredictedScore
+            ? '(Predict goal scorers for bonus points)'
+            : ''}
         </p>
       </div>
       <div
@@ -356,6 +376,15 @@ export const Success = ({
                         team2PredictedScoringPlayers,
                     },
                   },
+                }) &&
+                updateUserCoins({
+                  variables: {
+                    id: currentUser.id,
+                    input: {
+                      coins:
+                        currentUser.coins + initialWageredCoins - wageredCoins,
+                    },
+                  },
                 })
               : createPrediction({
                   variables: {
@@ -369,6 +398,14 @@ export const Success = ({
                         team1PredictedScoringPlayers,
                       predictedScoringPlayersOfTeam2:
                         team2PredictedScoringPlayers,
+                    },
+                  },
+                }) &&
+                updateUserCoins({
+                  variables: {
+                    id: currentUser.id,
+                    input: {
+                      coins: currentUser.coins - wageredCoins,
                     },
                   },
                 })
@@ -385,7 +422,15 @@ export const Success = ({
                   variables: {
                     id: userInitialPrediction.id,
                   },
-                })
+                }) &&
+                  updateUserCoins({
+                    variables: {
+                      id: currentUser.id,
+                      input: {
+                        coins: currentUser.coins + initialWageredCoins,
+                      },
+                    },
+                  })
               }}
             />
           </div>

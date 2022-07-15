@@ -270,8 +270,8 @@ const RecentMatchItem = ({ recentMatch }) => {
           id="score"
           className="flex flex-col skew-x-[12deg] gap-1 whitespace-nowrap min-w-[5%] items-start justify-center text-white-1 text-xs md:text-sm"
         >
-          <p>{recentMatch.teams[0].team.score ?? 0}</p>
-          <p>{recentMatch.teams[1].team.score ?? 0}</p>
+          <p>{recentMatch.teams[0].score}</p>
+          <p>{recentMatch.teams[1].score}</p>
         </div>
         <div
           id="predictions"
@@ -287,10 +287,10 @@ const RecentMatchItem = ({ recentMatch }) => {
         </div>
         <div
           id="userPoints"
-          className="flex skew-x-[12deg] justify-center items-center whitespace-nowrap min-w-[15%] text-primary-light text-center text-[10px] md:text-[12px]"
+          className="flex skew-x-[12deg] justify-center items-center whitespace-nowrap min-w-[15%] text-green-light text-center text-[10px] md:text-[12px]"
         >
           {didPredict ? (
-            <p>{didPredict.earnedPoints ?? 100} PTS</p>
+            <p>{didPredict.earnedPoints} PTS</p>
           ) : (
             <NotPredictedLabel />
           )}

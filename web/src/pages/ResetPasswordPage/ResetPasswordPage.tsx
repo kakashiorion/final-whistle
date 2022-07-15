@@ -66,6 +66,7 @@ const ResetPasswordForm = ({ resetToken }: { resetToken: string }) => {
   const { reauthenticate, validateResetToken, resetPassword } = useAuth()
   const [enabled, setEnabled] = useState(false)
   const [username, setUsername] = useState('')
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     const validateToken = async () => {
@@ -81,11 +82,12 @@ const ResetPasswordForm = ({ resetToken }: { resetToken: string }) => {
   }, [resetToken, validateResetToken])
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
+    setLoading(true)
     const response = await resetPassword({
       resetToken,
       password: data.password,
     })
-
+    setLoading(false)
     if (response.error) {
       toast.error(response.error)
     } else {
@@ -123,7 +125,9 @@ const ResetPasswordForm = ({ resetToken }: { resetToken: string }) => {
           name="password"
         />
       </div>
-      <PrimarySkewedButton label="CHANGE PASSWORD" />
+      <PrimarySkewedButton
+        label={loading ? '... Please Wait' : 'CHANGE PASSWORD'}
+      />
     </Form>
   )
 }
