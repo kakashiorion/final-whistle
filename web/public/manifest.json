@@ -1,0 +1,16 @@
+{
+  "short_name": "Final Whistle App",
+  "name": "Final Whistle",
+  "icons": [
+    {
+      "src": "Main.png",
+      "sizes": "892x892",
+      "type": "image/png"
+    }
+  ],
+  "start_url": "/",
+  "display": "fullscreen",
+  "orientation": "portrait",
+  "theme_color": "#FAA613",
+  "background_color": "#01478D"
+}
