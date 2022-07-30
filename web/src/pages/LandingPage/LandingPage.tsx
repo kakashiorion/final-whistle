@@ -72,7 +72,7 @@ const LandingContent = () => {
               </p>
               <p className="text-base md:text-lg text-white-2">
                 Correctly guess the final result of every game to win points and
-                top the leaderboard
+                climb the leaderboard
               </p>
             </div>
             <img className="w-1/4" src={predictImage} alt="predict" />
@@ -86,7 +86,7 @@ const LandingContent = () => {
                 Bet to multiply winnings
               </p>
               <p className="text-base md:text-lg text-white-2 text-end">
-                Wager more coins and earn upto 3x points if you are confident in
+                Wager more coins and win upto 3x points if you are confident in
                 your prediction skills
               </p>
             </div>
@@ -96,11 +96,11 @@ const LandingContent = () => {
           <div className="flex w-full justify-between items-center gap-4 md:gap-6">
             <div className="w-3/4 gap-3 md:gap-4 flex flex-col items-start">
               <p className="text-xl font-semibold md:text-2xl text-primary-normal text-start">
-                Guess goalscorers for bonus points
+                Guess goalscorers for bonus
               </p>
               <p className="text-base md:text-lg text-white-2 text-start">
-                With nothing to lose, also predict the goal scoring players to
-                get bonus points
+                With nothing to lose, predict which players will score goals to
+                earn bonus points
               </p>
             </div>
             <img className="w-1/4" src={playerImage} alt="predict" />
