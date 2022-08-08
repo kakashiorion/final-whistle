@@ -4,6 +4,7 @@ import type {
   MutationResolvers,
   UserResolvers,
 } from 'types/graphql'
+import { sendEmail } from 'src/lib/email'
 
 export const users: QueryResolvers['users'] = () => {
   return db.user.findMany()
@@ -37,4 +38,23 @@ export const deleteUser: MutationResolvers['deleteUser'] = ({ id }) => {
 export const User: UserResolvers = {
   predictions: (_obj, { root }) =>
     db.user.findUnique({ where: { id: root.id } }).predictions(),
+}
+
+export const emailUser = async ({ id }) => {
+  const user = await db.user.findUnique({
+    where: { id },
+  })
+  await sendTestEmail(user.email, user.resetToken)
+  return user
+}
+
+function sendTestEmail(emailAddress: string, userToken: string) {
+  const subject = 'Reset Password Link'
+  const text =
+    `Here is the link to reset your password: localhost:8910/reset-password?resetToken=${userToken}\n\n` +
+    `It was sent from Final Whistle application.`
+  const html =
+    `Here is the link to reset your password: localhost:8910/reset-password?resetToken=${userToken}<br><br>` +
+    `It was sent from Final Whistle application.`
+  return sendEmail({ to: emailAddress, subject, text, html })
 }
