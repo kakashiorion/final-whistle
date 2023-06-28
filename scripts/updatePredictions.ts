@@ -1,4 +1,4 @@
-//1. Get actual score reuslt for a match (between timestamps)
+//1. Get actual score result for a match (between timestamps)
 //2. Calculate points based on actual and predicted values for all predictions for that match
 //3. Update points for each user
 
@@ -6,89 +6,85 @@ import { db } from 'api/src/lib/db'
 
 export default async () => {
   try {
-    //Enter ID of matches
-    const matches = [3]
+    //TODO: Enter ID of matches for which predictions and points are to be updated
+    const matches = [3, 6]
 
+    //Script: Update prediction data in DB
     Promise.all(
       //Go through all matches
       matches.map(async (matchId) => {
-        const matchResult = await db.teamsInMatch.findMany({
+        const matchResult = await db.match.findFirst({
           where: {
-            matchId,
+            id: matchId,
           },
         })
-        // console.log(matchResult)
-        //Get actual results of each match
-        const actualScoreOfTeam1 = matchResult[0].score
-        const actualScoreOfTeam2 = matchResult[1].score
-        const actualScoringPlayersOfTeam1 = matchResult[0].scoringPlayers
-        const actualScoringPlayersOfTeam2 = matchResult[1].scoringPlayers
-        //Get all the predictions for each match
+        //Get actual results of the match
+        const actualScoreOfTeam1 = matchResult.homeScore
+        const actualScoreOfTeam2 = matchResult.awayScore
+        const actualScoringPlayersOfTeam1 = matchResult.homeScoringPlayers
+        const actualScoringPlayersOfTeam2 = matchResult.awayScoringPlayers
+        //Get all the predictions for the match
         const predictions = await db.matchPrediction.findMany({
           where: {
-            matchId,
+            matchId: matchId,
           },
         })
-        // console.log(
-        //  `Number of predictions for match ${matchId} is ${predictions.length}`
-        // )
         //Go through all predictions
         predictions.map(async (prediction) => {
-          //Calculate scorelinePoints
-          const scorelinePoints =
-            getScorelinePoints(
-              prediction.predictedScoreOfTeam1,
-              prediction.predictedScoreOfTeam2,
-              actualScoreOfTeam1,
-              actualScoreOfTeam2
-            ) * prediction.wageredCoins
-          //Calculate bonus goalscorer points
-          const goalScorerPoints =
-            (findIntersectionCount(
-              prediction.predictedScoringPlayersOfTeam1,
+          //Calculate scoreline multiplier for each prediction
+          const scorelineMult = getScorelinePoints(
+            prediction.predictedScoreOfHomeTeam,
+            prediction.predictedScoreOfAwayTeam,
+            actualScoreOfTeam1,
+            actualScoreOfTeam2
+          )
+          //Calculate bonus goalscorer multiplier for each prediction
+          const goalScorerMult =
+            findIntersectionCount(
+              prediction.predictedScoringPlayersOfHomeTeam,
               actualScoringPlayersOfTeam1
             ) +
-              findIntersectionCount(
-                prediction.predictedScoringPlayersOfTeam2,
-                actualScoringPlayersOfTeam2
-              )) *
-            prediction.wageredCoins
-          //Calculate totalPoints
-          const totalPoints = scorelinePoints + goalScorerPoints
+            findIntersectionCount(
+              prediction.predictedScoringPlayersOfAwayTeam,
+              actualScoringPlayersOfTeam2
+            )
+          //Calculate totalPoints for each prediction
+          const totalPoints =
+            (scorelineMult + goalScorerMult) * prediction.wageredCoins
 
-          //Get user currentPoints
+          //update earned points for each prediction
+          await db.matchPrediction.update({
+            data: {
+              earnedPoints: totalPoints,
+              goalScorerMultiplier: goalScorerMult,
+              scorelineMultiplier: scorelineMult,
+            },
+            where: {
+              id: prediction.id,
+            },
+          })
+          //Get predicting user's data
           const userData = await db.user.findUnique({
             where: {
               id: prediction.userId,
             },
           })
-          // console.log(
-          //   'Editing user: ' +
-          //     userData.username +
-          //     ' with current points: ' +
-          //     userData.points
-          // )
-          //update earned points for this prediction
-          // const updatedPrediction =
-          await db.matchPrediction.update({
-            data: { earnedPoints: totalPoints },
-            where: {
-              id: prediction.id,
-            },
-          })
-          // console.log(
-          //   'Updated prediction points: ' + updatedPrediction.earnedPoints
-          // )
           //Update the user's points
-          // const updatedUser =
           await db.user.update({
             data: { points: userData.points + totalPoints },
             where: {
               id: prediction.userId,
             },
           })
-          // console.log('updated points of user: ' + updatedUser.points)
+          console.log(
+            `updated ${userData.id} with ${
+              userData.points + totalPoints
+            } points`
+          )
         })
+        console.log(
+          `Updated ${predictions.length} predictions for match ${matchId}`
+        )
       })
     )
   } catch (error) {
@@ -96,6 +92,7 @@ export default async () => {
   }
 }
 
+//Find goalScorer prediction match count with actual
 function findIntersectionCount(a: number[], b: number[]) {
   let count = 0
   b = b.filter((p) => a.includes(p))
@@ -109,6 +106,7 @@ function findIntersectionCount(a: number[], b: number[]) {
   return count
 }
 
+//Get scoreline points (3:exact scoreline; 2:same goal diff; 1:same result)
 const getScorelinePoints = (
   predScoreTeam1: number,
   predScoreTeam2: number,
@@ -116,16 +114,19 @@ const getScorelinePoints = (
   actualScoreTeam2: number
 ) => {
   if (
+    //Exactly the same scoreline
     predScoreTeam1 == actualScoreTeam1 &&
     predScoreTeam2 == actualScoreTeam2
   ) {
     return 3
   } else if (
+    //Same goal difference
     predScoreTeam1 - predScoreTeam2 ==
     actualScoreTeam1 - actualScoreTeam2
   ) {
     return 2
   } else if (
+    //Same result
     (predScoreTeam1 - predScoreTeam2) * (actualScoreTeam1 - actualScoreTeam2) >
     0
   ) {

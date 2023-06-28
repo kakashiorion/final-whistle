@@ -2,27 +2,40 @@ export const schema = gql`
   type Player {
     id: Int!
     name: String!
-    position: String!
-    team: Team
-    teamId: Int
+    position: PlayerPosition!
+    team: Team!
+    teamId: Int!
     createdAt: DateTime!
     updatedAt: DateTime!
+  }
+
+  enum PlayerPosition {
+    GK
+    DF
+    MD
+    FW
+  }
+
+  type MostChosenPlayerType {
+    player: Player!
+    occurence: Int!
   }
 
   type Query {
     players: [Player!]! @requireAuth
     player(id: Int!): Player @requireAuth
+    mostChosenPlayers(tournamentId: Int!): [MostChosenPlayerType!]! @requireAuth
   }
 
   input CreatePlayerInput {
     name: String!
-    position: String!
-    teamId: Int
+    position: PlayerPosition!
+    teamId: Int!
   }
 
   input UpdatePlayerInput {
     name: String
-    position: String
+    position: PlayerPosition
     teamId: Int
   }
 

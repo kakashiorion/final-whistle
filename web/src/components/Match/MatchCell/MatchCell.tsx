@@ -1,4 +1,5 @@
 import type { FindMatchById } from 'types/graphql'
+
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 
 import Match from 'src/components/Match/Match'

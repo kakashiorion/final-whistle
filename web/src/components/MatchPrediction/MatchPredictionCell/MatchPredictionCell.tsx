@@ -1,4 +1,5 @@
 import type { FindMatchPredictionById } from 'types/graphql'
+
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 
 import MatchPrediction from 'src/components/MatchPrediction/MatchPrediction'
@@ -9,10 +10,10 @@ export const QUERY = gql`
       id
       userId
       matchId
-      predictedScoreOfTeam1
-      predictedScoreOfTeam2
-      predictedScoringPlayersOfTeam1
-      predictedScoringPlayersOfTeam2
+      predictedScoreOfHomeTeam
+      predictedScoreOfAwayTeam
+      predictedScoringPlayersOfHomeTeam
+      predictedScoringPlayersOfAwayTeam
       wageredCoins
       createdAt
       updatedAt
@@ -28,6 +29,8 @@ export const Failure = ({ error }: CellFailureProps) => (
   <div className="rw-cell-error">{error.message}</div>
 )
 
-export const Success = ({ matchPrediction }: CellSuccessProps<FindMatchPredictionById>) => {
+export const Success = ({
+  matchPrediction,
+}: CellSuccessProps<FindMatchPredictionById>) => {
   return <MatchPrediction matchPrediction={matchPrediction} />
 }

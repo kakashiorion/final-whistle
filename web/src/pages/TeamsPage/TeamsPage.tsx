@@ -1,5 +1,7 @@
 import { MetaTags } from '@redwoodjs/web'
+
 import AllTeamsCell from 'src/components/AllTeamsCell'
+import { CurrentTournamentID } from 'src/utils'
 
 const TeamsPage = () => {
   return (
@@ -9,7 +11,7 @@ const TeamsPage = () => {
         description="List of all tournament teams in Final Whistle - the football prediction game"
       />
 
-      <AllTeamsCell />
+      <AllTeamsCell tournamentId={CurrentTournamentID} />
     </>
   )
 }

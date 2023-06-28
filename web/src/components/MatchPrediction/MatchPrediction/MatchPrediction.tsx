@@ -1,8 +1,8 @@
 import humanize from 'humanize-string'
 
+import { Link, routes, navigate } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
-import { Link, routes, navigate } from '@redwoodjs/router'
 
 const DELETE_MATCH_PREDICTION_MUTATION = gql`
   mutation DeleteMatchPredictionMutation($id: Int!) {
@@ -46,18 +46,23 @@ const checkboxInputTag = (checked) => {
 }
 
 const MatchPrediction = ({ matchPrediction }) => {
-  const [deleteMatchPrediction] = useMutation(DELETE_MATCH_PREDICTION_MUTATION, {
-    onCompleted: () => {
-      toast.success('MatchPrediction deleted')
-      navigate(routes.matchPredictions())
-    },
-    onError: (error) => {
-      toast.error(error.message)
-    },
-  })
+  const [deleteMatchPrediction] = useMutation(
+    DELETE_MATCH_PREDICTION_MUTATION,
+    {
+      onCompleted: () => {
+        toast.success('MatchPrediction deleted')
+        navigate(routes.matchPredictions())
+      },
+      onError: (error) => {
+        toast.error(error.message)
+      },
+    }
+  )
 
   const onDeleteClick = (id) => {
-    if (confirm('Are you sure you want to delete matchPrediction ' + id + '?')) {
+    if (
+      confirm('Are you sure you want to delete matchPrediction ' + id + '?')
+    ) {
       deleteMatchPrediction({ variables: { id } })
     }
   }
@@ -66,38 +71,49 @@ const MatchPrediction = ({ matchPrediction }) => {
     <>
       <div className="rw-segment">
         <header className="rw-segment-header">
-          <h2 className="rw-heading rw-heading-secondary">MatchPrediction {matchPrediction.id} Detail</h2>
+          <h2 className="rw-heading rw-heading-secondary">
+            MatchPrediction {matchPrediction.id} Detail
+          </h2>
         </header>
         <table className="rw-table">
           <tbody>
             <tr>
               <th>Id</th>
               <td>{matchPrediction.id}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>User id</th>
               <td>{matchPrediction.userId}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>Match id</th>
               <td>{matchPrediction.matchId}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>Predicted score of team1</th>
               <td>{matchPrediction.predictedScoreOfTeam1}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>Predicted score of team2</th>
               <td>{matchPrediction.predictedScoreOfTeam2}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>Predicted scoring players of team1</th>
               <td>{matchPrediction.predictedScoringPlayersOfTeam1}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>Predicted scoring players of team2</th>
               <td>{matchPrediction.predictedScoringPlayersOfTeam2}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>Wagered coins</th>
               <td>{matchPrediction.wageredCoins}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>Created at</th>
               <td>{timeTag(matchPrediction.createdAt)}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>Updated at</th>
               <td>{timeTag(matchPrediction.updatedAt)}</td>
             </tr>

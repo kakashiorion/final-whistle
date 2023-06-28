@@ -1,7 +1,9 @@
-import type { AllUsersQuery } from 'types/graphql'
-import type { CellSuccessProps } from '@redwoodjs/web'
 import logo from 'public/Main 2.png'
-import { useAuth } from '@redwoodjs/auth'
+import type { AllUsersQuery } from 'types/graphql'
+
+import type { CellSuccessProps } from '@redwoodjs/web'
+
+import { useAuth } from 'src/auth'
 
 export const QUERY = gql`
   query AllUsersQuery {
@@ -25,16 +27,18 @@ export const Success = ({ allUsers }: CellSuccessProps<AllUsersQuery>) => {
 
   return (
     <div
-      id="AllTeamsDiv"
-      className="flex flex-col w-full max-h-[80vh] px-2 md:px-3 py-2 md:py-3 gap-2 md:gap-3 bg-black-3 bg-opacity-60 rounded-md items-start justify-start"
+      id="LeaderboardDiv"
+      className="flex flex-col w-full h-full overflow-hidden p-2 md:p-3 gap-3 bg-black-3/70 rounded-md items-start justify-start"
     >
-      <p className="text-light-3 text-xs md:text-sm font-bold">LEADERBOARD</p>
-      <div className="flex text-white-3 px-4 md:px-5 py-2 gap-3 md:gap-4 items-center justify-center w-full">
+      <p className="text-primary-normal px-3 md:px-4 text-lg md:text-2xl">
+        Leaderboard
+      </p>
+      <div className="flex text-white-3 px-3 md:px-4 gap-3 md:gap-4 items-center justify-center w-full text-sm md:text-base">
         <p className="basis-1/6 text-start">Rank</p>
         <p className="basis-3/6 text-start">Username</p>
         <p className="basis-2/6 text-end">Points</p>
       </div>
-      <div className="flex flex-col px-3 w-full h-full overflow-y-scroll gap-2 md:gap-3 justify-start items-start nonscroll">
+      <div className="flex flex-col px-3 py-1 w-full h-full overflow-y-scroll gap-2 md:gap-3 justify-start items-start nonscroll">
         {topUsers.map((user, i) => {
           return <UserItem user={user} key={user.id} rank={i} />
         })}
@@ -59,9 +63,9 @@ const UserItem = (props: UserItemProps) => {
     <div
       className={
         `flex -skew-x-[12deg] border-2 px-2 md:px-3 py-2 gap-3 md:gap-4 items-center justify-center w-full ` +
-        (props.user.id != currentUser.id
-          ? 'bg-white-3 text-secondary-dark border-secondary-dark'
-          : 'bg-black-1 text-primary-normal  border-primary-normal')
+        (props.user.id == currentUser.id
+          ? 'bg-white-3 text-secondary-normal border-secondary-normal shadow-md shadow-secondary-normal'
+          : 'bg-black-1 text-primary-normal border-primary-normal shadow-sm shadow-primary-normal')
       }
     >
       <p className="basis-1/6 text-start">#{props.rank + 1}</p>

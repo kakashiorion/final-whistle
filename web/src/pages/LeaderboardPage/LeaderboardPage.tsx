@@ -1,4 +1,5 @@
 import { MetaTags } from '@redwoodjs/web'
+
 import AllUsersCell from 'src/components/AllUsersCell'
 
 const LeaderboardPage = () => {

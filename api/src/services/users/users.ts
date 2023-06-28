@@ -1,9 +1,10 @@
-import { db } from 'src/lib/db'
 import type {
   QueryResolvers,
   MutationResolvers,
-  UserResolvers,
+  UserRelationResolvers,
 } from 'types/graphql'
+
+import { db } from 'src/lib/db'
 import { sendEmail } from 'src/lib/email'
 
 export const users: QueryResolvers['users'] = () => {
@@ -35,7 +36,7 @@ export const deleteUser: MutationResolvers['deleteUser'] = ({ id }) => {
   })
 }
 
-export const User: UserResolvers = {
+export const User: UserRelationResolvers = {
   predictions: (_obj, { root }) =>
     db.user.findUnique({ where: { id: root.id } }).predictions(),
 }

@@ -1,41 +1,45 @@
-import type { HomeMatchesQuery, HomeMatchesQueryVariables } from 'types/graphql'
-import type { CellSuccessProps } from '@redwoodjs/web'
 import moment from 'moment'
+import CheckIcon from 'public/CheckIcon.svg'
 import logo from 'public/Main 2.png'
-import { useAuth } from '@redwoodjs/auth'
+import type { HomeMatchesQuery, HomeMatchesQueryVariables } from 'types/graphql'
+
 import { Link, routes } from '@redwoodjs/router'
+import type { CellSuccessProps } from '@redwoodjs/web'
+
+import { useAuth } from 'src/auth'
 
 export const QUERY = gql`
   query HomeMatchesQuery($tournamentId: Int!) {
     tournament: tournament(id: $tournamentId) {
       id
       name
-      logoURL
+      startDate
+      endDate
       matches {
         id
         matchDate
         location
         round
+        homeScore
+        awayScore
         predictions {
           id
           userId
-          wageredCoins
+          predictedScoreOfHomeTeam
+          predictedScoreOfAwayTeam
           earnedPoints
-          predictedScoreOfTeam1
-          predictedScoreOfTeam2
-          predictedScoringPlayersOfTeam1
-          predictedScoringPlayersOfTeam2
         }
-        teams {
+        homeTeam {
           id
-          scoringPlayers
-          team {
-            id
-            name
-            flagURL
-            color
-          }
-          score
+          name
+          flagURL
+          color
+        }
+        awayTeam {
+          id
+          name
+          flagURL
+          color
         }
       }
     }
@@ -48,47 +52,45 @@ export const Loading = () => (
   </div>
 )
 
-export const Empty = () => <div>No tournament is currently active!</div>
-
-const currentDate = new Date('15 Aug 2022')
+const currentDate = new Date()
 
 export const Success = ({
   tournament,
 }: CellSuccessProps<HomeMatchesQuery, HomeMatchesQueryVariables>) => {
   //List of upcoming matches
   const upcomingMatches = tournament.matches
-    .filter(
-      (match) =>
-        moment(match.matchDate).isAfter(moment(currentDate)) &&
-        match.teams.length > 0
-    )
+    .filter((match) => moment(match.matchDate).isAfter(moment(currentDate)))
     .sort((a, b) => (moment(a.matchDate).isAfter(moment(b.matchDate)) ? 1 : -1))
 
   //List of recently completed matches
   const recentMatches = tournament.matches
-    .filter(
-      (match) =>
-        !moment(match.matchDate).isAfter(moment(currentDate)) &&
-        match.teams.length > 0
-    )
+    .filter((match) => moment(match.matchDate).isBefore(moment(currentDate)))
     .sort((a, b) => (moment(a.matchDate).isAfter(moment(b.matchDate)) ? -1 : 1))
 
   return (
     <div
-      id="MatchesDiv"
-      className="flex flex-col h-full items-start pb-3 md:pb-4 justify-start w-full gap-8 md:gap-10 rounded-md "
+      id="HomeMatchesDiv"
+      className="flex flex-col items-start overflow-hidden justify-start w-full gap-6 md:gap-8"
     >
       <div
         id="UpcomingMatchesDiv"
-        className="flex flex-col w-full px-2 md:px-3 py-2 md:py-3 gap-2 md:gap-3 max-h-[30vh] bg-black-3 bg-opacity-60 rounded-md items-start justify-start"
+        className="flex flex-col w-full p-2 md:p-3 gap-2 md:gap-3 bg-black-3/70 rounded items-start justify-start"
       >
-        <p className="text-light-3 flex justify-between w-full gap-1 md:gap-2 text-xs md:text-sm font-bold">
-          <p>UPCOMING MATCHES</p>
-          <p className="whitespace-nowrap animate-pulse flex items-center justify-center px-2 py-1 rounded-full text-[10px] md:text-xs bg-green-dark text-white-2">
-            PREDICT NOW!
+        <div
+          id="UpcomingHeader"
+          className="flex items-center justify-between w-full gap-1 md:gap-2 px-1"
+        >
+          <p className="whitespace-nowrap text-base md:text-lg text-primary-normal ">
+            Upcoming Matches
           </p>
-        </p>
-        <div className="flex w-full h-full overflow-x-scroll rounded-md gap-2 md:gap-3 justify-start items-start nonscroll">
+          <p className="whitespace-nowrap py-1 px-3 md:px-4 text-white-1 rounded-full animate-pulse text-xs md:text-sm bg-green-normal">
+            {'PREDICT NOW >'}
+          </p>
+        </div>
+        <div
+          id="UpcomingList"
+          className="flex w-full overflow-x-scroll gap-2 md:gap-3 px-1 py-1 justify-start items-start nonscroll"
+        >
           {upcomingMatches.length > 0 ? (
             upcomingMatches.map((match) => {
               return <UpcomingMatchItem upcomingMatch={match} key={match.id} />
@@ -102,18 +104,21 @@ export const Success = ({
       </div>
       <div
         id="RecentMatchesDiv"
-        className="flex flex-col w-full px-2 md:px-3 py-2 md:py-3 gap-2 md:gap-3 max-h-[40vh] bg-black-3 bg-opacity-60 rounded-md items-start justify-start"
+        className="flex flex-col w-full p-2 md:p-3 gap-2 md:gap-3 overflow-hidden bg-black-3/70 rounded items-start justify-start"
       >
-        <p className="text-light-3 text-xs md:text-sm font-bold">
-          RECENT RESULTS
+        <p className="text-primary-normal w-full whitespace-nowrap text-base md:text-lg px-1">
+          Recent Results
         </p>
-        <div className="flex flex-col w-full gap-1 md:gap-1 justify-start items-start rounded-md overflow-y-scroll nonscroll px-2">
+        <div
+          id="RecentMatchesList"
+          className="flex flex-col w-full gap-2 md:gap-3 justify-start items-start overflow-y-scroll nonscroll px-3 py-1"
+        >
           {recentMatches.length > 0 ? (
             recentMatches.map((match) => {
               return <RecentMatchItem recentMatch={match} key={match.id} />
             })
           ) : (
-            <p className="text-xs md:text-sm text-red-light">
+            <p className="text-xs md:text-sm text-center text-white-3">
               Tournament is yet to start!
             </p>
           )}
@@ -130,78 +135,65 @@ const UpcomingMatchItem = ({ upcomingMatch }) => {
   )
   return (
     <Link to={routes.matchPredict({ id: upcomingMatch.id })}>
-      <div className="h-full min-w-max hover:-translate-y-1 hover:-translate-x-1 hover:bg-green-dark hover:bg-opacity-60 flex flex-col justify-evenly gap-1 md:gap-2 rounded-tl-xl rounded-br-xl bg-dark-2 px-2 md:px-3 py-2 md:py-3 ">
-        <div
-          id="row1"
-          className="flex items-center gap-1 md:gap-2 justify-between"
-        >
-          <div
-            id="round"
-            className="flex flex-col whitespace-nowrap gap-1 items-start justify-evenly text-white-3 text-[8px] md:text-[10px]"
-          >
-            <p>{upcomingMatch.round.split('-')[0]}</p>
-            <p>{upcomingMatch.round.split('-')[1]}</p>
-          </div>
-          <div
-            id="dateTime"
-            className="flex flex-col whitespace-nowrap gap-1 items-end justify-evenly text-white-3 text-[8px] md:text-[10px]"
-          >
-            <p>{moment(upcomingMatch.matchDate).format('HH:mm')}</p>
-            <p>{moment(upcomingMatch.matchDate).format('DD MMM')}</p>
-          </div>
-        </div>
-        <div id="row2" className="flex flex-col w-full gap-1 md:gap-2">
+      <div className="w-40 md:w-48 hover:shadow-sm hover:shadow-primary-normal hover:-translate-y-1 hover:-translate-x-1 hover:bg-green-dark/70 flex flex-col justify-evenly items-center gap-2 md:gap-3 rounded-tl-lg rounded-br-lg bg-dark-2 p-3 md:p-4">
+        <div id="teams" className="flex flex-col w-full gap-1 md:gap-1.5">
           <div
             id="team 1"
-            className="flex w-full gap-1 md:gap-2 whitespace-nowrap pr-2 md:pr-3 items-center justify-start text-white-1 text-xs md:text-sm"
+            className="flex w-full gap-1 md:gap-2 whitespace-nowrap pr-2 md:pr-3 items-center justify-start text-white-1 text-sm md:text-base"
           >
             <img
-              className="h-3 md:h-4 aspect-video"
-              src={upcomingMatch.teams[0].team.flagURL}
+              className="h-5 md:h-6"
+              src={upcomingMatch.homeTeam.flagURL}
               alt="team1 flag"
             />
-            <p>{upcomingMatch.teams[0].team.name.split('U-')[0]}</p>
+            <p>{upcomingMatch.homeTeam.name.split(' U-')[0]}</p>
           </div>
           <div
             id="team 2"
-            className="flex w-full gap-1 md:gap-2 whitespace-nowrap pl-2 md:pl-3 items-center justify-end text-white-1 text-xs md:text-sm"
+            className="flex w-full gap-1 md:gap-2 whitespace-nowrap pl-2 md:pl-3 items-center justify-end text-white-1 text-sm md:text-base"
           >
-            <p>{upcomingMatch.teams[1].team.name.split('U-')[0]}</p>
+            <p>{upcomingMatch.awayTeam.name.split(' U-')[0]}</p>
             <img
-              className="h-3 md:h-4 aspect-video"
-              src={upcomingMatch.teams[1].team.flagURL}
+              className="h-5 md:h-6"
+              src={upcomingMatch.awayTeam.flagURL}
               alt="team2 flag"
             />
           </div>
         </div>
         <div
-          id="row3"
-          className="flex items-center gap-1 md:gap-2 justify-between"
+          id="round"
+          className="flex flex-col gap-0.5 md:gap-1 items-center justify-center text-white-4 text-xs md:text-sm"
         >
+          <p>{upcomingMatch.round}</p>
           <div
-            id="predictions"
-            className="py-1 border-secondary-light border-[1px] rounded-md px-1 md:px-2 whitespace-nowrap text-secondary-light text-[8px] md:text-[10px] font-bold"
+            id="dateTime"
+            className="flex items-center gap-1 md:gap-2 justify-between"
           >
-            <p>{upcomingMatch.predictions.length}</p>
+            <p>{moment(upcomingMatch.matchDate).format('DD MMM')}</p>
+            <p>{moment(upcomingMatch.matchDate).format('HH:mm')}</p>
           </div>
+        </div>
+        <div
+          id="predInfo"
+          className="flex w-full items-center gap-1 md:gap-2 justify-between"
+        >
+          <p
+            id="predictions"
+            className="py-1 md:py-1.5 rounded-full px-3 md:px-4 bg-secondary-light text-[10px] md:text-xs text-black-2"
+          >
+            {upcomingMatch.predictions.length}
+          </p>
           {alreadyPredicted ? <PredictedLabel /> : <></>}
         </div>
       </div>
     </Link>
   )
 }
+
 const PredictedLabel = () => {
   return (
-    <div className="bg-green-dark rounded-sm px-1 py-[2px] text-[8px] md:text-[10px] text-white-3">
-      PRED
-    </div>
-  )
-}
-
-const NotPredictedLabel = () => {
-  return (
-    <div className="text-red-light text-[10px] md:text-[12px] line-through">
-      PRED
+    <div className="text-green-dark flex item-center rounded-br-lg rounded-tl-lg p-1 md:p-1.5 text-[10px] md:text-xs bg-white-3">
+      <CheckIcon className="h-3 md:h-4 w-3 md:w-4" />
     </div>
   )
 }
@@ -211,91 +203,84 @@ const RecentMatchItem = ({ recentMatch }) => {
   //Count of successful predictions
   const successCount = recentMatch.predictions.filter(
     (p) =>
-      p.predictedScoreOfTeam1 === recentMatch.teams[0].team.score &&
-      p.predictedScoreOfTeam2 === recentMatch.teams[1].team.score
+      p.predictedScoreOfHomeTeam === recentMatch.homeScore &&
+      p.predictedScoreOfAwayTeam === recentMatch.awayScore
   ).length
   //Rate of successful predictions
   const successRate =
     recentMatch.predictions.length != 0
       ? `${(successCount * 100) / recentMatch.predictions.length}%`
-      : '-'
+      : '0%'
   //Did currentUser make a prediction for this match
   const didPredict = recentMatch.predictions.find(
     (p) => p.userId == currentUser.id
   )
 
   return (
-    <>
-      <Link
-        to={routes.matchResult({ id: recentMatch.id })}
-        className={`w-full -skew-x-[12deg] hover:-translate-y-1 hover:-translate-x-1 hover:bg-secondary-dark hover:bg-opacity-60 flex gap-1 md:gap-2 items-center justify-evenly bg-tertiary-dark px-1 md:px-2 py-2 md:py-3`}
+    <Link
+      to={routes.matchResult({ id: recentMatch.id })}
+      className={`w-full -skew-x-[12deg] hover:shadow-sm hover:shadow-primary-normal hover:-translate-y-1 hover:-translate-x-1 hover:bg-secondary-dark hover:bg-opacity-60 flex gap-1 md:gap-2 items-center justify-evenly bg-dark-3 px-1 md:px-2 py-2 md:py-3`}
+    >
+      <div
+        id="dateTime"
+        className="flex flex-col skew-x-[12deg] whitespace-nowrap gap-1 md:gap-1.5 min-w-[15%] md:min-w-[10%] items-center justify-center text-white-3 text-[10px] md:text-xs"
       >
-        <div
-          id="dateTime"
-          className="flex flex-col skew-x-[12deg] whitespace-nowrap gap-1 min-w-[15%] sm:min-w-[10%] items-center justify-center text-white-3 text-[10px] md:text-xs"
-        >
-          <p>{moment(recentMatch.matchDate).format('HH:mm')}</p>
-          <p>{moment(recentMatch.matchDate).format('DD MMM')}</p>
-        </div>
-        <div
-          id="round"
-          className="hidden sm:flex flex-col skew-x-[12deg] whitespace-nowrap gap-1 min-w-[10%] items-center justify-center text-white-3 text-[10px] md:text-xs"
-        >
-          <p>{recentMatch.round.split('-')[0]}</p>
-          <p>{recentMatch.round.split('-')[1]}</p>
-        </div>
-        <div
-          id="flags"
-          className="flex flex-col skew-x-[12deg] min-w-[5%] items-end gap-1 justify-center"
-        >
-          <img
-            className="h-3 md:h-4 aspect-video"
-            src={recentMatch.teams[0].team.flagURL}
-            alt="team1 flag"
-          />
-          <img
-            className="h-3 md:h-4 aspect-video"
-            src={recentMatch.teams[1].team.flagURL}
-            alt="team2 flag"
-          />
-        </div>
-        <div
-          id="teams"
-          className="flex flex-col skew-x-[12deg] gap-1 whitespace-nowrap min-w-[30%] md:min-w-[25%] items-start justify-center text-white-1 text-xs md:text-sm"
-        >
-          <p>{recentMatch.teams[0].team.name.split('U-')[0]}</p>
-          <p>{recentMatch.teams[1].team.name.split('U-')[0]}</p>
-        </div>
-        <div
-          id="score"
-          className="flex flex-col skew-x-[12deg] gap-1 whitespace-nowrap min-w-[5%] items-start justify-center text-white-1 text-xs md:text-sm"
-        >
-          <p>{recentMatch.teams[0].score}</p>
-          <p>{recentMatch.teams[1].score}</p>
-        </div>
-        <div
-          id="predictions"
-          className="py-1 md:py-[6px] skew-x-[12deg] rounded-lg whitespace-nowrap min-w-[10%] px-1 md:px-2 bg-secondary-light flex justify-center items-center text-black-2 text-[8px] md:text-[10px]"
-        >
-          <p>{recentMatch.predictions.length}</p>
-        </div>
-        <div
-          id="success"
-          className="py-1 md:py-[6px] skew-x-[12deg] rounded-lg whitespace-nowrap min-w-[10%] px-1 md:px-2 bg-green-light flex justify-center items-center text-black-2 text-[8px] md:text-[10px]"
-        >
-          <p>{successRate}</p>
-        </div>
-        <div
-          id="userPoints"
-          className="flex skew-x-[12deg] justify-center items-center whitespace-nowrap min-w-[15%] text-green-light text-center text-[10px] md:text-[12px]"
-        >
-          {didPredict ? (
-            <p>{didPredict.earnedPoints} PTS</p>
-          ) : (
-            <NotPredictedLabel />
-          )}
-        </div>
-      </Link>
-    </>
+        <p>{moment(recentMatch.matchDate).format('HH:mm')}</p>
+        <p>{moment(recentMatch.matchDate).format('DD MMM')}</p>
+      </div>
+      <div
+        id="round"
+        className="hidden md:flex flex-col skew-x-[12deg] whitespace-nowrap gap-1 md:gap-1.5 min-w-[10%] items-center justify-center text-white-3 text-[10px] md:text-xs"
+      >
+        <p>{recentMatch.round}</p>
+      </div>
+      <div
+        id="flags"
+        className="flex flex-col skew-x-[12deg] min-w-[5%] items-end gap-1 md:gap-1.5 justify-center"
+      >
+        <img
+          className="h-4 md:h-5"
+          src={recentMatch.homeTeam.flagURL}
+          alt="team1 flag"
+        />
+        <img
+          className="h-4 md:h-5"
+          src={recentMatch.awayTeam.flagURL}
+          alt="team2 flag"
+        />
+      </div>
+      <div
+        id="teams"
+        className="flex flex-col skew-x-[12deg] gap-1 md:gap-1.5 whitespace-nowrap min-w-[30%] md:min-w-[25%] items-start justify-center text-white-1 text-xs md:text-sm"
+      >
+        <p>{recentMatch.homeTeam.name.split(' U-')[0]}</p>
+        <p>{recentMatch.awayTeam.name.split(' U-')[0]}</p>
+      </div>
+      <div
+        id="score"
+        className="flex flex-col skew-x-[12deg] gap-1 md:gap-1.5 whitespace-nowrap min-w-[5%] items-start justify-center text-white-1 text-xs md:text-sm"
+      >
+        <p>{recentMatch.homeScore ?? '-'}</p>
+        <p>{recentMatch.awayScore ?? '-'}</p>
+      </div>
+      <div
+        id="predictions"
+        className="py-1 md:py-1.5 skew-x-[12deg] rounded-full whitespace-nowrap px-3 md:px-4 bg-secondary-light flex justify-center items-center text-black-2 text-[10px] md:text-xs"
+      >
+        <p>{recentMatch.predictions.length}</p>
+      </div>
+      <div
+        id="success"
+        className="hidden py-1 md:py-1.5 skew-x-[12deg] rounded-full whitespace-nowrap px-3 md:px-4 bg-green-light md:flex justify-center items-center text-black-2 text-[10px] md:text-xs"
+      >
+        <p>{successRate}</p>
+      </div>
+      <div
+        id="userPoints"
+        className="flex skew-x-[12deg] justify-center items-center whitespace-nowrap min-w-[10%] text-primary-normal text-center text-base md:text-xl"
+      >
+        {didPredict ? didPredict.earnedPoints : 0}
+      </div>
+    </Link>
   )
 }

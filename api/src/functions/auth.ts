@@ -1,9 +1,15 @@
+import type { APIGatewayProxyEvent, Context } from 'aws-lambda'
+
+import { DbAuthHandler, DbAuthHandlerOptions } from '@redwoodjs/auth-dbauth-api'
+
 import { db } from 'src/lib/db'
-import { DbAuthHandler } from '@redwoodjs/api'
 import { emailUser } from 'src/services/users/users'
 
-export const handler = async (event, context) => {
-  const forgotPasswordOptions = {
+export const handler = async (
+  event: APIGatewayProxyEvent,
+  context: Context
+) => {
+  const forgotPasswordOptions: DbAuthHandlerOptions['forgotPassword'] = {
     // handler() is invoked after verifying that a user was found with the given
     // username. This is where you can send the user an email with a link to
     // reset their password. With the default dbAuth routes and field names, the

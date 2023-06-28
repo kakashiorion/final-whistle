@@ -1,6 +1,7 @@
-import { Link, navigate, routes } from '@redwoodjs/router'
-import { MetaTags } from '@redwoodjs/web'
+import { useState } from 'react'
+
 import logo from 'public/Main 2.png'
+
 import {
   TextField,
   FieldError,
@@ -8,11 +9,27 @@ import {
   PasswordField,
   SubmitHandler,
 } from '@redwoodjs/forms'
+import { Link, routes } from '@redwoodjs/router'
+import { MetaTags } from '@redwoodjs/web'
 import { toast, Toaster } from '@redwoodjs/web/dist/toast'
-import { useAuth } from '@redwoodjs/auth'
-import { SecondaryRoundedButtonOutlined } from 'src/components/Buttons/RoundedButton/SecondaryRoundedButton'
+
+import { useAuth } from 'src/auth'
+import { SignUpBlock } from 'src/components/Blocks/SignupBlock'
 import { PrimarySkewedButton } from 'src/components/Buttons/SkewedButton/PrimarySkewedButton'
-import { useState } from 'react'
+import {
+  TextInputContainerClassName,
+  LoginTextInputFieldClassName,
+  LoginTextInputErrorClassName,
+  ErrorFieldClassName,
+  FormClassName,
+  UnderlineButtonClassName,
+  LogoShadowClassName,
+  LogoAnimClassName,
+  LogoClassName,
+  PageContentClassName,
+  PageWrapperClassName,
+  ExtraBlockWrapperClassName,
+} from 'src/utils'
 
 const LoginPage = () => {
   return (
@@ -23,6 +40,9 @@ const LoginPage = () => {
       />
       <Toaster toastOptions={{ className: 'rw-toast', duration: 3000 }} />
       <LoginContent />
+      <div id="SignupBlockWrapper" className={ExtraBlockWrapperClassName}>
+        <SignUpBlock />
+      </div>
     </>
   )
 }
@@ -31,24 +51,21 @@ export default LoginPage
 
 const LoginContent = () => {
   return (
-    <div className="bg-[url('/public/loginBG.jpeg')] bg-black-2 bg-cover bg-blend-overlay flex justify-start items-center w-full px-4 md:px-8 py-4 md:py-8 h-screen">
-      <div className="w-full md:w-2/3 rounded-3xl h-full flex flex-col gap-6 md:gap-8 items-center justify-center px-4 py-16">
-        <div className="flex flex-col items-end">
+    <div id="LoginPageWrapper" className={PageWrapperClassName}>
+      <div id="LoginPageContent" className={PageContentClassName}>
+        <div className={LogoClassName}>
           <img
-            className="w-20 self-center animate-bounce"
+            className={LogoAnimClassName}
             src={logo}
             alt="Final Whistle - Logo"
           />
-          <div className="bg-black-3 animate-[pulse_1s_ease-in-out_infinite] h-2 w-10 rounded-[50%]"></div>
+          <div className={LogoShadowClassName}></div>
         </div>
-        <div className="flex flex-col gap-3 items-center justify-center">
-          <p className="text-lg md:text-xl text-white-2 w-full text-center">
-            Login with your email and password
-          </p>
-          <LoginForm />
-          <ForgotPasswordButton />
-        </div>
-        <SignUpBlock />
+        <p className="text-lg md:text-2xl text-primary-normal w-full text-center">
+          Login with your email and password
+        </p>
+        <LoginForm />
+        <ForgotPasswordButton />
       </div>
     </div>
   )
@@ -56,14 +73,12 @@ const LoginContent = () => {
 
 const ForgotPasswordButton = () => {
   return (
-    <Link
-      className=" text-xs md:text-sm text-white-1 underline"
-      to={routes.forgotPassword()}
-    >
+    <Link className={UnderlineButtonClassName} to={routes.forgotPassword()}>
       Forgot Password?
     </Link>
   )
 }
+
 interface FormValues {
   email: string
   password: string
@@ -89,17 +104,14 @@ const LoginForm = () => {
   }
 
   return (
-    <Form
-      onSubmit={onSubmit}
-      className="flex flex-col items-center justify-center gap-3 md:gap-4"
-    >
-      <div className="items-center flex flex-col">
+    <Form onSubmit={onSubmit} className={FormClassName}>
+      <div id="EmailContainer" className={TextInputContainerClassName}>
         <TextField
           placeholder="Email"
-          className="text-secondary-dark placeholder:text-primary-light rounded-tl-lg rounded-br-lg px-3 py-1 bg-white-1 border-transparent border-4 focus:border-primary-normal text-base md:text-lg"
+          className={LoginTextInputFieldClassName}
           name="email"
           inputMode="email"
-          errorClassName="text-red-light placeholder:text-primary-light rounded-tl-lg rounded-br-lg px-3 py-1 bg-white-1 border-transparent border-2 border-red-light text-lg md:text-xl"
+          errorClassName={LoginTextInputErrorClassName}
           validation={{
             required: { value: true, message: 'Email is required' },
             pattern: {
@@ -108,17 +120,14 @@ const LoginForm = () => {
             },
           }}
         />
-        <FieldError
-          className="text-xs md:text-sm text-red-light"
-          name="email"
-        />
+        <FieldError className={ErrorFieldClassName} name="email" />
       </div>
-      <div className="items-center flex flex-col">
+      <div id="PasswordContainer" className={TextInputContainerClassName}>
         <PasswordField
           placeholder="Password"
-          className="text-secondary-dark placeholder:text-primary-light rounded-tl-lg rounded-br-lg px-3 py-1 bg-white-1 border-transparent border-4 focus:border-primary-normal text-base md:text-lg"
+          className={LoginTextInputFieldClassName}
           name="password"
-          errorClassName="text-red-light placeholder:text-primary-light rounded-tl-lg rounded-br-lg px-3 py-1 bg-white-1 border-transparent border-2 border-red-light text-lg md:text-xl"
+          errorClassName={LoginTextInputErrorClassName}
           validation={{
             required: {
               value: true,
@@ -127,31 +136,9 @@ const LoginForm = () => {
             minLength: { value: 8, message: 'Minimum 8 characters' },
           }}
         />
-        <FieldError
-          className="text-xs md:text-sm text-red-light"
-          name="password"
-        />
+        <FieldError className={ErrorFieldClassName} name="password" />
       </div>
-      <PrimarySkewedButton label={loading ? '... Please Wait' : 'KICK OFF!'} />
+      <PrimarySkewedButton label={loading ? '... Please Wait' : 'KICK OFF'} />
     </Form>
-  )
-}
-
-const SignUpBlock = () => {
-  const navigateToSignUpPage = () => {
-    navigate(routes.signup())
-  }
-  const signupText = "Don't have an account yet?"
-
-  return (
-    <div className="gap-2 flex flex-col items-center justify-center">
-      <p className="text-base md:text-lg text-center whitespace-nowrap text-secondary-normal font-bold">
-        {signupText}
-      </p>
-      <SecondaryRoundedButtonOutlined
-        label="SIGN UP AND PLAY!"
-        onClick={navigateToSignUpPage}
-      />
-    </div>
   )
 }

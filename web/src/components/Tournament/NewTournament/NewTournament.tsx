@@ -1,6 +1,7 @@
+import { navigate, routes } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
-import { navigate, routes } from '@redwoodjs/router'
+
 import TournamentForm from 'src/components/Tournament/TournamentForm'
 
 const CREATE_TOURNAMENT_MUTATION = gql`

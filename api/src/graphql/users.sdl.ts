@@ -10,9 +10,9 @@ export const schema = gql`
     coins: Int
     points: Int
     predictions: [MatchPrediction]!
+    roles: String!
     createdAt: DateTime!
     updatedAt: DateTime!
-    roles: String!
   }
 
   type Query {

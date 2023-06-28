@@ -1,7 +1,7 @@
 import type { FindTeams } from 'types/graphql'
-import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 
 import { Link, routes } from '@redwoodjs/router'
+import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 
 import Teams from 'src/components/Team/Teams'
 
@@ -11,7 +11,6 @@ export const QUERY = gql`
       id
       name
       color
-      color2
       flagURL
       createdAt
       updatedAt

@@ -1,12 +1,71 @@
-import { db } from 'src/lib/db'
 import type {
   QueryResolvers,
   MutationResolvers,
-  PlayerResolvers,
+  PlayerRelationResolvers,
 } from 'types/graphql'
+
+import { db } from 'src/lib/db'
 
 export const players: QueryResolvers['players'] = () => {
   return db.player.findMany()
+}
+
+export const mostChosenPlayers = async ({
+  tournamentId,
+}: {
+  tournamentId: number
+}) => {
+  const predictions = await db.matchPrediction.findMany({
+    where: {
+      match: {
+        tournamentId: tournamentId,
+      },
+    },
+  })
+  const mostChosenPlayers = {}
+  predictions.forEach((pred) => {
+    pred.predictedScoringPlayersOfHomeTeam.forEach((p) => {
+      if (Object.keys(mostChosenPlayers).includes(p.toString())) {
+        mostChosenPlayers[p] += 1
+      } else {
+        mostChosenPlayers[p] = 1
+      }
+    })
+    pred.predictedScoringPlayersOfAwayTeam.forEach((p) => {
+      if (Object.keys(mostChosenPlayers).includes(p.toString())) {
+        mostChosenPlayers[p] += 1
+      } else {
+        mostChosenPlayers[p] = 1
+      }
+    })
+  })
+  // Create items array
+  const items = Object.keys(mostChosenPlayers).map((key) => {
+    return [key, mostChosenPlayers[key]]
+  })
+
+  // Sort the array based on the second element
+  items.sort((first, second) => {
+    return second[1] - first[1]
+  })
+
+  // Create a new array with only the first 5 items
+  const result = items.slice(0, 5).map((item) => Number(item[0]))
+  const players = await db.player.findMany({
+    where: {
+      id: {
+        in: result,
+      },
+    },
+  })
+  const resultSet = []
+  players.forEach((player) => {
+    resultSet.push({
+      player: player,
+      occurence: mostChosenPlayers[player.id.toString()],
+    })
+  })
+  return resultSet.sort((a, b) => b.occurence - a.occurence)
 }
 
 export const player: QueryResolvers['player'] = ({ id }) => {
@@ -37,7 +96,8 @@ export const deletePlayer: MutationResolvers['deletePlayer'] = ({ id }) => {
   })
 }
 
-export const Player: PlayerResolvers = {
-  team: (_obj, { root }) =>
-    db.player.findUnique({ where: { id: root.id } }).team(),
+export const Player: PlayerRelationResolvers = {
+  team: (_obj, { root }) => {
+    return db.player.findUnique({ where: { id: root?.id } }).team()
+  },
 }

@@ -1,20 +1,31 @@
+import { useEffect, useState } from 'react'
+
+import moment from 'moment'
+import coin from 'public/coin.png'
+import dice from 'public/diceBet.png'
+import gloves from 'public/gloves.png'
+import goal from 'public/goal.png'
+import logo from 'public/Main 2.png'
 import type {
   FindPredictMatchQuery,
   FindPredictMatchQueryVariables,
 } from 'types/graphql'
+
+import { back, navigate, Redirect, routes } from '@redwoodjs/router'
 import { CellSuccessProps, useMutation } from '@redwoodjs/web'
-import logo from 'public/Main 2.png'
-import goal from 'public/goal.png'
-import football from 'public/football.png'
-import gloves from 'public/gloves.png'
-import { navigate, Redirect, routes } from '@redwoodjs/router'
-import moment from 'moment'
-import { useAuth } from '@redwoodjs/auth'
-import { useEffect, useState } from 'react'
-import { PrimaryRoundedButton } from '../Buttons/RoundedButton/PrimaryRoundedButton'
-import { SecondaryRoundedButtonSmall } from '../Buttons/RoundedButton/SecondaryRoundedButton'
 import { toast } from '@redwoodjs/web/dist/toast'
-import { RedRoundedButtonOutlined } from '../Buttons/RoundedButton/RedRoundedButton'
+
+import { useAuth } from 'src/auth'
+import {
+  WagerTextInputErrorClassName,
+  WagerTextInputFieldClassName,
+} from 'src/utils'
+
+import { PrimarySkewedButton } from '../Buttons/SkewedButton/PrimarySkewedButton'
+import {
+  SecondarySkewedButton,
+  SmallSecondarySkewedButton,
+} from '../Buttons/SkewedButton/SecondarySkewedButton'
 
 //Initial query to get all prediction data for the match
 export const QUERY = gql`
@@ -28,24 +39,32 @@ export const QUERY = gql`
       predictions {
         id
         userId
-        predictedScoreOfTeam1
-        predictedScoreOfTeam2
-        predictedScoringPlayersOfTeam1
-        predictedScoringPlayersOfTeam2
+        predictedScoreOfHomeTeam
+        predictedScoreOfAwayTeam
+        predictedScoringPlayersOfHomeTeam
+        predictedScoringPlayersOfAwayTeam
         wageredCoins
       }
-      teams {
+      homeTeam {
         id
-        team {
+        name
+        flagURL
+        color
+        players {
           id
           name
-          flagURL
-          color
-          players {
-            id
-            name
-            position
-          }
+          position
+        }
+      }
+      awayTeam {
+        id
+        name
+        flagURL
+        color
+        players {
+          id
+          name
+          position
         }
       }
     }
@@ -59,10 +78,10 @@ const CREATE_PREDICTION_MUTATION = gql`
       userId
       matchId
       wageredCoins
-      predictedScoreOfTeam1
-      predictedScoreOfTeam2
-      predictedScoringPlayersOfTeam1
-      predictedScoringPlayersOfTeam2
+      predictedScoreOfHomeTeam
+      predictedScoreOfAwayTeam
+      predictedScoringPlayersOfHomeTeam
+      predictedScoringPlayersOfAwayTeam
     }
   }
 `
@@ -77,10 +96,10 @@ const UPDATE_PREDICTION_MUTATION = gql`
       userId
       matchId
       wageredCoins
-      predictedScoreOfTeam1
-      predictedScoreOfTeam2
-      predictedScoringPlayersOfTeam1
-      predictedScoringPlayersOfTeam2
+      predictedScoreOfHomeTeam
+      predictedScoreOfAwayTeam
+      predictedScoringPlayersOfHomeTeam
+      predictedScoringPlayersOfAwayTeam
     }
   }
 `
@@ -89,13 +108,6 @@ const DELETE_PREDICTION_MUTATION = gql`
   mutation DeletePredictionMutation($id: Int!) {
     deleteMatchPrediction(id: $id) {
       id
-      userId
-      matchId
-      wageredCoins
-      predictedScoreOfTeam1
-      predictedScoreOfTeam2
-      predictedScoringPlayersOfTeam1
-      predictedScoringPlayersOfTeam2
     }
   }
 `
@@ -122,7 +134,7 @@ const currentDate = new Date()
 export const Success = ({
   matchBeingPredicted,
 }: CellSuccessProps<FindPredictMatchQuery, FindPredictMatchQueryVariables>) => {
-  const { currentUser } = useAuth()
+  const { currentUser, reauthenticate } = useAuth()
 
   //Function to update user coins
   const [updateUserCoins] = useMutation(UPDATE_USER_COINS_MUTATION, {
@@ -135,6 +147,7 @@ export const Success = ({
   const [createPrediction] = useMutation(CREATE_PREDICTION_MUTATION, {
     onCompleted: () => {
       toast.success('Prediction saved!')
+      reauthenticate()
       navigate(routes.home())
     },
     onError: (error) => {
@@ -146,6 +159,7 @@ export const Success = ({
   const [updatePrediction] = useMutation(UPDATE_PREDICTION_MUTATION, {
     onCompleted: () => {
       toast.success('Prediction updated!')
+      reauthenticate()
       navigate(routes.home())
     },
     onError: (error) => {
@@ -157,6 +171,7 @@ export const Success = ({
   const [deletePrediction] = useMutation(DELETE_PREDICTION_MUTATION, {
     onCompleted: () => {
       toast.success('Prediction deleted!')
+      reauthenticate()
       navigate(routes.home())
     },
     onError: (error) => {
@@ -164,32 +179,33 @@ export const Success = ({
     },
   })
 
-  //Find current user's prediciton for the match
+  //Find current user's prediction for the match
   const userInitialPrediction = matchBeingPredicted.predictions.find(
     (p) => p.userId == currentUser.id
   )
 
   //Get already existing prediction data, if any
-  const team1InitialScore = userInitialPrediction?.predictedScoreOfTeam1
-  const team1InitialGoalScoringPlayers =
-    userInitialPrediction?.predictedScoringPlayersOfTeam1
-  const team2InitialScore = userInitialPrediction?.predictedScoreOfTeam2
-  const team2InitialGoalScoringPlayers =
-    userInitialPrediction?.predictedScoringPlayersOfTeam2
-  const initialWageredCoins = userInitialPrediction?.wageredCoins
+  const homeTeamInitialScore =
+    userInitialPrediction?.predictedScoreOfHomeTeam ?? 0
+  const homeTeamInitialGoalScoringPlayers =
+    userInitialPrediction?.predictedScoringPlayersOfHomeTeam ?? []
+  const awayTeamInitialScore =
+    userInitialPrediction?.predictedScoreOfAwayTeam ?? 0
+  const awayTeamInitialGoalScoringPlayers =
+    userInitialPrediction?.predictedScoringPlayersOfAwayTeam ?? []
+  const initialWageredCoins = userInitialPrediction?.wageredCoins ?? 0
 
   //State variables for updating prediction data
-  const [wageredCoins, setWageredCoins] = useState(initialWageredCoins ?? 10)
-  const [team1PredictedScore, setTeam1PredictedScore] = useState(
-    team1InitialScore ?? 0
-  )
+  const [wageredCoins, setWageredCoins] = useState(initialWageredCoins)
+  const [wagerErrorMsg, setWagerErrorMsg] = useState('')
+  const [team1PredictedScore, setTeam1PredictedScore] =
+    useState(homeTeamInitialScore)
   const [team1PredictedScoringPlayers, setTeam1PredictedScoringPlayers] =
-    useState(team1InitialGoalScoringPlayers ?? [])
-  const [team2PredictedScore, setTeam2PredictedScore] = useState(
-    team2InitialScore ?? 0
-  )
+    useState(homeTeamInitialGoalScoringPlayers)
+  const [team2PredictedScore, setTeam2PredictedScore] =
+    useState(awayTeamInitialScore)
   const [team2PredictedScoringPlayers, setTeam2PredictedScoringPlayers] =
-    useState(team2InitialGoalScoringPlayers ?? [])
+    useState(awayTeamInitialGoalScoringPlayers)
 
   //Cannot predict a match already played; Redirect to home
   useEffect(() => {
@@ -201,45 +217,68 @@ export const Success = ({
   return (
     <div
       id="matchPredictionDiv"
-      className="flex flex-col w-full overflow-y-scroll gap-2 md:gap-3 nonscroll"
+      className="flex flex-col w-full overflow-y-scroll gap-4 md:gap-5 nonscroll"
     >
+      <div id="HeaderDiv" className="flex gap-2 md:gap-3 justify-between">
+        <p id="Header" className="text-lg md:text-2xl text-primary-normal ">
+          Match Prediction
+        </p>
+        <p
+          id="predictionsLength"
+          className="py-1 md:py-1.5 rounded-full whitespace-nowrap px-3 md:px-4 bg-secondary-light flex justify-center items-center text-black-2 text-[10px] md:text-xs"
+        >
+          {matchBeingPredicted.predictions.length}
+        </p>
+      </div>
       <div
         id="infoDiv"
-        className="flex px-2 md:px-3 py-2 md:py-3 gap-2 md:gap-3
-       bg-tertiary-dark bg-opacity-80 rounded-md
-      justify-between items-center w-full text-white-3 text-xs md:text-sm"
+        className="flex p-2 md:p-3 gap-2 md:gap-3
+       bg-dark-2/70 rounded
+      justify-between items-center w-full text-white-4 text-sm md:text-base"
       >
-        <div className="flex flex-col gap-1 md:gap-2">
+        <div
+          id="matchInfo"
+          className="flex flex-col gap-1 md:gap-2 items-start"
+        >
           <p>{matchBeingPredicted.round}</p>
           <p>{matchBeingPredicted.location}</p>
         </div>
-        <div className="flex flex-col gap-1 md:gap-2 items-end">
+        <div id="matchTime" className="flex flex-col gap-1 md:gap-2 items-end">
           <p>{moment(matchBeingPredicted.matchDate).format('HH:mm')}</p>
           <p>{moment(matchBeingPredicted.matchDate).format('DD MMM')}</p>
         </div>
       </div>
       <div
         id="teamsDiv"
-        className="flex flex-col gap-1 md:gap-2 justify-start items-start"
+        className="flex flex-col gap-3 md:gap-4 justify-start items-start"
       >
         <div
           id="team1Div"
-          className="flex flex-col min-w-max -skew-x-[12deg] border-2 border-primary-normal rounded-md md:mr-12 ml-3 md:ml-4 px-3 md:px-4 py-2 md:py-3 bg-black-3 bg-opacity-70 gap-2 md:gap-3 items-start justify-start "
+          className="flex min-w-max -skew-x-[12deg] border-2 border-primary-normal rounded md:mr-12 ml-3 md:ml-4 p-3 md:p-4 bg-black-3/70"
         >
-          <div className="flex skew-x-[12deg] gap-3 md:gap-4 items-center justify-start">
-            <div className="flex flex-col items-start gap-1 md:gap-2">
-              <div className="flex gap-2 md:gap-3 items-center justify-start">
+          <div
+            id="team1Box"
+            className="flex skew-x-[12deg] gap-1 md:gap-4 items-start justify-start"
+          >
+            <div
+              id="team1Meta"
+              className="flex flex-col items-start gap-3 md:gap-4"
+            >
+              <div
+                id="team1Info"
+                className="flex gap-2 md:gap-3 items-center justify-start"
+              >
                 <img
                   id="team1Flag"
-                  className="h-4 md:h-5 aspect-video"
-                  src={matchBeingPredicted.teams[0].team.flagURL}
+                  className="h-7 md:h-8"
+                  src={matchBeingPredicted.homeTeam.flagURL}
                   alt="Team 1 flag"
                 />
                 <p
                   id="team1Name"
-                  className="text-white-1 text-base md:text-lg whitespace-nowrap"
+                  className="text-white-1 text-lg md:text-2xl whitespace-nowrap"
                 >
-                  {matchBeingPredicted.teams[0].team.name.split('U-')[0]}
+                  {matchBeingPredicted.homeTeam.name.split(' U-')[0]}
                 </p>
               </div>
               <SelectGoals
@@ -252,7 +291,7 @@ export const Success = ({
             </div>
             <p
               id="team1PredictedScore"
-              className="text-primary-normal text-3xl md:text-4xl font-bold border-black-3 border-l-2 pl-3 md:pl-4"
+              className="text-primary-normal text-3xl md:text-4xl font-bold"
             >
               {team1PredictedScore}
             </p>
@@ -260,7 +299,7 @@ export const Success = ({
         </div>
         <div id="team1ScorersDiv" className="self-start ml-2 md:ml-3">
           <GoalScorerPredictionForm
-            teamPlayers={matchBeingPredicted.teams[0].team.players}
+            teamPlayers={matchBeingPredicted.homeTeam.players}
             predictedScore={team1PredictedScore}
             predictedGoalScorers={team1PredictedScoringPlayers}
             setScorers={setTeam1PredictedScoringPlayers}
@@ -274,27 +313,36 @@ export const Success = ({
         </div>
         <div
           id="team2Div"
-          className="flex flex-col min-w-max self-end -skew-x-[12deg] border-2 border-primary-normal rounded-md md:ml-12 mr-3 md:mr-4 px-3 md:px-4 py-2 md:py-3 bg-black-3 bg-opacity-70 gap-2 md:gap-3 items-end justify-start"
+          className="flex min-w-max self-end -skew-x-[12deg] border-2 border-primary-normal rounded md:ml-12 mr-3 md:mr-4 p-3 md:p-4 bg-black-3/70"
         >
-          <div className="flex skew-x-[12deg] items-center justify-end gap-3 md:gap-4">
+          <div
+            id="team2Box"
+            className="flex skew-x-[12deg] items-start justify-end gap-1 md:gap-4"
+          >
             <p
               id="team2PredictedScore"
-              className="text-primary-normal text-3xl md:text-4xl font-bold border-black-3 border-r-2 pr-3 md:pr-4"
+              className="text-primary-normal text-3xl md:text-4xl font-bold"
             >
               {team2PredictedScore}
             </p>
-            <div className="flex flex-col items-end gap-1 md:gap-2">
-              <div className="flex gap-2 md:gap-3 items-center justify-end">
+            <div
+              id="team2Meta"
+              className="flex flex-col items-end gap-3 md:gap-4"
+            >
+              <div
+                id="team2Info"
+                className="flex gap-2 md:gap-3 items-center justify-end"
+              >
                 <p
                   id="team2Name"
-                  className="text-white-1 text-base md:text-lg whitespace-nowrap"
+                  className="text-white-1 text-lg md:text-2xl whitespace-nowrap"
                 >
-                  {matchBeingPredicted.teams[1].team.name.split('U-')[0]}
+                  {matchBeingPredicted.awayTeam.name.split(' U-')[0]}
                 </p>
                 <img
                   id="team2Flag"
-                  className="h-4 md:h-5 aspect-video"
-                  src={matchBeingPredicted.teams[1].team.flagURL}
+                  className="h-7 md:h-8"
+                  src={matchBeingPredicted.awayTeam.flagURL}
                   alt="Team 2 flag"
                 />
               </div>
@@ -308,9 +356,9 @@ export const Success = ({
             </div>
           </div>
         </div>
-        <div id="team2ScorersDiv" className="self-end">
+        <div id="team2ScorersDiv" className="self-end mr-2 md:mr-3">
           <GoalScorerPredictionForm
-            teamPlayers={matchBeingPredicted.teams[1].team.players}
+            teamPlayers={matchBeingPredicted.awayTeam.players}
             predictedScore={team2PredictedScore}
             predictedGoalScorers={team2PredictedScoringPlayers}
             setScorers={setTeam2PredictedScoringPlayers}
@@ -318,126 +366,160 @@ export const Success = ({
         </div>
       </div>
       <div
-        id="wagerDiv"
-        className="flex px-2 md:px-3 py-2 md:py-3 gap-3 md:gap-4
-        bg-black-3 bg-opacity-90 rounded-md
-      justify-between items-center w-full text-white-3 text-xs md:text-sm"
+        id="wagerContainer"
+        className="flex flex-col px-2 md:px-3 py-2 md:py-3 gap-3 md:gap-4
+         border-t-2 border-t-primary-normal
+      justify-center items-center w-full text-white-3 text-xs md:text-sm"
       >
-        <div className="flex gap-2 md:gap-3 justify-end items-center whitespace-nowrap">
-          <p className="text-primary-normal text-lg md:text-xl">
-            Wager coins:{' '}
-          </p>
+        <p className="text-primary-normal text-base md:text-lg">
+          Place your wager
+        </p>
+        <div
+          id="wagerInputDiv"
+          className="flex w-full gap-2 md:gap-3 justify-center items-center"
+        >
+          <img src={dice} className="h-11 md:h-14" alt="Dice 1" />
+
           <input
-            className="text-secondary-dark w-20 placeholder:text-primary-light rounded-tl-lg rounded-br-lg px-1 md:px-2 py-1 bg-white-1 border-transparent border-4 focus:border-primary-normal text-base md:text-lg"
-            name="wager"
-            value={wageredCoins}
-            onChange={(e) =>
-              setWageredCoins(
-                Math.min(
-                  e.target.value == '' || e.target.value == '0' // Handle null and 0 values
-                    ? 1
-                    : parseInt(e.target.value),
-                  matchBeingPredicted.maxWagerLimit,
-                  currentUser.coins
-                )
-              )
+            className={
+              wagerErrorMsg
+                ? WagerTextInputErrorClassName
+                : WagerTextInputFieldClassName
             }
+            name="wager"
             inputMode="numeric"
+            value={wageredCoins}
+            onChange={(e) => {
+              const v = Number(e.target.value)
+              if (v >= 0) {
+                setWageredCoins(v)
+                setWagerErrorMsg('')
+              }
+            }}
           />
-          <p className="text-red-light text-sm md:text-base">
-            (Max: {matchBeingPredicted.maxWagerLimit})
+          <img src={dice} className="h-11 md:h-14" alt="Dice 2" />
+        </div>
+        <div
+          id="wagerInfoDiv"
+          className="flex w-full gap-2 md:gap-3 justify-center items-center"
+        >
+          <p className="text-white-3 text-sm md:text-base">
+            {matchBeingPredicted.maxWagerLimit == 0
+              ? '(No Round Limit)'
+              : `(Round Limit: ${matchBeingPredicted.maxWagerLimit})`}
           </p>
         </div>
-        <p className="text-end text-xs md:text-sm text-secondary-light">
-          {team1PredictedScore || team2PredictedScore
-            ? '(Predict goal scorers for bonus points)'
-            : ''}
+        <div
+          id="UserCoinsDiv"
+          className="flex gap-2 md:gap-3 bg-dark-2/70 rounded px-4 md:px-5 md:py-2.5 py-2 justify-center items-center"
+        >
+          <p className="text-sm md:text-base text-primary-normal">
+            You have: {currentUser.coins}
+          </p>
+          <img src={coin} className="h-5 md:h-6" alt="Wager coins" />
+        </div>
+        <p className="text-red-normal text-center text-sm md:text-base">
+          {wagerErrorMsg}
         </p>
       </div>
       <div
         id="actionDiv"
-        className="flex py-2 md:py-3 gap-3 md:gap-4 justify-between items-center w-full"
+        className="flex px-4 md:px-5 py-2 md:py-3 gap-2 md:gap-3 justify-center items-center w-full"
       >
-        <PrimaryRoundedButton
-          label={userInitialPrediction ? 'UPDATE' : 'SAVE'}
+        <SecondarySkewedButton label="<" onClick={() => back()} />
+        <PrimarySkewedButton
+          label={
+            userInitialPrediction ? 'UPDATE PREDICTION' : 'SAVE PREDICTION'
+          }
           onClick={() => {
-            //A user prediction already exists? Update it; Else create a new one
-            userInitialPrediction
-              ? updatePrediction({
-                  variables: {
-                    id: userInitialPrediction.id,
-                    input: {
-                      wageredCoins: wageredCoins,
-                      predictedScoreOfTeam1: team1PredictedScore,
-                      predictedScoreOfTeam2: team2PredictedScore,
-                      predictedScoringPlayersOfTeam1:
-                        team1PredictedScoringPlayers,
-                      predictedScoringPlayersOfTeam2:
-                        team2PredictedScoringPlayers,
+            if (wageredCoins <= 0) {
+              setWagerErrorMsg('Enter a valid wager')
+            } else if (
+              wageredCoins > matchBeingPredicted.maxWagerLimit &&
+              matchBeingPredicted.maxWagerLimit > 0
+            ) {
+              setWagerErrorMsg('Round wager limit exceeded')
+            } else if (wageredCoins > currentUser.coins + initialWageredCoins) {
+              setWagerErrorMsg('Not enough coins')
+            } else {
+              //A user prediction already exists? Update it; Else create a new one
+              userInitialPrediction
+                ? updatePrediction({
+                    variables: {
+                      id: userInitialPrediction.id,
+                      input: {
+                        wageredCoins: wageredCoins,
+                        predictedScoreOfHomeTeam: team1PredictedScore,
+                        predictedScoreOfAwayTeam: team2PredictedScore,
+                        predictedScoringPlayersOfHomeTeam:
+                          team1PredictedScoringPlayers,
+                        predictedScoringPlayersOfAwayTeam:
+                          team2PredictedScoringPlayers,
+                      },
                     },
-                  },
-                }) &&
-                updateUserCoins({
-                  variables: {
-                    id: currentUser.id,
-                    input: {
-                      coins:
-                        currentUser.coins + initialWageredCoins - wageredCoins,
-                    },
-                  },
-                })
-              : createPrediction({
-                  variables: {
-                    input: {
-                      userId: currentUser.id,
-                      matchId: matchBeingPredicted.id,
-                      wageredCoins: wageredCoins,
-                      predictedScoreOfTeam1: team1PredictedScore,
-                      predictedScoreOfTeam2: team2PredictedScore,
-                      predictedScoringPlayersOfTeam1:
-                        team1PredictedScoringPlayers,
-                      predictedScoringPlayersOfTeam2:
-                        team2PredictedScoringPlayers,
-                    },
-                  },
-                }) &&
-                updateUserCoins({
-                  variables: {
-                    id: currentUser.id,
-                    input: {
-                      coins: currentUser.coins - wageredCoins,
-                    },
-                  },
-                })
-          }}
-        />
-        {userInitialPrediction ? (
-          <div className="flex text-white-3 text-xs md:text-sm items-center gap-2 md:gap-3">
-            <p className="text-end">Not sure about this prediction?</p>
-            <RedRoundedButtonOutlined
-              label="DELETE"
-              onClick={() => {
-                //A user prediction already exists? Update it; Else create a new one
-                deletePrediction({
-                  variables: {
-                    id: userInitialPrediction.id,
-                  },
-                }) &&
+                  }) &&
                   updateUserCoins({
                     variables: {
                       id: currentUser.id,
                       input: {
-                        coins: currentUser.coins + initialWageredCoins,
+                        coins:
+                          currentUser.coins +
+                          initialWageredCoins -
+                          wageredCoins,
                       },
                     },
                   })
-              }}
-            />
-          </div>
-        ) : (
-          <></>
-        )}
+                : createPrediction({
+                    variables: {
+                      input: {
+                        userId: currentUser.id,
+                        matchId: matchBeingPredicted.id,
+                        wageredCoins: wageredCoins,
+                        predictedScoreOfHomeTeam: team1PredictedScore,
+                        predictedScoreOfAwayTeam: team2PredictedScore,
+                        predictedScoringPlayersOfHomeTeam:
+                          team1PredictedScoringPlayers,
+                        predictedScoringPlayersOfAwayTeam:
+                          team2PredictedScoringPlayers,
+                      },
+                    },
+                  }) &&
+                  updateUserCoins({
+                    variables: {
+                      id: currentUser.id,
+                      input: {
+                        coins: currentUser.coins - wageredCoins,
+                      },
+                    },
+                  })
+            }
+          }}
+        />
       </div>
+      {userInitialPrediction && (
+        <button
+          className="hover:text-red-light text-white-4 hover:underline text-xs md:text-sm"
+          onClick={() => {
+            //A user prediction already exists? Update it; Else create a new one
+            deletePrediction({
+              variables: {
+                id: userInitialPrediction.id,
+              },
+            }) &&
+              updateUserCoins({
+                variables: {
+                  id: currentUser.id,
+                  input: {
+                    coins: currentUser.coins + initialWageredCoins,
+                  },
+                },
+              })
+          }}
+        >
+          REMOVE PREDICTION
+        </button>
+      )}
+      {/* </div> */}
     </div>
   )
 }
@@ -453,8 +535,7 @@ const SelectGoals = (props: SelectGoalsProps) => {
   return (
     <div
       className={
-        'flex flex-row gap-1 md:gap-2 ' +
-        (props.reversed ? 'flex-row-reverse' : '')
+        'flex flex-row gap-2 ' + (props.reversed ? 'flex-row-reverse' : '')
       }
     >
       <button
@@ -465,8 +546,10 @@ const SelectGoals = (props: SelectGoalsProps) => {
       >
         <img
           src={gloves}
-          className="h-6 md:h-8 hover:-translate-x-[1px] hover:-translate-y-[2px]"
-          alt="Goal"
+          className={`h-6 md:h-8 hover:-translate-x-[1px] hover:-translate-y-[2px] ${
+            props.goals > 0 ? 'opacity-20' : ''
+          }`}
+          alt="0 Goal"
         />
       </button>
       <button
@@ -476,9 +559,11 @@ const SelectGoals = (props: SelectGoalsProps) => {
         }}
       >
         <img
-          src={props.goals > 0 ? goal : football}
-          className="h-6 md:h-8 hover:-translate-x-[1px] hover:-translate-y-[2px]"
-          alt="Goal"
+          src={goal}
+          className={`h-6 md:h-8 hover:-translate-x-[1px] hover:-translate-y-[2px] ${
+            props.goals < 1 ? 'opacity-20' : ''
+          }`}
+          alt="1 Goal"
         />
       </button>
       <button
@@ -488,9 +573,11 @@ const SelectGoals = (props: SelectGoalsProps) => {
         }}
       >
         <img
-          src={props.goals > 1 ? goal : football}
-          className="h-6 md:h-8 hover:-translate-x-[1px] hover:-translate-y-[2px]"
-          alt="Goal"
+          src={goal}
+          className={`h-6 md:h-8 hover:-translate-x-[1px] hover:-translate-y-[2px] ${
+            props.goals < 2 ? 'opacity-20' : ''
+          }`}
+          alt="2 Goal"
         />
       </button>
       <button
@@ -500,9 +587,11 @@ const SelectGoals = (props: SelectGoalsProps) => {
         }}
       >
         <img
-          src={props.goals > 2 ? goal : football}
-          className="h-6 md:h-8 hover:-translate-x-[1px] hover:-translate-y-[2px]"
-          alt="Goal"
+          src={goal}
+          className={`h-6 md:h-8 hover:-translate-x-[1px] hover:-translate-y-[2px] ${
+            props.goals < 3 ? 'opacity-20' : ''
+          }`}
+          alt="3 Goal"
         />
       </button>
       <button
@@ -512,9 +601,11 @@ const SelectGoals = (props: SelectGoalsProps) => {
         }}
       >
         <img
-          src={props.goals > 3 ? goal : football}
-          className="h-6 md:h-8 hover:-translate-x-[1px] hover:-translate-y-[2px]"
-          alt="Goal"
+          src={goal}
+          className={`h-6 md:h-8 hover:-translate-x-[1px] hover:-translate-y-[2px] ${
+            props.goals < 4 ? 'opacity-20' : ''
+          }`}
+          alt="4 Goal"
         />
       </button>
       <button
@@ -524,9 +615,11 @@ const SelectGoals = (props: SelectGoalsProps) => {
         }}
       >
         <img
-          src={props.goals > 4 ? goal : football}
-          className="h-6 md:h-8 hover:-translate-x-[1px] hover:-translate-y-[2px]"
-          alt="Goal"
+          src={goal}
+          className={`h-6 md:h-8 hover:-translate-x-[1px] hover:-translate-y-[2px] ${
+            props.goals < 5 ? 'opacity-20' : ''
+          }`}
+          alt="5 Goal"
         />
       </button>
       <button
@@ -536,9 +629,11 @@ const SelectGoals = (props: SelectGoalsProps) => {
         }}
       >
         <img
-          src={props.goals > 5 ? goal : football}
-          className="h-6 md:h-8 hover:-translate-x-[1px] hover:-translate-y-[2px]"
-          alt="Goal"
+          src={goal}
+          className={`h-6 md:h-8 hover:-translate-x-[1px] hover:-translate-y-[2px] ${
+            props.goals < 6 ? 'opacity-20' : ''
+          }`}
+          alt="6 Goal"
         />
       </button>
       <button
@@ -548,9 +643,11 @@ const SelectGoals = (props: SelectGoalsProps) => {
         }}
       >
         <img
-          src={props.goals > 6 ? goal : football}
-          className="h-6 md:h-8 hover:-translate-x-[1px] hover:-translate-y-[2px]"
-          alt="Goal"
+          src={goal}
+          className={`h-6 md:h-8 hover:-translate-x-[1px] hover:-translate-y-[2px] ${
+            props.goals < 7 ? 'opacity-20' : ''
+          }`}
+          alt="7 Goal"
         />
       </button>
       <button
@@ -560,9 +657,11 @@ const SelectGoals = (props: SelectGoalsProps) => {
         }}
       >
         <img
-          src={props.goals > 7 ? goal : football}
-          className="h-6 md:h-8 hover:-translate-x-[1px] hover:-translate-y-[2px]"
-          alt="Goal"
+          src={goal}
+          className={`h-6 md:h-8 hidden md:flex hover:-translate-x-[1px] hover:-translate-y-[2px] ${
+            props.goals < 8 ? 'opacity-20' : ''
+          }`}
+          alt="8 Goal"
         />
       </button>
       <button
@@ -572,21 +671,11 @@ const SelectGoals = (props: SelectGoalsProps) => {
         }}
       >
         <img
-          src={props.goals > 8 ? goal : football}
-          className="h-6 md:h-8 hidden md:flex hover:-translate-x-[1px] hover:-translate-y-[2px]"
-          alt="Goal"
-        />
-      </button>
-      <button
-        onClick={() => {
-          props.setGoals(10)
-          props.setScorers(props.scorers.slice(0, 10))
-        }}
-      >
-        <img
-          src={props.goals > 9 ? goal : football}
-          className="h-6 md:h-8 hidden md:flex hover:-translate-x-[1px] hover:-translate-y-[2px]"
-          alt="Goal"
+          src={goal}
+          className={`h-6 md:h-8 hidden md:flex hover:-translate-x-[1px] hover:-translate-y-[2px] ${
+            props.goals < 9 ? 'opacity-20' : ''
+          }`}
+          alt="9 Goal"
         />
       </button>
     </div>
@@ -605,23 +694,25 @@ interface GoalScorerPredictionFormProps {
 }
 
 const GoalScorerPredictionForm = (props: GoalScorerPredictionFormProps) => {
-  console.log('Goal scorers:' + props.predictedGoalScorers)
   return (
-    <div className="flex flex-col gap-1 md:gap-2 items-start">
+    <div
+      id="GoalScorerForm"
+      className="flex flex-col gap-2 md:gap-3 items-start w-full"
+    >
       {props.predictedGoalScorers
         .slice(0, props.predictedScore)
         .map((scorer, i) => {
           const selectedPlayer = props.teamPlayers.find((p) => p.id == scorer)
           return (
             <div
+              id="ScorerItemLine"
               key={i}
-              className="flex gap-1 md:gap-2 -skew-x-12 items-center"
+              className="flex gap-2 md:gap-3 -skew-x-12 items-center w-full"
             >
               <select
-                className="rounded-md bg-white-3 border-secondary-normal text-secondary-normal text-xs md:text-sm p-2"
+                className="rounded bg-white-1 border-secondary-normal text-secondary-normal text-xs md:text-sm p-2 md:p-3"
                 value={`${selectedPlayer.position} | ${selectedPlayer.name}`}
                 onChange={(e) => {
-                  console.log(e.target.value)
                   props.setScorers([
                     ...props.predictedGoalScorers.slice(0, i),
                     props.teamPlayers.find(
@@ -638,7 +729,8 @@ const GoalScorerPredictionForm = (props: GoalScorerPredictionFormProps) => {
                 ))}
               </select>
               <button
-                className="bg-red-normal text-white-3 text-xs md:text-sm py-1 px-2 rounded-md"
+                id="removeGoalScorer"
+                className="bg-red-normal text-white-3 text-xs md:text-sm py-1 md:py-1.5 px-2 md:px-3 rounded"
                 onClick={() => {
                   props.setScorers([
                     ...props.predictedGoalScorers.slice(0, i),
@@ -646,14 +738,14 @@ const GoalScorerPredictionForm = (props: GoalScorerPredictionFormProps) => {
                   ])
                 }}
               >
-                x
+                X
               </button>
             </div>
           )
         })}
       {props.predictedScore > props.predictedGoalScorers.length ? (
-        <SecondaryRoundedButtonSmall
-          label="+ PREDICT GOAL SCORER"
+        <SmallSecondarySkewedButton
+          label="+ PREDICT GOAL SCORERS"
           onClick={() =>
             props.setScorers([
               ...props.predictedGoalScorers,

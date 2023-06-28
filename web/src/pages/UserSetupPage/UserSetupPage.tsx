@@ -1,5 +1,6 @@
 import { MetaTags } from '@redwoodjs/web'
 import { Toaster } from '@redwoodjs/web/dist/toast'
+
 import UserSetupCell from 'src/components/UserSetupCell'
 
 const UserSetupPage = () => {

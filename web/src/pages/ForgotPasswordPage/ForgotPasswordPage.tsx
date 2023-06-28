@@ -1,12 +1,29 @@
-import { useAuth } from '@redwoodjs/auth'
+import { useState } from 'react'
+
+import logo from 'public/Main 2.png'
+
 import { FieldError, Form, SubmitHandler, TextField } from '@redwoodjs/forms'
-import { Link, navigate, routes } from '@redwoodjs/router'
+import { Link, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 import { toast, Toaster } from '@redwoodjs/web/dist/toast'
-import logo from 'public/Main 2.png'
-import { useState } from 'react'
-import { SecondaryRoundedButtonOutlined } from 'src/components/Buttons/RoundedButton/SecondaryRoundedButton'
+
+import { useAuth } from 'src/auth'
+import { SignUpBlock } from 'src/components/Blocks/SignupBlock'
 import { PrimarySkewedButton } from 'src/components/Buttons/SkewedButton/PrimarySkewedButton'
+import {
+  ErrorFieldClassName,
+  FormClassName,
+  LogoAnimClassName,
+  LogoClassName,
+  LogoShadowClassName,
+  PageContentClassName,
+  PageWrapperClassName,
+  ExtraBlockWrapperClassName,
+  TextInputContainerClassName,
+  LoginTextInputErrorClassName,
+  LoginTextInputFieldClassName,
+  UnderlineButtonClassName,
+} from 'src/utils'
 
 const ForgotPasswordPage = () => {
   return (
@@ -17,6 +34,9 @@ const ForgotPasswordPage = () => {
       />
       <Toaster toastOptions={{ className: 'rw-toast', duration: 3000 }} />
       <ForgotPasswordContent />
+      <div id="SignupBlockWrapper" className={ExtraBlockWrapperClassName}>
+        <SignUpBlock />
+      </div>
     </>
   )
 }
@@ -25,34 +45,28 @@ export default ForgotPasswordPage
 
 const ForgotPasswordContent = () => {
   return (
-    <div className=" bg-[url('/public/loginBG.jpeg')] bg-black-2 bg-cover bg-blend-overlay flex justify-start items-center w-full px-4 md:px-8 py-4 md:py-8 h-screen">
-      <div className="w-full md:w-2/3 rounded-3xl h-full flex flex-col gap-6 md:gap-8 items-center justify-center px-4 py-16">
-        <div className="flex flex-col items-end">
+    <div id="ForgotPageWrapper" className={PageWrapperClassName}>
+      <div id="ForgotPageContent" className={PageContentClassName}>
+        <div className={LogoClassName}>
           <img
-            className="w-20 self-center animate-bounce"
+            className={LogoAnimClassName}
             src={logo}
             alt="Final Whistle - Logo"
           />
-          <div className="bg-black-3 animate-[pulse_1s_ease-in-out_infinite] h-2 w-10 rounded-[50%]"></div>
+          <div className={LogoShadowClassName}></div>
         </div>
-        <div className="flex flex-col gap-3 items-center justify-center">
-          <p className="text-lg md:text-xl text-primary-normal w-full text-center">
-            You will receive a link in your email to reset password
-          </p>
-          <ForgotPasswordForm />
-          <RememberPasswordButton />
-        </div>
-        <SignUpBlock />
+        <p className="text-lg md:text-2xl text-primary-normal w-full text-center">
+          You will receive a link in your email to reset the password
+        </p>
+        <ForgotPasswordForm />
+        <RememberPasswordButton />
       </div>
     </div>
   )
 }
 const RememberPasswordButton = () => {
   return (
-    <Link
-      className=" text-xs md:text-sm text-white-1 underline"
-      to={routes.login()}
-    >
+    <Link className={UnderlineButtonClassName} to={routes.login()}>
       I remember my password
     </Link>
   )
@@ -79,17 +93,14 @@ const ForgotPasswordForm = () => {
   }
 
   return (
-    <Form
-      onSubmit={onSubmit}
-      className="flex flex-col items-center justify-center gap-3 md:gap-4"
-    >
-      <div className="items-center flex flex-col">
+    <Form onSubmit={onSubmit} className={FormClassName}>
+      <div className={TextInputContainerClassName}>
         <TextField
-          placeholder="Provide your email ID"
-          className="text-secondary-dark placeholder:text-primary-light rounded-tl-lg rounded-br-lg px-3 py-1 bg-white-1 border-transparent border-4 focus:border-primary-normal text-base md:text-lg"
+          placeholder="Enter your email ID"
+          className={LoginTextInputFieldClassName}
           name="email"
           inputMode="email"
-          errorClassName="text-red-light placeholder:text-primary-light rounded-tl-lg rounded-br-lg px-3 py-1 bg-white-1 border-transparent border-2 border-red-light text-lg md:text-xl"
+          errorClassName={LoginTextInputErrorClassName}
           validation={{
             required: { value: true, message: 'Email is required' },
             pattern: {
@@ -98,33 +109,11 @@ const ForgotPasswordForm = () => {
             },
           }}
         />
-        <FieldError
-          className="text-xs md:text-sm text-red-light"
-          name="email"
-        />
+        <FieldError className={ErrorFieldClassName} name="email" />
       </div>
       <PrimarySkewedButton
-        label={loading ? '... Please Wait' : 'SEND ME LINK!'}
+        label={loading ? '... Please Wait' : 'GET RESET LINK'}
       />
     </Form>
-  )
-}
-
-const SignUpBlock = () => {
-  const navigateToSignUpPage = () => {
-    navigate(routes.signup())
-  }
-  const signupText = "Don't have an account yet?"
-
-  return (
-    <div className="gap-2 flex flex-col items-center justify-center">
-      <p className="text-base md:text-lg text-center whitespace-nowrap text-secondary-normal font-bold">
-        {signupText}
-      </p>
-      <SecondaryRoundedButtonOutlined
-        label="SIGN UP AND PLAY!"
-        onClick={navigateToSignUpPage}
-      />
-    </div>
   )
 }

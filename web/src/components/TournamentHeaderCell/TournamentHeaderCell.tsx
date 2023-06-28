@@ -1,9 +1,10 @@
+import defaultTrophy from 'public/tournamentDefault.png'
 import type {
   FindTournamentHeaderQuery,
   FindTournamentHeaderQueryVariables,
 } from 'types/graphql'
-import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
-import defaultTrophy from 'public/tournamentDefault.png'
+
+import type { CellSuccessProps } from '@redwoodjs/web'
 
 export const QUERY = gql`
   query FindTournamentHeaderQuery($id: Int!) {
@@ -15,16 +16,6 @@ export const QUERY = gql`
   }
 `
 
-export const Loading = () => <div>Loading...</div>
-
-export const Empty = () => <div>Empty</div>
-
-export const Failure = ({
-  error,
-}: CellFailureProps<FindTournamentHeaderQueryVariables>) => (
-  <div style={{ color: 'red' }}>Error: {error.message}</div>
-)
-
 export const Success = ({
   tournament,
 }: CellSuccessProps<
@@ -34,14 +25,14 @@ export const Success = ({
   return (
     <div
       id="HeaderContentDiv"
-      className="flex w-5/6 self-end md:self-start gap-2 md:gap-3 rounded-md justify-end whitespace-nowrap md:justify-start items-center text-secondary-normal text-sm md:text-lg font-medium"
+      className="flex w-5/6 self-end gap-2 md:gap-3 rounded-md justify-end whitespace-nowrap items-center text-secondary-normal text-base md:text-xl font-medium"
     >
+      <p>{tournament.name}</p>
       <img
-        className="h-6 md:h-8"
+        className="h-7 md:h-9"
         src={tournament.logoURL ?? defaultTrophy}
         alt="Tournament logo"
       />
-      <p>{tournament.name}</p>
     </div>
   )
 }

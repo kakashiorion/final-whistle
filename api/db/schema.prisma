@@ -1,6 +1,6 @@
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url      = env("TEST_DATABASE_URL")
 }
 
 generator client {
@@ -10,96 +10,98 @@ generator client {
 
 model Tournament {
   id        Int      @id @default(autoincrement())
-  name     String @unique
-  venue      String?
-  logoURL String?
-  matches Match[]
-  teams Team[]
+  name      String   @unique
+  venue     String?
+  logoURL   String?
+  matches   Match[]
+  teams     Team[]
   startDate DateTime
-  endDate DateTime
+  endDate   DateTime
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 model Team {
-  id        Int      @id @default(autoincrement())
-  name     String @unique
-  color String?
-  color2 String?
-  flagURL String?
-  players      Player[]
-  matches TeamsInMatch[]
+  id          Int          @id @default(autoincrement())
+  name        String       @unique
+  color       String?
+  flagURL     String?
+  players     Player[]
+  homeMatches Match[]      @relation("HomeTeam")
+  awayMatches Match[]      @relation("AwayTeam")
   tournaments Tournament[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
 }
 
 model Player {
-  id        Int      @id @default(autoincrement())
-  name     String @unique
-  position      String
-  team      Team?     @relation(fields: [teamId], references: [id])
-  teamId    Int?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id        Int            @id @default(autoincrement())
+  name      String         @unique
+  position  PlayerPosition
+  team      Team           @relation(fields: [teamId], references: [id])
+  teamId    Int
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+}
+
+enum PlayerPosition {
+  GK
+  DF
+  MD
+  FW
 }
 
 model Match {
-  id        Int      @id @default(autoincrement())
-  location     String
-  matchDate      DateTime
-  round String
-  tournament      Tournament     @relation(fields: [tournamentId], references: [id])
-  tournamentId    Int
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  teams TeamsInMatch[]
-  maxWagerLimit Int
-  predictions MatchPrediction[]
-}
-
-model TeamsInMatch {
-  id        Int     @id @default(autoincrement())
-  matchId     Int
-  match       Match     @relation(fields: [matchId], references: [id])
-  teamId Int
-  team   Team @relation(fields: [teamId], references: [id])
-  score Int?
-  scoringPlayers Int[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@unique([matchId, teamId])
+  id                 Int               @id @default(autoincrement())
+  location           String
+  matchDate          DateTime
+  round              String?
+  tournament         Tournament        @relation(fields: [tournamentId], references: [id])
+  tournamentId       Int
+  homeTeam           Team              @relation("HomeTeam", fields: [homeTeamId], references: [id])
+  homeTeamId         Int
+  awayTeam           Team              @relation("AwayTeam", fields: [awayTeamId], references: [id])
+  awayTeamId         Int
+  homeScore          Int?
+  awayScore          Int?
+  homeScoringPlayers Int[]
+  awayScoringPlayers Int[]
+  maxWagerLimit      Int
+  predictions        MatchPrediction[]
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  username String? @unique
-  email     String @unique
+  id                  Int               @id @default(autoincrement())
+  username            String?           @unique
+  email               String            @unique
   hashedPassword      String
   salt                String
   resetToken          String?
   resetTokenExpiresAt DateTime?
-  coins Int?
-  points Int?
-  predictions MatchPrediction[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  roles     String @default("Gamer")
+  coins               Int?
+  points              Int?
+  predictions         MatchPrediction[]
+  roles               String            @default("Gamer")
+  createdAt           DateTime          @default(now())
+  updatedAt           DateTime          @updatedAt
 }
 
 model MatchPrediction {
-  id        Int      @id @default(autoincrement())
-  userId Int
-  user   User @relation(fields: [userId], references: [id])
-  matchId Int
-  match Match @relation(fields: [matchId], references: [id])
-  predictedScoreOfTeam1 Int @default(0)
-  predictedScoreOfTeam2 Int @default(0)
-  predictedScoringPlayersOfTeam1 Int[]
-  predictedScoringPlayersOfTeam2 Int[]
-  wageredCoins Int @default(10)
-  earnedPoints Int?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id                                Int      @id @default(autoincrement())
+  userId                            Int
+  user                              User     @relation(fields: [userId], references: [id])
+  matchId                           Int
+  match                             Match    @relation(fields: [matchId], references: [id])
+  predictedScoreOfHomeTeam          Int      @default(0)
+  predictedScoreOfAwayTeam          Int      @default(0)
+  predictedScoringPlayersOfHomeTeam Int[]
+  predictedScoringPlayersOfAwayTeam Int[]
+  wageredCoins                      Int      @default(10)
+  scorelineMultiplier               Int?
+  goalScorerMultiplier              Int?
+  earnedPoints                      Int?
+  createdAt                         DateTime @default(now())
+  updatedAt                         DateTime @updatedAt
 }

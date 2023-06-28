@@ -14,19 +14,21 @@ import {
   Private,
   // ,Private
 } from '@redwoodjs/router'
-import MatchPredictionsLayout from 'src/layouts/MatchPredictionsLayout'
-import UsersLayout from 'src/layouts/UsersLayout'
-import TeamsInMatchesLayout from 'src/layouts/TeamsInMatchesLayout'
+
 import MatchesLayout from 'src/layouts/MatchesLayout'
+import MatchPredictionsLayout from 'src/layouts/MatchPredictionsLayout'
 import PlayersLayout from 'src/layouts/PlayersLayout'
 import TeamsLayout from 'src/layouts/TeamsLayout'
 import TournamentsLayout from 'src/layouts/TournamentsLayout'
+import UsersLayout from 'src/layouts/UsersLayout'
+
+import { useAuth } from './auth'
 import LandingLayout from './layouts/LandingLayout/LandingLayout'
 import NavigationLayout from './layouts/NavigationLayout/NavigationLayout'
 
 const Routes = () => {
   return (
-    <Router>
+    <Router useAuth={useAuth}>
       <Private unauthenticated="landing" roles={['Admin']}>
         <Set wrap={MatchPredictionsLayout}>
           <Route path="/admin/match-predictions/new" page={MatchPredictionNewMatchPredictionPage} name="newMatchPrediction" />
@@ -39,12 +41,6 @@ const Routes = () => {
           <Route path="/admin/users/{id:Int}/edit" page={UserEditUserPage} name="editUser" />
           <Route path="/admin/users/{id:Int}" page={UserUserPage} name="user" />
           <Route path="/admin/users" page={UserUsersPage} name="users" />
-        </Set>
-        <Set wrap={TeamsInMatchesLayout}>
-          <Route path="/admin/teams-in-matches/new" page={TeamsInMatchNewTeamsInMatchPage} name="newTeamsInMatch" />
-          <Route path="/admin/teams-in-matches/{id:Int}/edit" page={TeamsInMatchEditTeamsInMatchPage} name="editTeamsInMatch" />
-          <Route path="/admin/teams-in-matches/{id:Int}" page={TeamsInMatchTeamsInMatchPage} name="teamsInMatch" />
-          <Route path="/admin/teams-in-matches" page={TeamsInMatchTeamsInMatchesPage} name="teamsInMatches" />
         </Set>
         <Set wrap={MatchesLayout}>
           <Route path="/admin/matches/new" page={MatchNewMatchPage} name="newMatch" />

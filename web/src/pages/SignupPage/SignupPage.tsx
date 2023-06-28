@@ -1,6 +1,7 @@
-import { navigate, routes } from '@redwoodjs/router'
-import { MetaTags } from '@redwoodjs/web'
+import { useState } from 'react'
+
 import logo from 'public/Main 2.png'
+
 import {
   FieldError,
   Form,
@@ -8,11 +9,21 @@ import {
   SubmitHandler,
   TextField,
 } from '@redwoodjs/forms'
+import { navigate, routes } from '@redwoodjs/router'
+import { MetaTags } from '@redwoodjs/web'
 import { toast, Toaster } from '@redwoodjs/web/dist/toast'
-import { useAuth } from '@redwoodjs/auth'
-import { PrimaryRoundedButtonOutlined } from 'src/components/Buttons/RoundedButton/PrimaryRoundedButton'
+
+import { useAuth } from 'src/auth'
+import { PrimarySkewedButton } from 'src/components/Buttons/SkewedButton/PrimarySkewedButton'
 import { SecondarySkewedButton } from 'src/components/Buttons/SkewedButton/SecondarySkewedButton'
-import { useState } from 'react'
+import {
+  ErrorFieldClassName,
+  ExtraBlockWrapperClassName,
+  FormClassName,
+  SignupTextInputErrorClassName,
+  SignupTextInputFieldClassName,
+  TextInputContainerClassName,
+} from 'src/utils'
 
 const SignupPage = () => {
   return (
@@ -23,6 +34,9 @@ const SignupPage = () => {
       />
       <Toaster toastOptions={{ className: 'rw-toast', duration: 3000 }} />
       <SignupContent />
+      <div id="LoginBlockWrapper" className={ExtraBlockWrapperClassName}>
+        <LoginBlock />
+      </div>
     </>
   )
 }
@@ -31,18 +45,19 @@ export default SignupPage
 
 const SignupContent = () => {
   return (
-    <div className=" bg-[url('/public/signupBG.webp')] bg-black-2 bg-cover bg-blend-overlay flex justify-end items-center w-full px-4 md:px-8 py-4 md:py-8 h-screen">
-      <div className="w-full md:w-1/2 rounded-3xl flex flex-col gap-6 md:gap-8 items-center justify-center px-4 py-16">
-        <img
-          className="max-w-[80px] max-h-20 animate-spin"
-          src={logo}
-          alt="FW logo"
-        />
-        <p className="text-lg md:text-xl text-white-2 w-full text-center">
+    <div
+      id="SignupPageWrapper"
+      className=" bg-[url('/public/signupBG.webp')] bg-black-1/95 bg-cover bg-blend-overlay flex justify-center items-center w-full px-4 md:px-8 py-12 md:py-16 h-screen"
+    >
+      <div
+        id="SignupPageContent"
+        className="w-full md:max-w-3xl rounded-3xl flex flex-col gap-16 md:gap-20 items-center justify-center p-2"
+      >
+        <img className="h-16 md:h-20 animate-spin" src={logo} alt="FW logo" />
+        <p className="text-lg md:text-2xl text-secondary-normal w-full text-center">
           Start your journey with just an email
         </p>
         <SignupForm />
-        <LoginBlock />
       </div>
     </div>
   )
@@ -74,17 +89,14 @@ const SignupForm = () => {
   }
 
   return (
-    <Form
-      onSubmit={onSubmit}
-      className="flex flex-col items-center justify-center gap-3 md:gap-4"
-    >
-      <div className="items-center flex flex-col">
+    <Form onSubmit={onSubmit} className={FormClassName}>
+      <div className={TextInputContainerClassName}>
         <TextField
-          placeholder="Enter your email"
+          placeholder="Enter your email ID"
           inputMode="email"
-          className="text-primary-dark placeholder:text-secondary-light rounded-tl-lg rounded-br-lg px-3 py-1 bg-white-1 border-transparent border-4 focus:border-secondary-normal text-base md:text-lg"
+          className={SignupTextInputFieldClassName}
           name="email"
-          errorClassName="text-red-normal placeholder:text-secondary-light rounded-tl-lg rounded-br-lg px-3 py-1 bg-white-1 border-transparent border-2 border-red-normal text-lg md:text-xl"
+          errorClassName={SignupTextInputErrorClassName}
           validation={{
             required: { value: true, message: 'Email is required' },
             pattern: {
@@ -93,18 +105,15 @@ const SignupForm = () => {
             },
           }}
         />
-        <FieldError
-          className="text-xs md:text-sm text-red-normal"
-          name="email"
-        />
+        <FieldError className={ErrorFieldClassName} name="email" />
       </div>
-      <div className="items-center flex flex-col">
+      <div className={TextInputContainerClassName}>
         <PasswordField
           placeholder="Choose a password"
           hidden={true}
-          className="text-primary-dark placeholder:text-secondary-light rounded-tl-lg rounded-br-lg px-3 py-1 bg-white-1 border-transparent border-4 focus:border-secondary-normal text-base md:text-lg"
+          className={SignupTextInputFieldClassName}
           name="password"
-          errorClassName="text-red-normal placeholder:text-secondary-light rounded-tl-lg rounded-br-lg px-3 py-1 bg-white-1 border-transparent border-2 border-red-normal text-lg md:text-xl"
+          errorClassName={SignupTextInputErrorClassName}
           validation={{
             required: {
               value: true,
@@ -113,10 +122,7 @@ const SignupForm = () => {
             minLength: { value: 8, message: 'Minimum 8 characters' },
           }}
         />
-        <FieldError
-          className="text-xs md:text-sm text-red-normal"
-          name="password"
-        />
+        <FieldError className={ErrorFieldClassName} name="password" />
       </div>
       <SecondarySkewedButton
         label={loading ? '... Please Wait' : 'CREATE ACCOUNT'}
@@ -126,19 +132,16 @@ const SignupForm = () => {
 }
 
 const LoginBlock = () => {
-  const navigateToLoginPage = () => {
-    navigate(routes.login())
-  }
-  const loginText = 'Already have an account?'
-
   return (
     <div className="gap-2 flex flex-col items-center justify-center">
-      <p className="text-base md:text-lg text-center whitespace-nowrap text-primary-normal font-bold">
-        {loginText}
+      <p className="text-base md:text-lg text-center text-white-1">
+        {'Already have an account?'}
       </p>
-      <PrimaryRoundedButtonOutlined
-        label="LOGIN NOW!"
-        onClick={navigateToLoginPage}
+      <PrimarySkewedButton
+        label="LOGIN AND PLAY"
+        onClick={() => {
+          navigate(routes.login())
+        }}
       />
     </div>
   )

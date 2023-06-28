@@ -1,12 +1,24 @@
-import type { FindUsers } from 'types/graphql'
-import { CellSuccessProps, useMutation } from '@redwoodjs/web'
-import { FieldError, Form, SubmitHandler, TextField } from '@redwoodjs/forms'
-import { toast } from '@redwoodjs/web/dist/toast'
-import { navigate, routes } from '@redwoodjs/router'
-import logo from 'public/Main 2.png'
-import { SecondarySkewedButton } from '../Buttons/SkewedButton/SecondarySkewedButton'
-import { useAuth } from '@redwoodjs/auth'
 import { useEffect, useState } from 'react'
+
+import logo from 'public/Main 2.png'
+import type { FindUsers } from 'types/graphql'
+
+import { FieldError, Form, SubmitHandler, TextField } from '@redwoodjs/forms'
+import { navigate, routes } from '@redwoodjs/router'
+import { CellSuccessProps, useMutation } from '@redwoodjs/web'
+import { toast } from '@redwoodjs/web/dist/toast'
+
+import { useAuth } from 'src/auth'
+import {
+  CurrentTournamentInitialCoins,
+  ErrorFieldClassName,
+  FormClassName,
+  PageContentClassName,
+  SignupTextInputErrorClassName,
+  SignupTextInputFieldClassName,
+} from 'src/utils'
+
+import { SecondarySkewedButton } from '../Buttons/SkewedButton/SecondarySkewedButton'
 
 export const QUERY = gql`
   query FindAllUsers {
@@ -28,13 +40,10 @@ const UPDATE_USER_NAME_MUTATION = gql`
 `
 
 export const Loading = () => (
-  <div className="bg-[url('/public/userSetup.avif')] bg-black-1 bg-cover bg-blend-overlay flex justify-center items-center w-full px-4 md:px-8 py-4 md:py-8 h-screen">
+  <div className="bg-[url('/public/userSetup.avif')] bg-black-1/95 bg-cover bg-blend-overlay flex justify-center items-center w-full px-4 md:px-8 py-12 md:py-16 h-screen">
     <img className="h-1/4 animate-spin" src={logo} alt="FW logo" />
   </div>
 )
-
-//Initial tournament coins to be given to every new user
-const tournamentInitialCoins = 1000
 
 export const Success = ({ users }: CellSuccessProps<FindUsers>) => {
   const { currentUser, reauthenticate } = useAuth()
@@ -70,7 +79,7 @@ export const Success = ({ users }: CellSuccessProps<FindUsers>) => {
           id: currentUser.id,
           input: {
             username: data.username,
-            coins: tournamentInitialCoins,
+            coins: CurrentTournamentInitialCoins,
             points: 0,
           },
         },
@@ -80,39 +89,36 @@ export const Success = ({ users }: CellSuccessProps<FindUsers>) => {
   }
 
   return (
-    <div className="bg-[url('/public/userSetup.avif')] bg-black-1 bg-cover bg-blend-overlay flex justify-center items-center w-full px-4 md:px-8 py-4 md:py-8 h-screen">
-      <div className="flex flex-col h-full w-full md:w-1/3 gap-3 md:gap-4 items-center justify-center">
-        <img className="max-w-[80px] max-h-20" src={logo} alt="FW logo" />
-        <p className="text-green-normal text-xl font-bold md:text-2xl text-center">
+    <div className="bg-[url('/public/userSetup.avif')] bg-black-1/95 bg-cover bg-blend-overlay flex justify-center items-center w-full px-4 md:px-8 py-12 md:py-16 h-screen">
+      <div className={PageContentClassName}>
+        <img className="h-16 md:h-20" src={logo} alt="FW logo" />
+        <p className="text-green-light text-lg md:text-2xl text-center">
           Account crearted successfully!
         </p>
-        <p className="text-white-2 mt-8 text-sm md:text-base text-center">
-          But before you can start playing, just one last thing:
+        <p className="text-white-3 text-xs md:text-sm text-center">
+          Before you can start playing, just one last thing:
         </p>
-        <p className="text-secondary-light text-lg md:text-xl text-center">
-          WHAT NAME WOULD WE PUT ON THE TROPHY?
+        <p className="text-secondary-light text-lg md:text-2xl text-center">
+          Enter your username that will be displayed on the leaderboard
         </p>
-        <Form
-          onSubmit={onSubmit}
-          className=" flex flex-col gap-3 md:gap-4 items-center justify-center"
-        >
+        <Form onSubmit={onSubmit} className={FormClassName}>
           <div className="flex flex-col items-center justify-center">
             <TextField
-              className="text-primary-dark placeholder:text-secondary-light rounded-tl-lg rounded-br-lg px-3 py-1 bg-white-1 border-transparent border-4 focus:border-secondary-normal text-md md:text-lg"
+              className={SignupTextInputFieldClassName}
               name="username"
               placeholder="Choose a username"
-              errorClassName="text-red-light placeholder:text-secondary-light rounded-tl-lg rounded-br-lg px-3 py-1 bg-white-1 border-transparent border-2 border-red-light text-lg md:text-xl"
+              errorClassName={SignupTextInputErrorClassName}
               validation={{
                 required: { value: true, message: 'Username is required' },
-                maxLength: { value: 20, message: 'Max 20 characters allowed' },
+                maxLength: { value: 15, message: 'Max 15 characters allowed' },
+                minLength: { value: 5, message: 'Min 5 characters required' },
               }}
             />
-            <FieldError
-              className="text-xs md:text-sm text-red-light"
-              name="username"
-            />
+            <FieldError className={ErrorFieldClassName} name="username" />
           </div>
-          <SecondarySkewedButton label={loading ? '... Please Wait' : 'DONE'} />
+          <SecondarySkewedButton
+            label={loading ? '... Please Wait' : 'START PLAYING'}
+          />
         </Form>
       </div>
     </div>

@@ -1,19 +1,25 @@
-import type { AllTeamsQuery } from 'types/graphql'
-import type { CellSuccessProps } from '@redwoodjs/web'
-import logo from 'public/Main 2.png'
 import { useState } from 'react'
 
+import logo from 'public/Main 2.png'
+import type { AllTeamsQuery } from 'types/graphql'
+
+import { Redirect, routes } from '@redwoodjs/router'
+import type { CellSuccessProps } from '@redwoodjs/web'
+
 export const QUERY = gql`
-  query AllTeamsQuery {
-    allTeams: teams {
+  query AllTeamsQuery($tournamentId: Int!) {
+    allTeams: tournament(id: $tournamentId) {
       id
-      name
-      color
-      flagURL
-      players {
+      teams {
         id
         name
-        position
+        color
+        flagURL
+        players {
+          id
+          name
+          position
+        }
       }
     }
   }
@@ -24,18 +30,20 @@ export const Loading = () => (
     <img className="max-h-[25vh] animate-bounce" src={logo} alt="FW logo" />
   </div>
 )
-export const Empty = () => <div>No tournament is currently active!</div>
+export const Empty = () => <Redirect to={routes.home()} />
 
 export const Success = ({ allTeams }: CellSuccessProps<AllTeamsQuery>) => {
   const [expandedIndex, setExpandedIndex] = useState(0)
   return (
     <div
       id="AllTeamsDiv"
-      className="flex flex-col w-full max-h-[80vh] px-2 md:px-3 py-2 md:py-3 gap-2 md:gap-3 bg-black-3 bg-opacity-60 rounded-md items-start justify-start"
+      className="flex flex-col w-full h-full overflow-hidden p-2 md:p-3 gap-2 md:gap-3 bg-black-3/70 rounded items-start justify-start"
     >
-      <p className="text-light-3 text-xs md:text-sm font-bold">ALL TEAMS</p>
-      <div className="flex flex-col w-full h-full overflow-y-scroll gap-2 md:gap-3 justify-start items-start nonscroll">
-        {allTeams.map((team) => {
+      <p className="text-primary-normal text-lg md:text-2xl">
+        Teams and Players
+      </p>
+      <div className="flex flex-col w-full h-full p-1 overflow-y-scroll gap-2 md:gap-3 justify-start items-start nonscroll">
+        {allTeams.teams.map((team) => {
           return (
             <TeamItem
               team={team}
@@ -75,14 +83,10 @@ const TeamItem = (props: TeamItemProps) => {
           props.expandedIndex == props.team.id ? 0 : props.team.id
         )
       }}
-      className="w-full rounded-sm flex-col text-secondary-dark text-sm md:text-base hover:text-white-3 hover:-translate-y-1 hover:-translate-x-1 hover:bg-secondary-dark hover:bg-opacity-60 flex gap-1 md:gap-2 items-center justify-evenly bg-white-3 px-1 md:px-2 py-2 md:py-3"
+      className="w-full rounded flex-col hover:shadow-sm hover:shadow-primary-normal text-secondary-dark text-sm md:text-base hover:text-white-3 hover:-translate-y-1 hover:-translate-x-1 hover:bg-secondary-dark hover:bg-opacity-60 flex gap-1 md:gap-2 items-center justify-evenly bg-white-3 p-2 md:p-3"
     >
       <div className="w-full flex gap-2 md:gap-3 items-center">
-        <img
-          className="h-3 md:h-4 aspect-video"
-          src={props.team.flagURL}
-          alt="team flag"
-        />{' '}
+        <img className="h-5 md:h-6" src={props.team.flagURL} alt="team flag" />{' '}
         <p>{props.team.name.split('U-')[0]}</p>
       </div>
       {props.expandedIndex == props.team.id ? (
@@ -101,8 +105,8 @@ const TeamItem = (props: TeamItemProps) => {
 const PlayerItem = ({ player }) => {
   return (
     <div className="flex gap-3 md:gap-4 items-center justify-center w-full">
-      <p className="basis-5/12 text-end">{player.position}</p>
-      <p className="basis-7/12 text-start">{player.name}</p>
+      <p className="basis-1/3 text-end">{player.position}</p>
+      <p className="basis-2/3 text-start">{player.name}</p>
     </div>
   )
 }

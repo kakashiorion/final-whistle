@@ -1,5 +1,6 @@
 import { back } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
+
 import { PrimarySkewedButton } from 'src/components/Buttons/SkewedButton/PrimarySkewedButton'
 
 export default () => {
@@ -24,7 +25,7 @@ const ErrorBanner = () => {
       <p className="font-semibold text-secondary-normal text-lg md:text-2xl">
         404... Page not found!
       </p>
-      <h1 className="text-primary-normal text-4xl md:text-5xl font-extrabold text-left">
+      <h1 className="text-primary-normal text-3xl md:text-5xl font-extrabold text-left">
         {errorText}
       </h1>
       <div className="px-4">

@@ -5,40 +5,52 @@ export const schema = gql`
     user: User!
     matchId: Int!
     match: Match!
-    predictedScoreOfTeam1: Int!
-    predictedScoreOfTeam2: Int!
-    predictedScoringPlayersOfTeam1: [Int]!
-    predictedScoringPlayersOfTeam2: [Int]!
+    predictedScoreOfHomeTeam: Int!
+    predictedScoreOfAwayTeam: Int!
+    predictedScoringPlayersOfHomeTeam: [Int]!
+    predictedScoringPlayersOfAwayTeam: [Int]!
     wageredCoins: Int!
+    scorelineMultiplier: Int
+    goalScorerMultiplier: Int
     earnedPoints: Int
     createdAt: DateTime!
     updatedAt: DateTime!
   }
 
+  type ScorelineResult {
+    scoreline: String!
+    occurence: Int!
+  }
+
   type Query {
     matchPredictions: [MatchPrediction!]! @requireAuth
     matchPrediction(id: Int!): MatchPrediction @requireAuth
+    mostChosenScorelines(tournamentId: Int!): [ScorelineResult!]! @requireAuth
   }
 
   input CreateMatchPredictionInput {
     userId: Int!
     matchId: Int!
-    predictedScoreOfTeam1: Int!
-    predictedScoreOfTeam2: Int!
-    predictedScoringPlayersOfTeam1: [Int]!
-    predictedScoringPlayersOfTeam2: [Int]!
+    predictedScoreOfHomeTeam: Int!
+    predictedScoreOfAwayTeam: Int!
+    predictedScoringPlayersOfHomeTeam: [Int]!
+    predictedScoringPlayersOfAwayTeam: [Int]!
     wageredCoins: Int!
+    scorelineMultiplier: Int
+    goalScorerMultiplier: Int
     earnedPoints: Int
   }
 
   input UpdateMatchPredictionInput {
     userId: Int
     matchId: Int
-    predictedScoreOfTeam1: Int
-    predictedScoreOfTeam2: Int
-    predictedScoringPlayersOfTeam1: [Int]!
-    predictedScoringPlayersOfTeam2: [Int]!
+    predictedScoreOfHomeTeam: Int
+    predictedScoreOfAwayTeam: Int
+    predictedScoringPlayersOfHomeTeam: [Int]!
+    predictedScoringPlayersOfAwayTeam: [Int]!
     wageredCoins: Int
+    scorelineMultiplier: Int
+    goalScorerMultiplier: Int
     earnedPoints: Int
   }
 

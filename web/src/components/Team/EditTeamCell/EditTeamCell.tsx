@@ -1,9 +1,9 @@
 import type { EditTeamById } from 'types/graphql'
 
+import { navigate, routes } from '@redwoodjs/router'
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
-import { navigate, routes } from '@redwoodjs/router'
 
 import TeamForm from 'src/components/Team/TeamForm'
 
@@ -13,7 +13,6 @@ export const QUERY = gql`
       id
       name
       color
-      color2
       flagURL
       createdAt
       updatedAt
@@ -26,7 +25,6 @@ const UPDATE_TEAM_MUTATION = gql`
       id
       name
       color
-      color2
       flagURL
       createdAt
       updatedAt

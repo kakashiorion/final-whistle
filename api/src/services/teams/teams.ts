@@ -1,9 +1,10 @@
-import { db } from 'src/lib/db'
 import type {
   QueryResolvers,
   MutationResolvers,
-  TeamResolvers,
+  TeamRelationResolvers,
 } from 'types/graphql'
+
+import { db } from 'src/lib/db'
 
 export const teams: QueryResolvers['teams'] = () => {
   return db.team.findMany()
@@ -34,11 +35,17 @@ export const deleteTeam: MutationResolvers['deleteTeam'] = ({ id }) => {
   })
 }
 
-export const Team: TeamResolvers = {
-  players: (_obj, { root }) =>
-    db.team.findUnique({ where: { id: root.id } }).players(),
-  matches: (_obj, { root }) =>
-    db.team.findUnique({ where: { id: root.id } }).matches(),
-  tournaments: (_obj, { root }) =>
-    db.team.findUnique({ where: { id: root.id } }).tournaments(),
+export const Team: TeamRelationResolvers = {
+  players: (_obj, { root }) => {
+    return db.team.findUnique({ where: { id: root?.id } }).players()
+  },
+  homeMatches: (_obj, { root }) => {
+    return db.team.findUnique({ where: { id: root?.id } }).homeMatches()
+  },
+  awayMatches: (_obj, { root }) => {
+    return db.team.findUnique({ where: { id: root?.id } }).awayMatches()
+  },
+  tournaments: (_obj, { root }) => {
+    return db.team.findUnique({ where: { id: root?.id } }).tournaments()
+  },
 }

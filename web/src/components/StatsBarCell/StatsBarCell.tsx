@@ -2,35 +2,54 @@ import type {
   FindStatsBarQuery,
   FindStatsBarQueryVariables,
 } from 'types/graphql'
-import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
-import moment from 'moment'
+
+import type { CellSuccessProps } from '@redwoodjs/web'
 
 export const QUERY = gql`
   query FindStatsBarQuery($id: Int!) {
-    tournamentStats: tournament(id: $id) {
-      id
-      matches {
+    mostChosenPlayers(tournamentId: $id) {
+      player {
         id
-        matchDate
-        location
-        round
-        predictions {
+        name
+        position
+        team {
           id
-          predictedScoreOfTeam1
-          predictedScoreOfTeam2
-          predictedScoringPlayersOfTeam1
-          predictedScoringPlayersOfTeam2
+          name
         }
-        teams {
+      }
+      occurence
+    }
+    mostChosenScorelines(tournamentId: $id) {
+      scoreline
+      occurence
+    }
+    mostChosenTeams(tournamentId: $id) {
+      winningTeams {
+        team {
           id
-          team {
-            name
-            flagURL
-            color
-          }
-          score
-          scoringPlayers
+          name
+          flagURL
+          color
         }
+        occurence
+      }
+      losingTeams {
+        team {
+          id
+          name
+          flagURL
+          color
+        }
+        occurence
+      }
+      drawingTeams {
+        team {
+          id
+          name
+          flagURL
+          color
+        }
+        occurence
       }
     }
   }
@@ -38,84 +57,143 @@ export const QUERY = gql`
 
 export const Loading = () => {
   return (
-    <div className="lg:w-80 lg:py-10 lg:h-full lg:border-l-[.5px] lg:border-l-black-3 lg:px-1 hidden lg:flex">
+    <div className="xl:w-80 xl:py-6 xl:shrink-0 xl:h-full xl:pr-6 hidden xl:flex">
       <div className="animate-pulse h-full rounded-lg w-full bg-black-3"></div>
     </div>
   )
 }
 
-export const Empty = () => <div>Empty</div>
-
-export const Failure = ({
-  error,
-}: CellFailureProps<FindStatsBarQueryVariables>) => (
-  <div style={{ color: 'red' }}>Error: {error.message}</div>
-)
-
 export const Success = ({
-  tournamentStats,
+  mostChosenPlayers,
+  mostChosenScorelines,
+  mostChosenTeams,
 }: CellSuccessProps<FindStatsBarQuery, FindStatsBarQueryVariables>) => {
-  const currentDate = new Date()
-
-  const tournamentMatches = tournamentStats.matches
-
-  const tournamentMatchPredictions = []
-  tournamentMatches.forEach((m) =>
-    tournamentMatchPredictions.push(...m.predictions)
-  )
-
-  const tournamentPredictedScorelines = []
-  tournamentMatchPredictions.forEach((p) =>
-    tournamentPredictedScorelines.push(
-      p.predictedScoreOfTeam1 > p.predictedScoreOfTeam2
-        ? [p.predictedScoreOfTeam1, p.predictedScoreOfTeam2]
-        : [p.predictedScoreOfTeam2, p.predictedScoreOfTeam1]
-    )
-  )
-
-  const tournamentPredictedGoalScorers = []
-  tournamentMatchPredictions.forEach((p) =>
-    tournamentPredictedGoalScorers.push(
-      ...p.predictedScoringPlayersOfTeam1,
-      ...p.predictedScoringPlayersOfTeam2
-    )
-  )
-
-  const tournamentActualScorelines = []
-  tournamentMatches.forEach(
-    (m) =>
-      moment(m.matchDate).isBefore(moment(currentDate)) &&
-      tournamentActualScorelines.push(
-        m.teams[0].score > m.teams[1].score
-          ? [(m.teams[0].score, m.teams[1].score)]
-          : [(m.teams[1].score, m.teams[0].score)]
-      )
-  )
-
-  const tournamentActualGoalScorers = []
-  tournamentMatches.forEach(
-    (m) =>
-      moment(m.matchDate).isBefore(moment(currentDate)) &&
-      tournamentActualGoalScorers.push(
-        ...m.teams[0].scoringPlayers,
-        ...m.teams[1].scoringPlayers
-      )
-  )
-
   return (
-    <div className="lg:w-80 lg:py-10 lg:h-full lg:border-l-[.5px] lg:border-l-black-3 lg:px-1 hidden lg:flex">
-      <div id="Scorelines">
-        <div id="mostPredictedScorlines"></div>
-        <div id="mostSuccessfullyPredictedScorlines"></div>
+    <div className="w-80 py-6 shrink-0 h-full pr-6 hidden xl:flex overflow-hidden">
+      <div className="flex flex-col w-full h-full overflow-y-scroll gap-3 nonscroll">
+        <div
+          id="ScorelinesDiv"
+          className="flex w-full p-3 flex-col rounded bg-black-3/70 gap-2"
+        >
+          <p className="text-primary-normal text-lg">
+            Most Predicted Scorelines
+          </p>
+          <div
+            id="mostPredictedScorlines"
+            className="flex w-full flex-col gap-1"
+          >
+            {mostChosenScorelines.map((item, i) => {
+              return (
+                <div
+                  key={i}
+                  className="flex items-center justify-between text-base text-white-3"
+                >
+                  <p>{item.scoreline}</p>
+                  <p>{item.occurence}</p>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+        <div
+          id="GoalScorersDiv"
+          className="flex w-full p-3 flex-col rounded bg-black-3/70 gap-2"
+        >
+          <p className="text-primary-normal text-lg">
+            Most Predicted Goalscorers
+          </p>
+          <div
+            id="mostPredictedScorlines"
+            className="flex w-full flex-col gap-1"
+          >
+            {mostChosenPlayers.map((item, i) => {
+              return (
+                <div
+                  key={i}
+                  className="flex items-center justify-between text-base text-white-3"
+                >
+                  <p>{`${item.player.name} (${item.player.position})`}</p>
+                  <p>{item.occurence}</p>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+        <div
+          id="WinningDiv"
+          className="flex w-full p-3 flex-col rounded bg-black-3/70 gap-2"
+        >
+          <p className="text-primary-normal text-lg">Most Predicted Winners</p>
+          <div id="mostPredictedWinners" className="flex w-full flex-col gap-1">
+            {mostChosenTeams.winningTeams.map((item, i) => {
+              return (
+                <div
+                  key={i}
+                  className="flex items-center justify-between text-base text-white-3"
+                >
+                  <p>{item.team.name}</p>
+                  <p>{item.occurence}</p>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+        <div
+          id="LosingDiv"
+          className="flex w-full p-3 flex-col rounded bg-black-3/70 gap-2"
+        >
+          <p className="text-primary-normal text-lg">Most Predicted Losers</p>
+          <div id="mostPredictedLosers" className="flex w-full flex-col gap-1">
+            {mostChosenTeams.losingTeams.map((item, i) => {
+              return (
+                <div
+                  key={i}
+                  className="flex items-center justify-between text-base text-white-3"
+                >
+                  <p>{item.team.name}</p>
+                  <p>{item.occurence}</p>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+        <div
+          id="DrawingDiv"
+          className="flex w-full p-3 flex-col rounded bg-black-3/70 gap-2"
+        >
+          <p className="text-primary-normal text-lg">Most Predicted Drawers</p>
+          <div id="mostPredictedDrawers" className="flex w-full flex-col gap-1">
+            {mostChosenTeams.drawingTeams.map((item, i) => {
+              return (
+                <div
+                  key={i}
+                  className="flex items-center justify-between text-base text-white-3"
+                >
+                  <p>{item.team.name}</p>
+                  <p>{item.occurence}</p>
+                </div>
+              )
+            })}
+          </div>
+        </div>
       </div>
-      <div id="GoalScorers">
-        <div id="mostPredictedGoalScorers"></div>
-        <div id="mostSuccessfullyPredictedGoalScorers"></div>
-      </div>
-      {/* <div id="Matches">
-        <div id="mostPredictedMatches"></div>
-        <div id="mostSuccessfullyPredictedMatches"></div>
-      </div> */}
     </div>
   )
 }
+
+/*
+Stats:
+  - Most chosen goalscorers (5)
+      Rank, Name, Position, Team, N
+  - Most chosen scorelines (5)
+      Rank, Scoreline , N
+  - Most chosen winning team (3)
+      Rank, Team, N
+  - Most chosen drawing team (3)
+      Rank, Team, N
+  - Most chosen losing team (3)
+      Rank, Team, N
+  - Top successfully predicted matches (5)
+      Rank, Teams, SuccessRate
+  -
+*/
