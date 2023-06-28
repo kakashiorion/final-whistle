@@ -34,3 +34,14 @@ export const WagerTextInputFieldClassName =
   'text-secondary-normal w-20 md:w-24 placeholder:text-primary-normal rounded-tl-lg rounded-br-lg px-3 md:px-5 py-1.5 md:py-2.5 bg-white-2 border-transparent border-4 focus:border-primary-normal text-base md:text-lg text-center'
 export const WagerTextInputErrorClassName =
   'text-secondary-normal w-20 md:w-24 placeholder:text-primary-normal rounded-tl-lg rounded-br-lg px-3 md:px-5 py-1.5 md:py-2.5 bg-white-2 border-red-normal border-4 focus:border-red-normal text-base md:text-lg text-center'
+
+//Rules CSS
+export const RulesPageClassName =
+  'flex flex-col gap-4 md:gap-6 items-start justify-start overflow-y-scroll h-full'
+export const SectionDivClassName =
+  'flex flex-col gap-3 md:gap-4 bg-black-3/70 p-2 md:p-3'
+export const SectionHeaderClassName =
+  'text-white-1 font-bold text-base md:text-xl'
+export const SubSectionTabClassName = 'pl-2 md:pl-3'
+export const SectionPointsClassName =
+  'flex flex-col gap-1 md:gap-2 text-white-3 text-base md:text-xl px-2 md:px-3'

@@ -366,7 +366,7 @@ export const Success = ({
                 <p>{userPrediction.wageredCoins}</p>
               </div>
               <div className="flex rounded-full px-3 py-1 md:px-4 md:py-1.5 bg-primary-dark text-base md:text-xl text-white-3">
-                Earned points: {userPrediction.earnedPoints}
+                Earned {userPrediction.earnedPoints} points
               </div>
             </div>
           </div>

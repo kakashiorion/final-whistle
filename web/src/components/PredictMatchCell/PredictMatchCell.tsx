@@ -371,7 +371,7 @@ export const Success = ({
          border-t-2 border-t-primary-normal
       justify-center items-center w-full text-white-3 text-xs md:text-sm"
       >
-        <p className="text-primary-normal text-base md:text-lg">
+        <p className="text-primary-normal text-base md:text-xl">
           Place your wager
         </p>
         <div

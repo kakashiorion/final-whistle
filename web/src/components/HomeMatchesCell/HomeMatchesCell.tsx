@@ -210,7 +210,7 @@ const RecentMatchItem = ({ recentMatch }) => {
   const successRate =
     recentMatch.predictions.length != 0
       ? `${(successCount * 100) / recentMatch.predictions.length}%`
-      : '0%'
+      : 'N/A'
   //Did currentUser make a prediction for this match
   const didPredict = recentMatch.predictions.find(
     (p) => p.userId == currentUser.id

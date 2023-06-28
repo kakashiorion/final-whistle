@@ -75,8 +75,8 @@ export const Success = ({
           id="ScorelinesDiv"
           className="flex w-full p-3 flex-col rounded bg-black-3/70 gap-2"
         >
-          <p className="text-primary-normal text-lg">
-            Most Predicted Scorelines
+          <p className="text-primary-normal text-sm">
+            Top predicted scorelines
           </p>
           <div
             id="mostPredictedScorlines"
@@ -86,7 +86,7 @@ export const Success = ({
               return (
                 <div
                   key={i}
-                  className="flex items-center justify-between text-base text-white-3"
+                  className="flex items-center justify-between text-base text-white-3 px-2"
                 >
                   <p>{item.scoreline}</p>
                   <p>{item.occurence}</p>
@@ -99,8 +99,8 @@ export const Success = ({
           id="GoalScorersDiv"
           className="flex w-full p-3 flex-col rounded bg-black-3/70 gap-2"
         >
-          <p className="text-primary-normal text-lg">
-            Most Predicted Goalscorers
+          <p className="text-primary-normal text-sm">
+            Top predicted goalscorers
           </p>
           <div
             id="mostPredictedScorlines"
@@ -110,7 +110,7 @@ export const Success = ({
               return (
                 <div
                   key={i}
-                  className="flex items-center justify-between text-base text-white-3"
+                  className="flex items-center justify-between text-base text-white-3 px-2"
                 >
                   <p>{`${item.player.name} (${item.player.position})`}</p>
                   <p>{item.occurence}</p>
@@ -123,13 +123,13 @@ export const Success = ({
           id="WinningDiv"
           className="flex w-full p-3 flex-col rounded bg-black-3/70 gap-2"
         >
-          <p className="text-primary-normal text-lg">Most Predicted Winners</p>
+          <p className="text-primary-normal text-sm">Top predicted winners</p>
           <div id="mostPredictedWinners" className="flex w-full flex-col gap-1">
             {mostChosenTeams.winningTeams.map((item, i) => {
               return (
                 <div
                   key={i}
-                  className="flex items-center justify-between text-base text-white-3"
+                  className="flex items-center justify-between text-base text-white-3 px-2"
                 >
                   <p>{item.team.name}</p>
                   <p>{item.occurence}</p>
@@ -142,13 +142,13 @@ export const Success = ({
           id="LosingDiv"
           className="flex w-full p-3 flex-col rounded bg-black-3/70 gap-2"
         >
-          <p className="text-primary-normal text-lg">Most Predicted Losers</p>
+          <p className="text-primary-normal text-sm">Top predicted losers</p>
           <div id="mostPredictedLosers" className="flex w-full flex-col gap-1">
             {mostChosenTeams.losingTeams.map((item, i) => {
               return (
                 <div
                   key={i}
-                  className="flex items-center justify-between text-base text-white-3"
+                  className="flex items-center justify-between text-base text-white-3 px-2"
                 >
                   <p>{item.team.name}</p>
                   <p>{item.occurence}</p>
@@ -161,13 +161,15 @@ export const Success = ({
           id="DrawingDiv"
           className="flex w-full p-3 flex-col rounded bg-black-3/70 gap-2"
         >
-          <p className="text-primary-normal text-lg">Most Predicted Drawers</p>
+          <p className="text-primary-normal text-sm">
+            Top predicted drawing team
+          </p>
           <div id="mostPredictedDrawers" className="flex w-full flex-col gap-1">
             {mostChosenTeams.drawingTeams.map((item, i) => {
               return (
                 <div
                   key={i}
-                  className="flex items-center justify-between text-base text-white-3"
+                  className="flex items-center justify-between text-base text-white-3 px-2"
                 >
                   <p>{item.team.name}</p>
                   <p>{item.occurence}</p>
