@@ -7,6 +7,7 @@ import { Link, routes } from '@redwoodjs/router'
 import type { CellSuccessProps } from '@redwoodjs/web'
 
 import { useAuth } from 'src/auth'
+import { currentDate } from 'src/utils'
 
 export const QUERY = gql`
   query HomeMatchesQuery($tournamentId: Int!) {
@@ -52,8 +53,6 @@ export const Loading = () => (
   </div>
 )
 
-const currentDate = new Date()
-
 export const Success = ({
   tournament,
 }: CellSuccessProps<HomeMatchesQuery, HomeMatchesQueryVariables>) => {
@@ -89,7 +88,7 @@ export const Success = ({
         </div>
         <div
           id="UpcomingList"
-          className="flex w-full overflow-x-scroll gap-2 md:gap-3 px-1 py-1 justify-start items-start nonscroll"
+          className="flex w-full overflow-scroll gap-2 md:gap-3 px-1 py-1 justify-start items-start nonscroll"
         >
           {upcomingMatches.length > 0 ? (
             upcomingMatches.map((match) => {
@@ -193,7 +192,7 @@ const UpcomingMatchItem = ({ upcomingMatch }) => {
 const PredictedLabel = () => {
   return (
     <div className="text-green-dark flex item-center rounded-br-lg rounded-tl-lg p-1 md:p-1.5 text-[10px] md:text-xs bg-white-3">
-      <CheckIcon className="h-3 md:h-4 w-3 md:w-4" />
+      <img src={CheckIcon} alt="Predicted Icon" className="h-3 md:h-4 w-3 md:w-4" />
     </div>
   )
 }
@@ -210,7 +209,7 @@ const RecentMatchItem = ({ recentMatch }) => {
   const successRate =
     recentMatch.predictions.length != 0
       ? `${(successCount * 100) / recentMatch.predictions.length}%`
-      : 'N/A'
+      : '0%'
   //Did currentUser make a prediction for this match
   const didPredict = recentMatch.predictions.find(
     (p) => p.userId == currentUser.id

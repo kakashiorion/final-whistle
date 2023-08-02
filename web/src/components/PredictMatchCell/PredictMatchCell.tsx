@@ -19,6 +19,7 @@ import { useAuth } from 'src/auth'
 import {
   WagerTextInputErrorClassName,
   WagerTextInputFieldClassName,
+  currentDate
 } from 'src/utils'
 
 import { PrimarySkewedButton } from '../Buttons/SkewedButton/PrimarySkewedButton'
@@ -128,8 +129,6 @@ export const Loading = () => (
 )
 
 export const Empty = () => <Redirect to={routes.home()} />
-
-const currentDate = new Date()
 
 export const Success = ({
   matchBeingPredicted,

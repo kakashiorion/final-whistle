@@ -9,6 +9,7 @@ import type {
   FindResultMatchQuery,
   FindResultMatchQueryVariables,
 } from 'types/graphql'
+import { currentDate } from 'src/utils'
 
 import { navigate, Redirect, routes } from '@redwoodjs/router'
 import type { CellSuccessProps } from '@redwoodjs/web'
@@ -72,8 +73,6 @@ export const Loading = () => (
 )
 
 export const Empty = () => <Redirect to={routes.home()} />
-
-const currentDate = new Date()
 
 export const Success = ({
   resultMatch,

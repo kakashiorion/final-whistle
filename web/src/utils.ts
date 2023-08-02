@@ -1,14 +1,14 @@
 //Tournament details
 export const CurrentTournamentID = 1
-export const CurrentTournamentName = 'UEFA U-21 Championship 2023'
+export const CurrentTournamentName = `2023 FIFA Women's World Cup`
 export const CurrentTournamentInitialCoins = 1000
-export const CurrentTournamentLogoURL = ''
+export const currentDate = new Date('2023-08-02 15:00')
 
 //Login CSS Classes
 export const ExtraBlockWrapperClassName =
   'w-full bg-black-2 flex flex-col gap-6 md:gap-8 items-center justify-start px-4 md:px-8 py-16 md:py-20'
 export const PageWrapperClassName =
-  "bg-[url('/public/loginBG.jpeg')] bg-black-1/95 bg-cover bg-blend-overlay flex flex-col justify-start items-center w-full px-4 md:px-8 pt-12 md:pt-16 pb-6 md:pb-8 h-screen"
+  "bg-[url('/loginBG.jpeg')] bg-black-1/95 bg-cover bg-blend-overlay flex flex-col justify-start items-center w-full px-4 md:px-8 pt-12 md:pt-16 pb-6 md:pb-8 h-screen"
 export const PageContentClassName =
   'w-full md:max-w-3xl h-full flex flex-col gap-10 md:gap-12 items-center justify-center p-2'
 export const LogoClassName = 'flex flex-col items-end'

@@ -40,7 +40,7 @@ const UPDATE_USER_NAME_MUTATION = gql`
 `
 
 export const Loading = () => (
-  <div className="bg-[url('/public/userSetup.avif')] bg-black-1/95 bg-cover bg-blend-overlay flex justify-center items-center w-full px-4 md:px-8 py-12 md:py-16 h-screen">
+  <div className="bg-[url('/userSetup.avif')] bg-black-1/95 bg-cover bg-blend-overlay flex justify-center items-center w-full px-4 md:px-8 py-12 md:py-16 h-screen">
     <img className="h-1/4 animate-spin" src={logo} alt="FW logo" />
   </div>
 )
@@ -89,7 +89,7 @@ export const Success = ({ users }: CellSuccessProps<FindUsers>) => {
   }
 
   return (
-    <div className="bg-[url('/public/userSetup.avif')] bg-black-1/95 bg-cover bg-blend-overlay flex justify-center items-center w-full px-4 md:px-8 py-12 md:py-16 h-screen">
+    <div className="bg-[url('/userSetup.avif')] bg-black-1/95 bg-cover bg-blend-overlay flex justify-center items-center w-full px-4 md:px-8 py-12 md:py-16 h-screen">
       <div className={PageContentClassName}>
         <img className="h-16 md:h-20" src={logo} alt="FW logo" />
         <p className="text-green-light text-lg md:text-2xl text-center">

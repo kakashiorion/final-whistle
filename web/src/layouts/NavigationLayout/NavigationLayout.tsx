@@ -35,7 +35,7 @@ const NavigationLayout = ({ children }: NavigationLayoutProps) => {
   return (
     <div
       id="HomeWrapper"
-      className="flex bg-[url('/public/homeBG.avif')] bg-black-1/95 bg-cover bg-blend-overlay flex-col overflow-hidden w-full items-center justify-center "
+      className="flex bg-[url('/homeBG.avif')] bg-black-1/95 bg-cover bg-blend-overlay flex-col overflow-hidden w-full items-center justify-center "
     >
       <Toaster toastOptions={{ className: 'rw-toast', duration: 4000 }} />
       <SidebarIcon

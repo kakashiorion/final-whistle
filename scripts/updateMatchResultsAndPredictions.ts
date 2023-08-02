@@ -1,35 +1,51 @@
-//1. Get actual score result for a match (between timestamps)
-//2. Calculate points based on actual and predicted values for all predictions for that match
-//3. Update points for each user
-
 import { db } from 'api/src/lib/db'
 
 export default async () => {
   try {
-    //TODO: Enter ID of matches for which predictions and points are to be updated
-    const matches = [35,36,47,48]
+    //TODO: Enter actual match result data
+    const matches = [
+      {
+        matchId: 9,
+        data: {
+          homeScore: 0,
+          homeScoringPlayers: [],
+          awayScore: 0,
+          awayScoringPlayers: [],
+        },
+      },
+      {
+        matchId: 12,
+        data: {
+          homeScore: 2,
+          homeScoringPlayers: [308, 350],
+          awayScore: 2,
+          awayScoringPlayers: [352, 367],
+        },
+      },
+    ]
 
-    //Script: Update prediction data in DB
+    //Script: Update match result data in DB
     Promise.all(
-      //Go through all matches
-      matches.map(async (matchId) => {
-        const matchResult = await db.match.findFirst({
+      matches.map(async (match) => {
+        const record = await db.match.update({
+          data: match.data,
           where: {
-            id: matchId,
+            id: match.matchId,
           },
         })
+        console.log(record)
         //Get actual results of the match
-        const actualScoreOfTeam1 = matchResult.homeScore
-        const actualScoreOfTeam2 = matchResult.awayScore
-        const actualScoringPlayersOfTeam1 = matchResult.homeScoringPlayers
-        const actualScoringPlayersOfTeam2 = matchResult.awayScoringPlayers
+        const actualScoreOfTeam1 = match.data.homeScore
+        const actualScoreOfTeam2 = match.data.awayScore
+        const actualScoringPlayersOfTeam1 = match.data.homeScoringPlayers
+        const actualScoringPlayersOfTeam2 = match.data.awayScoringPlayers
         //Get all the predictions for the match
         const predictions = await db.matchPrediction.findMany({
           where: {
-            matchId: matchId,
+            matchId: match.matchId,
           },
         })
-        //Go through all predictions
+        //Go through all predictions for this match
         predictions.map(async (prediction) => {
           //Calculate scoreline multiplier for each prediction
           const scorelineMult = getScorelinePoints(
@@ -71,7 +87,7 @@ export default async () => {
           })
           //Update the user's points
           await db.user.update({
-            data: { points: userData.points + totalPoints },
+            data: { points: { increment: totalPoints } },
             where: {
               id: prediction.userId,
             },
@@ -83,7 +99,7 @@ export default async () => {
           )
         })
         console.log(
-          `Updated ${predictions.length} predictions for match ${matchId}`
+          `Updated ${predictions.length} predictions for match ${match.matchId}`
         )
       })
     )

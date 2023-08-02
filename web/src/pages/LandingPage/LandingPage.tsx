@@ -2,7 +2,7 @@ import bonusImage from 'public/bonus.png'
 import betImage from 'public/diceBet.png'
 import logo from 'public/Main 2.png'
 import predictImage from 'public/tournamentDefault.png'
-import tournamentLogo from 'public/uefa21.png'
+import tournamentLogo from 'public/womenfifa23.svg'
 
 import { navigate, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
@@ -30,7 +30,7 @@ const LandingBanner = () => {
   return (
     <div
       id="LandingBannerWrapper"
-      className="bg-[url('/public/landingBG.webp')] bg-black-1/95 bg-cover bg-blend-overlay flex flex-col items-center w-full px-4 md:px-8 pt-16 md:pt-20 pb-6 md:pb-8 h-screen"
+      className="bg-[url('/landingBG.webp')] bg-black-1/95 bg-cover bg-blend-overlay flex flex-col items-center w-full px-4 md:px-8 pt-16 md:pt-20 pb-6 md:pb-8 h-screen"
     >
       <div
         id="LandingBannerContainer"
@@ -61,7 +61,7 @@ const LandingBanner = () => {
           <p className="text-sm md:text-base text-primary-normal">
             {CurrentTournamentName}
           </p>
-          <img className="h-20 md:h-24" src={tournamentLogo} alt="Tour Logo" />
+          <img className="h-10 md:h-12" src={tournamentLogo} alt="Tour Logo" />
         </div>
       </div>
     </div>

@@ -87,6 +87,8 @@ CREATE TABLE "MatchPrediction" (
     "predictedScoringPlayersOfHomeTeam" INTEGER[],
     "predictedScoringPlayersOfAwayTeam" INTEGER[],
     "wageredCoins" INTEGER NOT NULL DEFAULT 10,
+    "scorelineMultiplier" INTEGER,
+    "goalScorerMultiplier" INTEGER,
     "earnedPoints" INTEGER,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,

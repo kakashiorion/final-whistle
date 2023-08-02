@@ -47,7 +47,7 @@ const SignupContent = () => {
   return (
     <div
       id="SignupPageWrapper"
-      className=" bg-[url('/public/signupBG.webp')] bg-black-1/95 bg-cover bg-blend-overlay flex justify-center items-center w-full px-4 md:px-8 py-12 md:py-16 h-screen"
+      className=" bg-[url('/signupBG.webp')] bg-black-1/95 bg-cover bg-blend-overlay flex justify-center items-center w-full px-4 md:px-8 py-12 md:py-16 h-screen"
     >
       <div
         id="SignupPageContent"
@@ -89,7 +89,7 @@ const SignupForm = () => {
   }
 
   return (
-    <Form onSubmit={onSubmit} className={FormClassName}>
+    (<Form onSubmit={onSubmit} className={FormClassName}>
       <div className={TextInputContainerClassName}>
         <TextField
           placeholder="Enter your email ID"
@@ -110,7 +110,6 @@ const SignupForm = () => {
       <div className={TextInputContainerClassName}>
         <PasswordField
           placeholder="Choose a password"
-          hidden={true}
           className={SignupTextInputFieldClassName}
           name="password"
           errorClassName={SignupTextInputErrorClassName}
@@ -127,8 +126,8 @@ const SignupForm = () => {
       <SecondarySkewedButton
         label={loading ? '... Please Wait' : 'CREATE ACCOUNT'}
       />
-    </Form>
-  )
+    </Form>)
+  );
 }
 
 const LoginBlock = () => {

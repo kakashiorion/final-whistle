@@ -93,7 +93,7 @@ const ForgotPasswordForm = () => {
   }
 
   return (
-    <Form onSubmit={onSubmit} className={FormClassName}>
+    (<Form onSubmit={onSubmit} className={FormClassName}>
       <div className={TextInputContainerClassName}>
         <TextField
           placeholder="Enter your email ID"
@@ -114,6 +114,6 @@ const ForgotPasswordForm = () => {
       <PrimarySkewedButton
         label={loading ? '... Please Wait' : 'GET RESET LINK'}
       />
-    </Form>
-  )
+    </Form>)
+  );
 }

@@ -104,13 +104,14 @@ const LoginForm = () => {
   }
 
   return (
-    <Form onSubmit={onSubmit} className={FormClassName}>
+    (<Form onSubmit={onSubmit} className={FormClassName}>
       <div id="EmailContainer" className={TextInputContainerClassName}>
         <TextField
           placeholder="Email"
           className={LoginTextInputFieldClassName}
           name="email"
           inputMode="email"
+          defaultValue={"gamer1@fw.com"}
           errorClassName={LoginTextInputErrorClassName}
           validation={{
             required: { value: true, message: 'Email is required' },
@@ -127,6 +128,7 @@ const LoginForm = () => {
           placeholder="Password"
           className={LoginTextInputFieldClassName}
           name="password"
+          defaultValue={"12345678"}
           errorClassName={LoginTextInputErrorClassName}
           validation={{
             required: {
@@ -139,6 +141,6 @@ const LoginForm = () => {
         <FieldError className={ErrorFieldClassName} name="password" />
       </div>
       <PrimarySkewedButton label={loading ? '... Please Wait' : 'KICK OFF'} />
-    </Form>
-  )
+    </Form>)
+  );
 }
